@@ -122,7 +122,7 @@ public class SistemaPericia : MonoBehaviour
     void AtualizarUILigacoes()
     {
         if (textoLigacoesRestantes != null)
-            textoLigacoesRestantes.text = $"📞 Ligações: {ligacoesDisponiveis}";
+            textoLigacoesRestantes.text = $" Ligações: {ligacoesDisponiveis}";
     }
 
     public void AdicionarLigacao()
