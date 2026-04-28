@@ -122,13 +122,13 @@ public class SistemaPericia : MonoBehaviour
     void AtualizarUILigacoes()
     {
         if (textoLigacoesRestantes != null)
-            textoLigacoesRestantes.text = $" Ligações: {ligacoesDisponiveis}";
+            textoLigacoesRestantes.text = $" Calls: {ligacoesDisponiveis}";
     }
 
     public void AdicionarLigacao()
     {
         ligacoesDisponiveis++;
         AtualizarUILigacoes();
-        StartCoroutine(MostrarMensagemTemporaria("+1 Ligação disponível!", textoBotaoPericia, 1.5f));
+        StartCoroutine(MostrarMensagemTemporaria("+1 Call available!", textoBotaoPericia, 1.5f));
     }
 }

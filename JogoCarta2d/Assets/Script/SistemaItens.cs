@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
 
 public class SistemaItens : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class SistemaItens : MonoBehaviour
         public DicaAssociada dicaAssociada;
 
         [Header("UI Elements TMP")]
-        public TextMeshProUGUI textoDescricaoFloating; // Texto que aparece flutuando
+        public TextMeshProUGUI textoNomeFlutuante;
     }
 
     [System.Serializable]
@@ -32,42 +32,114 @@ public class SistemaItens : MonoBehaviour
 
     [Header("Configurações")]
     public List<ItemInvestigacao> itens = new List<ItemInvestigacao>();
-    public Transform gridInventario;
-    public GameObject prefabItemUI;
-    public TextMeshProUGUI textoDescricaoItem;
+
+    [Header("Referências")]
+    public SistemaInventario inventario; // Referência para o inventário separado
+    public GameManager gameManager;
 
     [Header("Efeitos")]
-    public float fadeDuration = 0.3f;
-    public float floatUpDuration = 1f;
+    public float fadeDuration = 0.5f;
+
+    [Header("Feedback")]
+    public GameObject painelFeedbackColeta;
+    public TextMeshProUGUI textoFeedbackColeta;
 
     void Start()
+    {
+        ConfigurarTodosItens();
+
+        if (painelFeedbackColeta != null)
+            painelFeedbackColeta.SetActive(false);
+    }
+
+    void ConfigurarTodosItens()
     {
         foreach (var item in itens)
         {
             if (!item.coletado && item.objetoNoMundo != null)
             {
-                AdicionarClickAoItem(item);
+                // Configura texto flutuante
+                if (item.textoNomeFlutuante != null)
+                {
+                    Color cor = item.textoNomeFlutuante.color;
+                    cor.a = 0f;
+                    item.textoNomeFlutuante.color = cor;
+                    item.textoNomeFlutuante.text = item.nomeItem;
+                    item.textoNomeFlutuante.gameObject.SetActive(true);
+                }
+
+                AdicionarInteracaoAoItem(item);
             }
         }
     }
 
-    void AdicionarClickAoItem(ItemInvestigacao item)
+    void AdicionarInteracaoAoItem(ItemInvestigacao item)
     {
-        Button btn = item.objetoNoMundo.GetComponent<Button>();
-        if (btn == null)
-            btn = item.objetoNoMundo.AddComponent<Button>();
+        GameObject obj = item.objetoNoMundo;
 
+        Button btn = obj.GetComponent<Button>();
+        if (btn == null) btn = obj.AddComponent<Button>();
+
+        btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() => StartCoroutine(ColetarItemComEfeito(item)));
 
-        // Efeito hover
-        EventTrigger trigger = item.objetoNoMundo.GetComponent<EventTrigger>();
-        if (trigger == null)
-            trigger = item.objetoNoMundo.AddComponent<EventTrigger>();
+        EventTrigger trigger = obj.GetComponent<EventTrigger>();
+        if (trigger == null) trigger = obj.AddComponent<EventTrigger>();
+
+        trigger.triggers.Clear();
 
         EventTrigger.Entry entryEnter = new EventTrigger.Entry();
         entryEnter.eventID = EventTriggerType.PointerEnter;
-        entryEnter.callback.AddListener((data) => StartCoroutine(MostrarDescricaoFloating(item)));
+        entryEnter.callback.AddListener((data) => StartCoroutine(MostrarNomeItem(item)));
         trigger.triggers.Add(entryEnter);
+
+        EventTrigger.Entry entryExit = new EventTrigger.Entry();
+        entryExit.eventID = EventTriggerType.PointerExit;
+        entryExit.callback.AddListener((data) => StartCoroutine(EsconderNomeItem(item)));
+        trigger.triggers.Add(entryExit);
+    }
+
+    IEnumerator MostrarNomeItem(ItemInvestigacao item)
+    {
+        if (item.textoNomeFlutuante == null) yield break;
+
+        Vector3 posicaoMundo = item.objetoNoMundo.transform.position;
+        Vector3 posicaoTela = Camera.main.WorldToScreenPoint(posicaoMundo);
+        posicaoTela.y += 50f;
+        item.textoNomeFlutuante.transform.position = posicaoTela;
+
+        float elapsed = 0f;
+        Color cor = item.textoNomeFlutuante.color;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            cor.a = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
+            item.textoNomeFlutuante.color = cor;
+            yield return null;
+        }
+
+        cor.a = 1f;
+        item.textoNomeFlutuante.color = cor;
+    }
+
+    IEnumerator EsconderNomeItem(ItemInvestigacao item)
+    {
+        if (item.textoNomeFlutuante == null) yield break;
+
+        float elapsed = 0f;
+        Color cor = item.textoNomeFlutuante.color;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            cor.a = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            item.textoNomeFlutuante.color = cor;
+            yield return null;
+        }
+
+        cor.a = 0f;
+        item.textoNomeFlutuante.color = cor;
     }
 
     IEnumerator ColetarItemComEfeito(ItemInvestigacao item)
@@ -76,12 +148,15 @@ public class SistemaItens : MonoBehaviour
 
         item.coletado = true;
 
-        // Efeito de scale e fade out
+        // 1. Esconde o nome
+        if (item.textoNomeFlutuante != null)
+        {
+            yield return StartCoroutine(EsconderNomeItem(item));
+        }
+
+        // 2. Efeito no item do mundo
         if (item.objetoNoMundo != null)
         {
-            CanvasGroup cg = item.objetoNoMundo.GetComponent<CanvasGroup>();
-            if (cg == null) cg = item.objetoNoMundo.AddComponent<CanvasGroup>();
-
             float elapsed = 0f;
             Vector3 startScale = item.objetoNoMundo.transform.localScale;
 
@@ -89,48 +164,65 @@ public class SistemaItens : MonoBehaviour
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / fadeDuration;
-                cg.alpha = Mathf.Lerp(1f, 0f, t);
                 item.objetoNoMundo.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
+
+                SpriteRenderer sr = item.objetoNoMundo.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    Color cor = sr.color;
+                    cor.a = Mathf.Lerp(1f, 0f, t);
+                    sr.color = cor;
+                }
                 yield return null;
             }
 
             Destroy(item.objetoNoMundo);
         }
 
-        AdicionarAoInventarioUI(item);
+        // 3. ADICIONA AO INVENTÁRIO (chamando o sistema separado)
+        if (inventario != null)
+        {
+            inventario.AdicionarItem(item.nomeItem, item.descricao, item.iconeItem);
+        }
 
+        // 4. Mostra feedback
+        yield return StartCoroutine(MostrarFeedbackColeta(item.nomeItem));
+
+        // 5. Desbloqueia dica
         if (item.dicaAssociada.sistemaPericia != null)
         {
             item.dicaAssociada.sistemaPericia.AdicionarLigacao();
         }
 
-        yield return StartCoroutine(MostrarMensagemColeta(item.nomeItem));
+        // 6. Registra no GameManager
+        if (gameManager != null)
+        {
+            gameManager.RegistrarPista(item.idItem, item.descricao);
+        }
     }
 
-    IEnumerator MostrarDescricaoFloating(ItemInvestigacao item)
+    IEnumerator MostrarFeedbackColeta(string nomeItem)
     {
-        if (item.textoDescricaoFloating != null)
+        if (painelFeedbackColeta != null && textoFeedbackColeta != null)
         {
-            item.textoDescricaoFloating.text = item.descricao;
-            item.textoDescricaoFloating.gameObject.SetActive(true);
+            textoFeedbackColeta.text = $"✓ {nomeItem} coletado!";
+            painelFeedbackColeta.SetActive(true);
 
-            CanvasGroup cg = item.textoDescricaoFloating.GetComponent<CanvasGroup>();
-            if (cg == null) cg = item.textoDescricaoFloating.gameObject.AddComponent<CanvasGroup>();
+            CanvasGroup cg = painelFeedbackColeta.GetComponent<CanvasGroup>();
+            if (cg == null) cg = painelFeedbackColeta.AddComponent<CanvasGroup>();
+            cg.alpha = 0f;
 
-            // Fade in e sobe
             float elapsed = 0f;
-            Vector3 startPos = item.textoDescricaoFloating.transform.position;
-
-            while (elapsed < floatUpDuration)
+            while (elapsed < fadeDuration)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / floatUpDuration;
-                cg.alpha = Mathf.Lerp(0f, 1f, t);
-                item.textoDescricaoFloating.transform.position = Vector3.Lerp(startPos, startPos + Vector3.up * 30f, t);
+                cg.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
                 yield return null;
             }
+            cg.alpha = 1f;
 
-            // Fade out
+            yield return new WaitForSeconds(2f);
+
             elapsed = 0f;
             while (elapsed < fadeDuration)
             {
@@ -138,100 +230,8 @@ public class SistemaItens : MonoBehaviour
                 cg.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
                 yield return null;
             }
-
-            item.textoDescricaoFloating.gameObject.SetActive(false);
-            item.textoDescricaoFloating.transform.position = startPos;
-        }
-    }
-
-    IEnumerator MostrarMensagemColeta(string nomeItem)
-    {
-        if (textoDescricaoItem != null)
-        {
-            Color corOriginal = textoDescricaoItem.color;
-            textoDescricaoItem.text = $"✅ {nomeItem} coletado!";
-            textoDescricaoItem.color = Color.green;
-
-            yield return new WaitForSeconds(2f);
-
-            textoDescricaoItem.text = "Clique nos itens para ver detalhes...";
-            textoDescricaoItem.color = corOriginal;
-        }
-    }
-
-    void AdicionarAoInventarioUI(ItemInvestigacao item)
-    {
-        if (prefabItemUI != null && gridInventario != null)
-        {
-            GameObject novoItem = Instantiate(prefabItemUI, gridInventario);
-
-            Image iconImage = novoItem.GetComponent<Image>();
-            if (iconImage != null && item.iconeItem != null)
-                iconImage.sprite = item.iconeItem;
-
-            Button btn = novoItem.GetComponent<Button>();
-            if (btn != null)
-            {
-                btn.onClick.AddListener(() => MostrarDescricaoItem(item.descricao));
-            }
-
-            // Efeito de entrada do item no inventário
-            CanvasGroup cg = novoItem.GetComponent<CanvasGroup>();
-            if (cg == null) cg = novoItem.AddComponent<CanvasGroup>();
             cg.alpha = 0f;
-
-            StartCoroutine(FadeInObject(cg, 0.3f));
+            painelFeedbackColeta.SetActive(false);
         }
-    }
-
-    void MostrarDescricaoItem(string descricao)
-    {
-        if (textoDescricaoItem != null)
-        {
-            StartCoroutine(MostrarDescricaoComFade(descricao));
-        }
-    }
-
-    IEnumerator MostrarDescricaoComFade(string descricao)
-    {
-        yield return StartCoroutine(FadeTextMeshPro(textoDescricaoItem, 1f, 0f, 0.2f));
-        textoDescricaoItem.text = descricao;
-        yield return StartCoroutine(FadeTextMeshPro(textoDescricaoItem, 0f, 1f, 0.2f));
-
-        yield return new WaitForSeconds(5f);
-
-        yield return StartCoroutine(FadeTextMeshPro(textoDescricaoItem, 1f, 0f, 0.2f));
-        textoDescricaoItem.text = "Clique nos itens para ver detalhes...";
-        yield return StartCoroutine(FadeTextMeshPro(textoDescricaoItem, 0f, 1f, 0.2f));
-    }
-
-    IEnumerator FadeTextMeshPro(TextMeshProUGUI tmp, float startAlpha, float endAlpha, float duration)
-    {
-        float elapsed = 0f;
-        Color cor = tmp.color;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
-            cor.a = alpha;
-            tmp.color = cor;
-            yield return null;
-        }
-
-        cor.a = endAlpha;
-        tmp.color = cor;
-    }
-
-    IEnumerator FadeInObject(CanvasGroup cg, float duration)
-    {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(0f, 1f, elapsed / duration);
-            yield return null;
-        }
-        cg.alpha = 1f;
     }
 }

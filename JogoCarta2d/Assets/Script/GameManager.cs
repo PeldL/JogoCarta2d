@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
 
     void CarregarProgresso()
     {
-        // Carregar save game (implementar PlayerPrefs ou sistema de save)
+        // Carregar save game 
         Debug.Log("Progresso carregado");
     }
 
