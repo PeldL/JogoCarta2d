@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // corrigido: era Text legado
 using System.Collections.Generic;
 
 public class QuadroDeducao : MonoBehaviour
@@ -7,7 +8,7 @@ public class QuadroDeducao : MonoBehaviour
     [System.Serializable]
     public class PistaSlot
     {
-        public string tipo; // "Vitima", "Suspeito", "Arma"
+        public TipoPista tipo; // enum â€” elimina magic strings e erros de digitaÃ§Ã£o
         public Transform slotPosition;
         public Image slotImage;
         public PistaItem itemColocado;
@@ -18,18 +19,26 @@ public class QuadroDeducao : MonoBehaviour
     public class PistaItem
     {
         public string nome;
-        public string tipo; // "Vitima", "Suspeito", "Arma"
+        public TipoPista tipo;
         public Sprite icone;
         [TextArea(2, 3)]
         public string descricao;
         public GameObject objetoColetavelAssociado;
     }
 
+    [Header("Slots e itens")]
     public List<PistaSlot> slots = new List<PistaSlot>();
     public List<PistaItem> todasPistas = new List<PistaItem>();
+
+    [Header("SoluÃ§Ã£o correta â€” configurar no Inspector")]
+    public string vitimaCerta;
+    public string suspeitoCerto;
+    public string armaCerta;
+
+    [Header("UI")]
     public GameObject painelQuadro;
     public Button botaoAbrirQuadro;
-    public Text textoResultadoFinal;
+    public TextMeshProUGUI textoResultadoFinal; // corrigido: era Text legado
     public GameObject painelVitoria;
 
     private PistaItem pistaSelecionada;
@@ -41,6 +50,8 @@ public class QuadroDeducao : MonoBehaviour
 
         if (painelQuadro != null)
             painelQuadro.SetActive(false);
+
+        ResetarCoresSlots();
     }
 
     void AbrirQuadro()
@@ -48,18 +59,16 @@ public class QuadroDeducao : MonoBehaviour
         painelQuadro.SetActive(!painelQuadro.activeSelf);
     }
 
-    // Chamado quando o jogador clica em uma pista no inventário
     public void SelecionarPista(PistaItem pista)
     {
         pistaSelecionada = pista;
-        Debug.Log($"Pista selecionada: {pista.nome}");
-
-        // Destacar slots compatíveis
-        DestacarSlotsCompatíveis();
+        ResetarCoresSlots();
+        DestacarSlotsCompatÃ­veis();
     }
 
-    void DestacarSlotsCompatíveis()
+    void DestacarSlotsCompatÃ­veis()
     {
+        if (pistaSelecionada == null) return;
         foreach (var slot in slots)
         {
             if (!slot.preenchido && slot.tipo == pistaSelecionada.tipo)
@@ -70,41 +79,30 @@ public class QuadroDeducao : MonoBehaviour
         }
     }
 
-    // Chamado quando o jogador clica em um slot
     public void TentarColocarPista(PistaSlot slot)
     {
         if (pistaSelecionada == null) return;
 
         if (!slot.preenchido && slot.tipo == pistaSelecionada.tipo)
         {
-            // Coloca a pista no slot
             slot.itemColocado = pistaSelecionada;
-            slot.preenchido = true;
+            slot.preenchido   = true;
 
-            // Atualiza UI
             if (slot.slotImage != null)
             {
                 slot.slotImage.sprite = pistaSelecionada.icone;
-                slot.slotImage.color = Color.white;
+                slot.slotImage.color  = Color.white;
             }
 
-            Debug.Log($"Pista {pistaSelecionada.nome} colocada no slot {slot.tipo}");
-
-            // Remove pista do inventário
-            // (Implementar remoção do inventário aqui)
-
             pistaSelecionada = null;
-
-            // Verifica se completou o quadro
+            ResetarCoresSlots();
             VerificarDeducaoCompleta();
         }
         else
         {
-            Debug.Log("Slot incompatível ou já preenchido!");
+            Debug.Log("Slot incompatÃ­vel ou jÃ¡ preenchido!");
+            ResetarCoresSlots();
         }
-
-        // Reset cores dos slots
-        ResetarCoresSlots();
     }
 
     void ResetarCoresSlots()
@@ -118,65 +116,46 @@ public class QuadroDeducao : MonoBehaviour
 
     void VerificarDeducaoCompleta()
     {
-        bool todosPreenchidos = true;
-
         foreach (var slot in slots)
         {
-            if (!slot.preenchido)
-            {
-                todosPreenchidos = false;
-                break;
-            }
+            if (!slot.preenchido) return;
         }
 
-        if (todosPreenchidos)
-        {
-            // Verifica se a combinação está correta
-            bool deducaoCorreta = VerificarCombinacaoCorreta();
-
-            if (deducaoCorreta)
-            {
-                FinalizarJogo(true);
-            }
-            else
-            {
-                FinalizarJogo(false);
-            }
-        }
+        FinalizarJogo(VerificarCombinacaoCorreta());
     }
 
     bool VerificarCombinacaoCorreta()
     {
-        // Configuração correta do caso
-        // Exemplo: Vitima = "Mulher do Bar", Suspeito = "Homem do Balcão", Arma = "Revólver"
-
         foreach (var slot in slots)
         {
-            if (slot.tipo == "Vitima" && slot.itemColocado.nome != "Mulher do Bar")
-                return false;
-            if (slot.tipo == "Suspeito" && slot.itemColocado.nome != "Homem do Balcão")
-                return false;
-            if (slot.tipo == "Arma" && slot.itemColocado.nome != "Revólver")
-                return false;
+            switch (slot.tipo)
+            {
+                case TipoPista.Vitima:
+                    if (slot.itemColocado.nome != vitimaCerta)   return false;
+                    break;
+                case TipoPista.Suspeito:
+                    if (slot.itemColocado.nome != suspeitoCerto) return false;
+                    break;
+                case TipoPista.Arma:
+                    if (slot.itemColocado.nome != armaCerta)     return false;
+                    break;
+            }
         }
-
         return true;
     }
 
     void FinalizarJogo(bool venceu)
     {
-        if (venceu)
+        if (textoResultadoFinal != null)
         {
-            textoResultadoFinal.text = "Parabéns! Você resolveu o caso!\nO Homem do Balcão confessou o assassinato da mulher para encobrir o roubo.";
-        }
-        else
-        {
-            textoResultadoFinal.text = "Dedução incorreta! O caso continua em aberto... Tente novamente!";
+            textoResultadoFinal.text = venceu
+                ? "ParabÃ©ns! VocÃª resolveu o caso!\nO Homem do BalcÃ£o confessou o assassinato da mulher para encobrir o roubo."
+                : "DeduÃ§Ã£o incorreta! O caso continua em aberto... Tente novamente!";
         }
 
         if (painelVitoria != null)
             painelVitoria.SetActive(true);
 
-        Time.timeScale = 0f; // Pausa o jogo
+        Time.timeScale = 0f;
     }
 }

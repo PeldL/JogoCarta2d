@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
@@ -34,7 +34,7 @@ public class SistemaItens : MonoBehaviour
     public List<ItemInvestigacao> itens = new List<ItemInvestigacao>();
 
     [Header("Referências")]
-    public SistemaInventario inventario; // Referência para o inventário separado
+    public SistemaInventario inventario;
     public GameManager gameManager;
 
     [Header("Efeitos")]
@@ -44,10 +44,12 @@ public class SistemaItens : MonoBehaviour
     public GameObject painelFeedbackColeta;
     public TextMeshProUGUI textoFeedbackColeta;
 
+    [Header("Canvas — arraste o Canvas da UI para garantir posicionamento correto")]
+    public RectTransform canvasRectTransform; // necessário para converter posição de mundo → UI
+
     void Start()
     {
         ConfigurarTodosItens();
-
         if (painelFeedbackColeta != null)
             painelFeedbackColeta.SetActive(false);
     }
@@ -58,16 +60,14 @@ public class SistemaItens : MonoBehaviour
         {
             if (!item.coletado && item.objetoNoMundo != null)
             {
-                // Configura texto flutuante
                 if (item.textoNomeFlutuante != null)
                 {
-                    Color cor = item.textoNomeFlutuante.color;
-                    cor.a = 0f;
-                    item.textoNomeFlutuante.color = cor;
+                    Color c = item.textoNomeFlutuante.color;
+                    c.a = 0f;
+                    item.textoNomeFlutuante.color = c;
                     item.textoNomeFlutuante.text = item.nomeItem;
                     item.textoNomeFlutuante.gameObject.SetActive(true);
                 }
-
                 AdicionarInteracaoAoItem(item);
             }
         }
@@ -77,161 +77,112 @@ public class SistemaItens : MonoBehaviour
     {
         GameObject obj = item.objetoNoMundo;
 
-        Button btn = obj.GetComponent<Button>();
-        if (btn == null) btn = obj.AddComponent<Button>();
-
+        Button btn = obj.GetComponent<Button>() ?? obj.AddComponent<Button>();
         btn.onClick.RemoveAllListeners();
         btn.onClick.AddListener(() => StartCoroutine(ColetarItemComEfeito(item)));
 
-        EventTrigger trigger = obj.GetComponent<EventTrigger>();
-        if (trigger == null) trigger = obj.AddComponent<EventTrigger>();
-
+        EventTrigger trigger = obj.GetComponent<EventTrigger>() ?? obj.AddComponent<EventTrigger>();
         trigger.triggers.Clear();
 
-        EventTrigger.Entry entryEnter = new EventTrigger.Entry();
-        entryEnter.eventID = EventTriggerType.PointerEnter;
-        entryEnter.callback.AddListener((data) => StartCoroutine(MostrarNomeItem(item)));
-        trigger.triggers.Add(entryEnter);
-
-        EventTrigger.Entry entryExit = new EventTrigger.Entry();
-        entryExit.eventID = EventTriggerType.PointerExit;
-        entryExit.callback.AddListener((data) => StartCoroutine(EsconderNomeItem(item)));
-        trigger.triggers.Add(entryExit);
+        AddTrigger(trigger, EventTriggerType.PointerEnter, _ => StartCoroutine(MostrarNomeItem(item)));
+        AddTrigger(trigger, EventTriggerType.PointerExit,  _ => StartCoroutine(EsconderNomeItem(item)));
     }
+
+    void AddTrigger(EventTrigger trigger, EventTriggerType type, UnityEngine.Events.UnityAction<BaseEventData> action)
+    {
+        var entry = new EventTrigger.Entry { eventID = type };
+        entry.callback.AddListener(action);
+        trigger.triggers.Add(entry);
+    }
+
+    // ── Hover nome ────────────────────────────────────────────────────────────
 
     IEnumerator MostrarNomeItem(ItemInvestigacao item)
     {
         if (item.textoNomeFlutuante == null) yield break;
 
-        Vector3 posicaoMundo = item.objetoNoMundo.transform.position;
-        Vector3 posicaoTela = Camera.main.WorldToScreenPoint(posicaoMundo);
-        posicaoTela.y += 50f;
-        item.textoNomeFlutuante.transform.position = posicaoTela;
-
-        float elapsed = 0f;
-        Color cor = item.textoNomeFlutuante.color;
-
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            cor.a = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
-            item.textoNomeFlutuante.color = cor;
-            yield return null;
-        }
-
-        cor.a = 1f;
-        item.textoNomeFlutuante.color = cor;
+        PositionarTextoFlutuante(item);
+        yield return StartCoroutine(FadeUtils.FadeTMP(this, item.textoNomeFlutuante, 0f, 1f, fadeDuration));
     }
 
     IEnumerator EsconderNomeItem(ItemInvestigacao item)
     {
         if (item.textoNomeFlutuante == null) yield break;
-
-        float elapsed = 0f;
-        Color cor = item.textoNomeFlutuante.color;
-
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            cor.a = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
-            item.textoNomeFlutuante.color = cor;
-            yield return null;
-        }
-
-        cor.a = 0f;
-        item.textoNomeFlutuante.color = cor;
+        yield return StartCoroutine(FadeUtils.FadeTMP(this, item.textoNomeFlutuante, 1f, 0f, fadeDuration));
     }
+
+    // Corrigido: usa RectTransformUtility para funcionar com qualquer modo de Canvas
+    void PositionarTextoFlutuante(ItemInvestigacao item)
+    {
+        if (item.textoNomeFlutuante == null || Camera.main == null) return;
+
+        Vector3 posicaoTela = Camera.main.WorldToScreenPoint(item.objetoNoMundo.transform.position);
+        posicaoTela.y += 50f;
+
+        if (canvasRectTransform != null)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRectTransform,
+                posicaoTela,
+                null, // null = Screen Space Overlay; passe a câmera do Canvas se for Screen Space Camera
+                out Vector2 localPoint);
+            item.textoNomeFlutuante.rectTransform.localPosition = localPoint;
+        }
+        else
+        {
+            // Fallback para Screen Space - Overlay
+            item.textoNomeFlutuante.transform.position = posicaoTela;
+        }
+    }
+
+    // ── Coleta ────────────────────────────────────────────────────────────────
 
     IEnumerator ColetarItemComEfeito(ItemInvestigacao item)
     {
         if (item.coletado) yield break;
-
         item.coletado = true;
 
-        // 1. Esconde o nome
         if (item.textoNomeFlutuante != null)
-        {
             yield return StartCoroutine(EsconderNomeItem(item));
-        }
 
-        // 2. Efeito no item do mundo
         if (item.objetoNoMundo != null)
         {
-            float elapsed = 0f;
             Vector3 startScale = item.objetoNoMundo.transform.localScale;
+            SpriteRenderer sr  = item.objetoNoMundo.GetComponent<SpriteRenderer>();
 
-            while (elapsed < fadeDuration)
+            yield return FadeUtils.Fade(this, t =>
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / fadeDuration;
                 item.objetoNoMundo.transform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
-
-                SpriteRenderer sr = item.objetoNoMundo.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
-                    Color cor = sr.color;
-                    cor.a = Mathf.Lerp(1f, 0f, t);
-                    sr.color = cor;
+                    Color c = sr.color; c.a = 1f - t; sr.color = c;
                 }
-                yield return null;
-            }
+            }, 0f, 1f, fadeDuration);
 
             Destroy(item.objetoNoMundo);
         }
 
-        // 3. ADICIONA AO INVENTÁRIO (chamando o sistema separado)
-        if (inventario != null)
-        {
-            inventario.AdicionarItem(item.nomeItem, item.descricao, item.iconeItem);
-        }
+        inventario?.AdicionarItem(item.nomeItem, item.descricao, item.iconeItem);
 
-        // 4. Mostra feedback
         yield return StartCoroutine(MostrarFeedbackColeta(item.nomeItem));
 
-        // 5. Desbloqueia dica
-        if (item.dicaAssociada.sistemaPericia != null)
-        {
-            item.dicaAssociada.sistemaPericia.AdicionarLigacao();
-        }
+        item.dicaAssociada?.sistemaPericia?.AdicionarLigacao();
 
-        // 6. Registra no GameManager
-        if (gameManager != null)
-        {
-            gameManager.RegistrarPista(item.idItem, item.descricao);
-        }
+        gameManager?.RegistrarPista(item.idItem, item.descricao);
     }
 
     IEnumerator MostrarFeedbackColeta(string nomeItem)
     {
-        if (painelFeedbackColeta != null && textoFeedbackColeta != null)
-        {
-            textoFeedbackColeta.text = $"✓ {nomeItem} coletado!";
-            painelFeedbackColeta.SetActive(true);
+        if (painelFeedbackColeta == null || textoFeedbackColeta == null) yield break;
 
-            CanvasGroup cg = painelFeedbackColeta.GetComponent<CanvasGroup>();
-            if (cg == null) cg = painelFeedbackColeta.AddComponent<CanvasGroup>();
-            cg.alpha = 0f;
+        textoFeedbackColeta.text = $"✓ {nomeItem} coletado!";
+        painelFeedbackColeta.SetActive(true);
 
-            float elapsed = 0f;
-            while (elapsed < fadeDuration)
-            {
-                elapsed += Time.deltaTime;
-                cg.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
-                yield return null;
-            }
-            cg.alpha = 1f;
+        CanvasGroup cg = FadeUtils.GetOrAddCanvasGroup(painelFeedbackColeta);
+        yield return StartCoroutine(FadeUtils.FadeCanvasGroup(this, cg, 0f, 1f, fadeDuration));
+        yield return new WaitForSeconds(2f);
+        yield return StartCoroutine(FadeUtils.FadeCanvasGroup(this, cg, 1f, 0f, fadeDuration));
 
-            yield return new WaitForSeconds(2f);
-
-            elapsed = 0f;
-            while (elapsed < fadeDuration)
-            {
-                elapsed += Time.deltaTime;
-                cg.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
-                yield return null;
-            }
-            cg.alpha = 0f;
-            painelFeedbackColeta.SetActive(false);
-        }
+        painelFeedbackColeta.SetActive(false);
     }
 }

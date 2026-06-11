@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class SistemaInventario : MonoBehaviour
 {
-    [Header("Configurações")]
+    [Header("ConfiguraÃ§Ãµes")]
     public Transform gridInventario;
     public GameObject prefabItemUI;
     public TextMeshProUGUI textoDescricaoItem;
@@ -14,9 +14,6 @@ public class SistemaInventario : MonoBehaviour
     [Header("Efeitos")]
     public float fadeDuration = 0.3f;
 
-    private List<ItemData> itensInventario = new List<ItemData>();
-
-    // Classe para guardar dados do item
     [System.Serializable]
     public class ItemData
     {
@@ -25,146 +22,83 @@ public class SistemaInventario : MonoBehaviour
         public Sprite icone;
     }
 
-    // Adiciona um item ao inventário
+    private List<ItemData> itensInventario = new List<ItemData>();
+
+    // DicionÃ¡rio para remoÃ§Ã£o eficiente â€” evita recriar toda a UI ao remover um item
+    private Dictionary<string, GameObject> itemUIMap = new Dictionary<string, GameObject>();
+
     public void AdicionarItem(string nome, string descricao, Sprite icone)
     {
-        ItemData novoItem = new ItemData();
-        novoItem.nome = nome;
-        novoItem.descricao = descricao;
-        novoItem.icone = icone;
-
+        var novoItem = new ItemData { nome = nome, descricao = descricao, icone = icone };
         itensInventario.Add(novoItem);
-
-        // Mostrar na UI
         MostrarItemNaUI(novoItem);
     }
 
     void MostrarItemNaUI(ItemData item)
     {
-        if (prefabItemUI != null && gridInventario != null)
-        {
-            GameObject novoItem = Instantiate(prefabItemUI, gridInventario);
+        if (prefabItemUI == null || gridInventario == null) return;
 
-            // Configura ícone
-            Image img = novoItem.GetComponent<Image>();
-            if (img != null && item.icone != null)
-                img.sprite = item.icone;
+        GameObject go = Instantiate(prefabItemUI, gridInventario);
 
-            // Configura clique para mostrar descrição
-            Button btn = novoItem.GetComponent<Button>();
-            if (btn == null) btn = novoItem.AddComponent<Button>();
+        Image img = go.GetComponent<Image>();
+        if (img != null && item.icone != null)
+            img.sprite = item.icone;
 
-            string nome = item.nome;
-            string desc = item.descricao;
-            btn.onClick.AddListener(() => MostrarDescricao(nome, desc));
+        Button btn = go.GetComponent<Button>() ?? go.AddComponent<Button>();
+        string nome = item.nome;
+        string desc = item.descricao;
+        btn.onClick.AddListener(() => MostrarDescricao(nome, desc));
 
-            // Efeito fade in
-            CanvasGroup cg = novoItem.GetComponent<CanvasGroup>();
-            if (cg == null) cg = novoItem.AddComponent<CanvasGroup>();
-            cg.alpha = 0f;
+        // Registra no mapa para remoÃ§Ã£o rÃ¡pida (usa nome como chave)
+        itemUIMap[item.nome] = go;
 
-            StartCoroutine(FadeInItem(cg));
-        }
+        CanvasGroup cg = FadeUtils.GetOrAddCanvasGroup(go);
+        cg.alpha = 0f;
+        StartCoroutine(FadeUtils.FadeCanvasGroup(this, cg, 0f, 1f, fadeDuration));
     }
 
     void MostrarDescricao(string nome, string descricao)
     {
         if (textoDescricaoItem != null)
-        {
             StartCoroutine(AnimacaoDescricao(nome, descricao));
-        }
     }
 
     IEnumerator AnimacaoDescricao(string nome, string descricao)
     {
-        // Fade out
-        float elapsed = 0f;
-        Color cor = textoDescricaoItem.color;
-
-        while (elapsed < 0.2f)
-        {
-            elapsed += Time.deltaTime;
-            cor.a = Mathf.Lerp(1f, 0f, elapsed / 0.2f);
-            textoDescricaoItem.color = cor;
-            yield return null;
-        }
+        yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoItem, 1f, 0f, 0.2f));
 
         textoDescricaoItem.text = $"<b>{nome}</b>\n{descricao}";
 
-        // Fade in
-        elapsed = 0f;
-        while (elapsed < 0.2f)
-        {
-            elapsed += Time.deltaTime;
-            cor.a = Mathf.Lerp(0f, 1f, elapsed / 0.2f);
-            textoDescricaoItem.color = cor;
-            yield return null;
-        }
-
+        yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoItem, 0f, 1f, 0.2f));
         yield return new WaitForSeconds(4f);
 
-        // Volta ao padrão
-        elapsed = 0f;
-        while (elapsed < 0.2f)
-        {
-            elapsed += Time.deltaTime;
-            cor.a = Mathf.Lerp(1f, 0f, elapsed / 0.2f);
-            textoDescricaoItem.color = cor;
-            yield return null;
-        }
-
+        yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoItem, 1f, 0f, 0.2f));
         textoDescricaoItem.text = "Clique nos itens para ver detalhes...";
-
-        elapsed = 0f;
-        while (elapsed < 0.2f)
-        {
-            elapsed += Time.deltaTime;
-            cor.a = Mathf.Lerp(0f, 1f, elapsed / 0.2f);
-            textoDescricaoItem.color = cor;
-            yield return null;
-        }
+        yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoItem, 0f, 1f, 0.2f));
     }
 
-    IEnumerator FadeInItem(CanvasGroup cg)
-    {
-        float elapsed = 0f;
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(0f, 1f, elapsed / fadeDuration);
-            yield return null;
-        }
-        cg.alpha = 1f;
-    }
+    public bool TemItem(string nomeItem) =>
+        itensInventario.Exists(item => item.nome == nomeItem);
 
-    // Verifica se tem um item no inventário
-    public bool TemItem(string nomeItem)
-    {
-        return itensInventario.Exists(item => item.nome == nomeItem);
-    }
-
-    // Remove um item (para usar no quadro de dedução)
     public void RemoverItem(string nomeItem)
     {
         ItemData item = itensInventario.Find(i => i.nome == nomeItem);
-        if (item != null)
+        if (item == null) return;
+
+        itensInventario.Remove(item);
+
+        // Remove apenas o GameObject deste item â€” sem recriar toda a UI
+        if (itemUIMap.TryGetValue(nomeItem, out GameObject go))
         {
-            itensInventario.Remove(item);
-            AtualizarUIInventario();
+            StartCoroutine(RemoverComFade(go, nomeItem));
         }
     }
 
-    void AtualizarUIInventario()
+    IEnumerator RemoverComFade(GameObject go, string nomeItem)
     {
-        // Limpa e recria toda a UI
-        foreach (Transform child in gridInventario)
-        {
-            Destroy(child.gameObject);
-        }
-
-        foreach (var item in itensInventario)
-        {
-            MostrarItemNaUI(item);
-        }
+        CanvasGroup cg = FadeUtils.GetOrAddCanvasGroup(go);
+        yield return StartCoroutine(FadeUtils.FadeCanvasGroup(this, cg, 1f, 0f, fadeDuration));
+        itemUIMap.Remove(nomeItem);
+        Destroy(go);
     }
 }

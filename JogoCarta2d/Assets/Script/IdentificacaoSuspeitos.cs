@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro; // corrigido: era Text/InputField legados
 using System.Collections.Generic;
 
 public class IdentificacaoSuspeitos : MonoBehaviour
@@ -9,16 +10,23 @@ public class IdentificacaoSuspeitos : MonoBehaviour
     {
         public string nome;
         public Sprite foto;
-        public string[] pistasIdentificacao; // Diálogos ou documentos que identificam
+        public string[] pistasIdentificacao;
         public bool identificado;
         public GameObject botaoIdentificar;
-        public InputField campoNome;
     }
 
+    [Header("Suspeitos")]
     public List<Suspeito> suspeitos = new List<Suspeito>();
+
+    [Header("UI â€” painel de identificaÃ§Ã£o")]
     public GameObject painelIdentificacao;
-    public Text textoFeedback;
-    public SistemaDeducao sistemaDeducao; // Referência ao sistema principal
+    public Image fotoUI;
+    public TMP_InputField campoNome;      // corrigido: TMP_InputField em vez de InputField legado
+    public Button botaoConfirmar;
+    public TextMeshProUGUI textoFeedback; // corrigido: era Text legado
+
+    [Header("ReferÃªncias")]
+    public SistemaDeducao sistemaDeducao;
 
     void Start()
     {
@@ -29,76 +37,71 @@ public class IdentificacaoSuspeitos : MonoBehaviour
                 Button btn = suspeito.botaoIdentificar.GetComponent<Button>();
                 if (btn != null)
                 {
-                    // Cada botão corresponde a um suspeito
-                    Suspeito localSuspeito = suspeito;
-                    btn.onClick.AddListener(() => AbrirIdentificacao(localSuspeito));
+                    Suspeito local = suspeito;
+                    btn.onClick.AddListener(() => AbrirIdentificacao(local));
                 }
             }
         }
+
+        if (painelIdentificacao != null)
+            painelIdentificacao.SetActive(false);
     }
 
     void AbrirIdentificacao(Suspeito suspeito)
     {
         if (suspeito.identificado)
         {
-            textoFeedback.text = $"{suspeito.nome} já foi identificado!";
+            MostrarFeedback($"{suspeito.nome} jÃ¡ foi identificado!");
             return;
         }
 
         painelIdentificacao.SetActive(true);
 
-        // Configurar UI com a foto do suspeito
-        Image fotoUI = painelIdentificacao.GetComponentInChildren<Image>();
         if (fotoUI != null && suspeito.foto != null)
             fotoUI.sprite = suspeito.foto;
 
-        // Configurar input field
-        InputField input = painelIdentificacao.GetComponentInChildren<InputField>();
-        if (input != null)
-        {
-            input.text = "";
+        if (campoNome != null)
+            campoNome.text = "";
 
-            // Configurar botão confirmar
-            Button confirmar = painelIdentificacao.GetComponentInChildren<Button>();
-            if (confirmar != null)
-            {
-                confirmar.onClick.RemoveAllListeners();
-                confirmar.onClick.AddListener(() => VerificarIdentificacao(suspeito, input.text));
-            }
+        if (botaoConfirmar != null)
+        {
+            botaoConfirmar.onClick.RemoveAllListeners();
+            botaoConfirmar.onClick.AddListener(() => VerificarIdentificacao(suspeito));
         }
     }
 
-    void VerificarIdentificacao(Suspeito suspeito, string nomeDigitado)
+    void VerificarIdentificacao(Suspeito suspeito)
     {
-        if (nomeDigitado.Trim().ToLower() == suspeito.nome.ToLower())
+        string digitado = campoNome != null ? campoNome.text.Trim() : "";
+
+        if (string.Equals(digitado, suspeito.nome, System.StringComparison.OrdinalIgnoreCase))
         {
             suspeito.identificado = true;
-            textoFeedback.text = $"Correto! Este é {suspeito.nome}!";
+            MostrarFeedback($"Correto! Este Ã© {suspeito.nome}!");
 
-            // Desbloquear progresso
-            if (sistemaDeducao != null)
-                sistemaDeducao.RegistrarIdentificacao(suspeito.nome);
+            sistemaDeducao?.RegistrarIdentificacao(suspeito.nome);
 
             painelIdentificacao.SetActive(false);
         }
         else
         {
-            textoFeedback.text = "Identificação incorreta! Tente novamente após encontrar mais pistas.";
+            MostrarFeedback("IdentificaÃ§Ã£o incorreta! Tente novamente apÃ³s encontrar mais pistas.");
         }
     }
 
-    // Verifica se o jogador tem pistas suficientes para identificar
+    void MostrarFeedback(string mensagem)
+    {
+        if (textoFeedback != null)
+            textoFeedback.text = mensagem;
+    }
+
+    // Verifica se o jogador coletou pistas suficientes para identificar o suspeito
     public bool PodeIdentificar(Suspeito suspeito, List<string> pistasEncontradas)
     {
-        int pistasNecessarias = suspeito.pistasIdentificacao.Length;
-        int pistasEncontradasCount = 0;
-
-        foreach (string pista in pistasEncontradas)
+        foreach (string pista in suspeito.pistasIdentificacao)
         {
-            if (System.Array.Exists(suspeito.pistasIdentificacao, p => p == pista))
-                pistasEncontradasCount++;
+            if (!pistasEncontradas.Contains(pista)) return false;
         }
-
-        return pistasEncontradasCount >= pistasNecessarias;
+        return true;
     }
 }

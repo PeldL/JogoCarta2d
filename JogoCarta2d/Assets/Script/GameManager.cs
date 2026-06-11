@@ -1,23 +1,30 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
+/// <summary>
+/// GameManager atualizado — integrado ao sistema de save por arquivos JSON.
+/// O save via PlayerPrefs foi removido; toda persistência passa por GameSaveSystem.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
-    [Header("Sistemas")]
-    public MapaInterativo mapa;
-    public SistemaPericia pericia;
-    public SistemaItens inventario;
-    public QuadroDeducao quadro;
-    public IdentificacaoSuspeitos identificacao;
+    [Header("Sistemas — reatribuídos automaticamente a cada cena")]
+    [HideInInspector] public MapaInterativo mapa;
+    [HideInInspector] public SistemaPericia pericia;
+    [HideInInspector] public SistemaItens sistemaItens;
+    [HideInInspector] public QuadroDeducao quadro;
+    [HideInInspector] public IdentificacaoSuspeitos identificacao;
+
+    [Header("UI — painel de pausa (atribuir no Inspector da cena)")]
+    public GameObject painelPausa;
 
     [Header("Progresso")]
     public List<string> pistasEncontradas = new List<string>();
     public int progressoHistoria = 0;
 
-    [Header("UI")]
-    public GameObject painelPausa;
+    // ── Singleton + DontDestroyOnLoad ─────────────────────────────────────────
 
     void Awake()
     {
@@ -25,6 +32,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
@@ -32,20 +40,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
+    void OnDestroy()
     {
-        // Inicializar jogo
-        CarregarProgresso();
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        mapa          = FindFirstObjectByType<MapaInterativo>();
+        pericia       = FindFirstObjectByType<SistemaPericia>();
+        sistemaItens  = FindFirstObjectByType<SistemaItens>();
+        quadro        = FindFirstObjectByType<QuadroDeducao>();
+        identificacao = FindFirstObjectByType<IdentificacaoSuspeitos>();
+        painelPausa   = GameObject.FindWithTag("PainelPausa");
     }
 
     void Update()
     {
-        // Tecla ESC para pausar
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            PausarJogo();
-        }
+            TogglePausa();
     }
+
+    // ── Registrar pista ───────────────────────────────────────────────────────
 
     public void RegistrarPista(string pistaId, string descricao)
     {
@@ -54,48 +70,43 @@ public class GameManager : MonoBehaviour
             pistasEncontradas.Add(pistaId);
             Debug.Log($"Nova pista encontrada: {descricao}");
 
-            // Verificar se alguma identifica��o pode ser feita agora
-            // (Implementar l�gica)
+            // Salva automaticamente ao encontrar pista importante
+            GetComponent<AutoSaveManager>()?.Salvar();
         }
     }
+
+    // ── Avançar história ──────────────────────────────────────────────────────
 
     public void AvancarHistoria()
     {
         progressoHistoria++;
-
         switch (progressoHistoria)
         {
-            case 1:
-                Debug.Log("Fase 1: Investigar o bar");
-                break;
-            case 2:
-                Debug.Log("Fase 2: Interrogar testemunhas");
-                break;
-            case 3:
-                Debug.Log("Fase 3: Montar o quadro de dedu��o");
-                break;
+            case 1: Debug.Log("Fase 1: Investigar o bar"); break;
+            case 2: Debug.Log("Fase 2: Interrogar testemunhas"); break;
+            case 3: Debug.Log("Fase 3: Montar o quadro de dedução"); break;
         }
+
+        // Salva automaticamente ao avançar na história
+        GetComponent<AutoSaveManager>()?.Salvar();
     }
 
-    void PausarJogo()
+    // ── Pausa ─────────────────────────────────────────────────────────────────
+
+    void TogglePausa()
     {
-        if (painelPausa != null)
-        {
-            bool pausado = !painelPausa.activeSelf;
-            painelPausa.SetActive(pausado);
-            Time.timeScale = pausado ? 0f : 1f;
-        }
+        if (painelPausa == null) return;
+        bool pausado = !painelPausa.activeSelf;
+        painelPausa.SetActive(pausado);
+        Time.timeScale = pausado ? 0f : 1f;
     }
 
-    void CarregarProgresso()
-    {
-        // Carregar save game 
-        Debug.Log("Progresso carregado");
-    }
+    // ── Reiniciar save ────────────────────────────────────────────────────────
 
-    public void SalvarProgresso()
+    /// <summary>Limpa os dados em memória (o slot no disco deve ser deletado via SlotSelectUI).</summary>
+    public void ReiniciarDados()
     {
-        // Salvar progresso
-        Debug.Log("Progresso salvo");
+        pistasEncontradas.Clear();
+        progressoHistoria = 0;
     }
 }

@@ -10,8 +10,11 @@ public class MapaInterativo : MonoBehaviour
     [System.Serializable]
     public class AreaMapa
     {
-        [Header("Configura��o da �rea")]
+        [Header("Configuração")]
         public string nomeArea;
+        [TextArea(2, 4)]
+        public string descricao;
+        public string nomeCenaParaCarregar;
 
         [Header("Elementos Visuais")]
         public Button botaoArea;
@@ -22,19 +25,21 @@ public class MapaInterativo : MonoBehaviour
         public TextMeshProUGUI textoNomeArea;
         public TextMeshProUGUI textoDescricaoArea;
 
-        [Header("Configura��es")]
-        [TextArea(2, 4)]
-        public string descricao;
-        public string nomeCenaParaCarregar;
-
-        [Header("Fade Config")]
+        [Header("Fade")]
         public float fadeDuration = 0.3f;
 
-        [HideInInspector] public bool isHovering = false;
+        // Coroutines em andamento — necessário para cancelar antes de inverter
+        [HideInInspector] public Coroutine hoverCoroutine;
+        [HideInInspector] public bool isHovering;
     }
 
+    [Header("Áreas")]
     public List<AreaMapa> areas = new List<AreaMapa>();
+
+    [Header("UI Global")]
     public TextMeshProUGUI textoDescricaoGlobal;
+    public Canvas canvasPrincipal; // Arraste o Canvas principal aqui — evita FindFirstObjectByType
+
     public float tempoResetDescricao = 3f;
 
     private Coroutine resetDescricaoCoroutine;
@@ -43,239 +48,97 @@ public class MapaInterativo : MonoBehaviour
     {
         foreach (var area in areas)
         {
-            // Configura outlines invis�veis
-            if (area.outlineEffect != null)
-            {
-                Color cor = area.outlineEffect.color;
-                cor.a = 0f;
-                area.outlineEffect.color = cor;
-                area.outlineEffect.gameObject.SetActive(true);
-            }
-
-            // Configura textos - TODOS come�am invis�veis e desativados
-            if (area.textoNomeArea != null)
-            {
-                Color cor = area.textoNomeArea.color;
-                cor.a = 0f;
-                area.textoNomeArea.color = cor;
-                area.textoNomeArea.gameObject.SetActive(true); // Ativo mas invis�vel
-            }
-
-            if (area.textoDescricaoArea != null)
-            {
-                Color cor = area.textoDescricaoArea.color;
-                cor.a = 0f;
-                area.textoDescricaoArea.color = cor;
-                area.textoDescricaoArea.gameObject.SetActive(true); // Ativo mas invis�vel
-            }
-
-            // Configura CanvasGroup
-            if (area.areaCanvasGroup != null)
-                area.areaCanvasGroup.alpha = 0f;
-
-            // Adiciona eventos
+            InitArea(area);
             AddHoverEvents(area);
             area.botaoArea.onClick.AddListener(() => OnAreaClicada(area));
         }
     }
 
+    void InitArea(AreaMapa area)
+    {
+        SetAlpha(area.outlineEffect, 0f);
+        SetAlpha(area.textoNomeArea, 0f);
+        SetAlpha(area.textoDescricaoArea, 0f);
+        if (area.areaCanvasGroup != null) area.areaCanvasGroup.alpha = 0f;
+    }
+
+    // ── Hover ─────────────────────────────────────────────────────────────────
+
     void AddHoverEvents(AreaMapa area)
     {
-        EventTrigger trigger = area.botaoArea.gameObject.GetComponent<EventTrigger>();
-        if (trigger == null)
-            trigger = area.botaoArea.gameObject.AddComponent<EventTrigger>();
-
+        EventTrigger trigger = area.botaoArea.gameObject.GetComponent<EventTrigger>()
+            ?? area.botaoArea.gameObject.AddComponent<EventTrigger>();
         trigger.triggers.Clear();
 
-        EventTrigger.Entry entryEnter = new EventTrigger.Entry();
-        entryEnter.eventID = EventTriggerType.PointerEnter;
-        entryEnter.callback.AddListener((data) => { StartCoroutine(OnHoverEnter(area)); });
-        trigger.triggers.Add(entryEnter);
-
-        EventTrigger.Entry entryExit = new EventTrigger.Entry();
-        entryExit.eventID = EventTriggerType.PointerExit;
-        entryExit.callback.AddListener((data) => { StartCoroutine(OnHoverExit(area)); });
-        trigger.triggers.Add(entryExit);
+        AddTrigger(trigger, EventTriggerType.PointerEnter, _ => StartHover(area, true));
+        AddTrigger(trigger, EventTriggerType.PointerExit,  _ => StartHover(area, false));
     }
 
-    IEnumerator OnHoverEnter(AreaMapa area)
+    void AddTrigger(EventTrigger trigger, EventTriggerType type, UnityEngine.Events.UnityAction<BaseEventData> action)
     {
-        if (area.isHovering) yield break;
-        area.isHovering = true;
+        var entry = new EventTrigger.Entry { eventID = type };
+        entry.callback.AddListener(action);
+        trigger.triggers.Add(entry);
+    }
 
-        // Atualiza os textos ANTES do fade
-        if (area.textoNomeArea != null)
-            area.textoNomeArea.text = area.nomeArea;
+    void StartHover(AreaMapa area, bool entering)
+    {
+        // Cancela coroutine anterior para evitar animações sobrepostas
+        if (area.hoverCoroutine != null)
+            StopCoroutine(area.hoverCoroutine);
 
-        if (area.textoDescricaoArea != null)
-            area.textoDescricaoArea.text = area.descricao;
+        area.isHovering = entering;
+        area.hoverCoroutine = StartCoroutine(entering ? HoverEnter(area) : HoverExit(area));
+    }
 
-        // ===== FADE SINCRONIZADO =====
-        // Todos os elementos fazem fade IN juntos
+    IEnumerator HoverEnter(AreaMapa area)
+    {
+        // Atualiza textos antes do fade para não ficar em branco durante a animação
+        if (area.textoNomeArea != null)    area.textoNomeArea.text    = area.nomeArea;
+        if (area.textoDescricaoArea != null) area.textoDescricaoArea.text = area.descricao;
 
-        float elapsed = 0f;
+        yield return FadeArea(area, 0f, 1f);
 
-        while (elapsed < area.fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / area.fadeDuration; // 0 a 1
-            float alpha = Mathf.Lerp(0f, 1f, t);
-
-            // 1. Fade do outline
-            if (area.outlineEffect != null)
-            {
-                Color cor = area.outlineEffect.color;
-                cor.a = alpha;
-                area.outlineEffect.color = cor;
-            }
-
-            // 2. Fade do CanvasGroup
-            if (area.areaCanvasGroup != null)
-                area.areaCanvasGroup.alpha = alpha;
-
-            // 3. Fade do NOME (TMP) - SINCRONIZADO
-            if (area.textoNomeArea != null)
-            {
-                Color cor = area.textoNomeArea.color;
-                cor.a = alpha;
-                area.textoNomeArea.color = cor;
-            }
-
-            // 4. Fade da DESCRI��O (TMP) - SINCRONIZADO
-            if (area.textoDescricaoArea != null)
-            {
-                Color cor = area.textoDescricaoArea.color;
-                cor.a = alpha;
-                area.textoDescricaoArea.color = cor;
-            }
-
-            yield return null;
-        }
-
-        // Garante que todos terminaram em alpha = 1
-        if (area.outlineEffect != null)
-        {
-            Color cor = area.outlineEffect.color;
-            cor.a = 1f;
-            area.outlineEffect.color = cor;
-        }
-
-        if (area.areaCanvasGroup != null)
-            area.areaCanvasGroup.alpha = 1f;
-
-        if (area.textoNomeArea != null)
-        {
-            Color cor = area.textoNomeArea.color;
-            cor.a = 1f;
-            area.textoNomeArea.color = cor;
-        }
-
-        if (area.textoDescricaoArea != null)
-        {
-            Color cor = area.textoDescricaoArea.color;
-            cor.a = 1f;
-            area.textoDescricaoArea.color = cor;
-        }
-
-        // Texto global (opcional)
+        // Texto global
         if (textoDescricaoGlobal != null)
         {
-            yield return StartCoroutine(FadeTextMeshProGlobal(textoDescricaoGlobal, 1f, 0f, 0.2f));
+            yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoGlobal, textoDescricaoGlobal.color.a, 0f, 0.2f));
             textoDescricaoGlobal.text = $"{area.nomeArea}: {area.descricao}";
-            yield return StartCoroutine(FadeTextMeshProGlobal(textoDescricaoGlobal, 0f, 1f, 0.2f));
+            yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoGlobal, 0f, 1f, 0.2f));
 
             if (resetDescricaoCoroutine != null)
+            {
                 StopCoroutine(resetDescricaoCoroutine);
+                resetDescricaoCoroutine = null;
+            }
         }
     }
 
-    IEnumerator OnHoverExit(AreaMapa area)
+    IEnumerator HoverExit(AreaMapa area)
     {
-        if (!area.isHovering) yield break;
-        area.isHovering = false;
+        yield return FadeArea(area, 1f, 0f);
 
-        // ===== FADE SINCRONIZADO DE SA�DA =====
-        // Todos os elementos fazem fade OUT juntos
-
-        float elapsed = 0f;
-
-        while (elapsed < area.fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / area.fadeDuration; // 0 a 1
-            float alpha = Mathf.Lerp(1f, 0f, t);
-
-            // 1. Fade do outline
-            if (area.outlineEffect != null)
-            {
-                Color cor = area.outlineEffect.color;
-                cor.a = alpha;
-                area.outlineEffect.color = cor;
-            }
-
-            // 2. Fade do CanvasGroup
-            if (area.areaCanvasGroup != null)
-                area.areaCanvasGroup.alpha = alpha;
-
-            // 3. Fade do NOME (TMP) - SINCRONIZADO
-            if (area.textoNomeArea != null)
-            {
-                Color cor = area.textoNomeArea.color;
-                cor.a = alpha;
-                area.textoNomeArea.color = cor;
-            }
-
-            // 4. Fade da DESCRI��O (TMP) - SINCRONIZADO
-            if (area.textoDescricaoArea != null)
-            {
-                Color cor = area.textoDescricaoArea.color;
-                cor.a = alpha;
-                area.textoDescricaoArea.color = cor;
-            }
-
-            yield return null;
-        }
-
-        // Garante que todos terminaram em alpha = 0
-        if (area.outlineEffect != null)
-        {
-            Color cor = area.outlineEffect.color;
-            cor.a = 0f;
-            area.outlineEffect.color = cor;
-        }
-
-        if (area.areaCanvasGroup != null)
-            area.areaCanvasGroup.alpha = 0f;
-
-        if (area.textoNomeArea != null)
-        {
-            Color cor = area.textoNomeArea.color;
-            cor.a = 0f;
-            area.textoNomeArea.color = cor;
-        }
-
-        if (area.textoDescricaoArea != null)
-        {
-            Color cor = area.textoDescricaoArea.color;
-            cor.a = 0f;
-            area.textoDescricaoArea.color = cor;
-        }
-
-        // Reseta texto global
         if (textoDescricaoGlobal != null && resetDescricaoCoroutine == null)
-        {
             resetDescricaoCoroutine = StartCoroutine(ResetarDescricaoComFade());
-        }
     }
+
+    IEnumerator FadeArea(AreaMapa area, float from, float to)
+    {
+        yield return FadeUtils.Fade(this, a =>
+        {
+            SetAlpha(area.outlineEffect, a);
+            SetAlpha(area.textoNomeArea, a);
+            SetAlpha(area.textoDescricaoArea, a);
+            if (area.areaCanvasGroup != null) area.areaCanvasGroup.alpha = a;
+        }, from, to, area.fadeDuration);
+    }
+
+    // ── Click / cena ──────────────────────────────────────────────────────────
 
     void OnAreaClicada(AreaMapa area)
     {
-        Debug.Log($"Clicou em: {area.nomeArea}");
-
         if (!string.IsNullOrEmpty(area.nomeCenaParaCarregar))
-        {
             StartCoroutine(TransicaoDeCena(area.nomeCenaParaCarregar));
-        }
     }
 
     IEnumerator TransicaoDeCena(string nomeCena)
@@ -283,19 +146,11 @@ public class MapaInterativo : MonoBehaviour
         GameObject fadePanel = CriarFadePanel();
         Image img = fadePanel.GetComponent<Image>();
 
-        float elapsed = 0f;
-        Color cor = img.color;
-
-        while (elapsed < 0.5f)
-        {
-            elapsed += Time.deltaTime;
-            cor.a = Mathf.Lerp(0f, 1f, elapsed / 0.5f);
-            img.color = cor;
-            yield return null;
-        }
-
+        yield return FadeUtils.FadeImage(this, img, 0f, 1f, 0.5f);
         UnityEngine.SceneManagement.SceneManager.LoadScene(nomeCena);
     }
+
+    // ── Texto global ──────────────────────────────────────────────────────────
 
     IEnumerator ResetarDescricaoComFade()
     {
@@ -303,52 +158,48 @@ public class MapaInterativo : MonoBehaviour
 
         if (textoDescricaoGlobal != null)
         {
-            yield return StartCoroutine(FadeTextMeshProGlobal(textoDescricaoGlobal, 1f, 0f, 0.3f));
-            textoDescricaoGlobal.text = "Passe o mouse sobre as �reas para investigar...";
-            yield return StartCoroutine(FadeTextMeshProGlobal(textoDescricaoGlobal, 0f, 1f, 0.3f));
+            yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoGlobal, 1f, 0f, 0.3f));
+            textoDescricaoGlobal.text = "Passe o mouse sobre as áreas para investigar...";
+            yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoGlobal, 0f, 1f, 0.3f));
         }
 
         resetDescricaoCoroutine = null;
     }
 
-    // Fade espec�fico para o texto global (separado para n�o interferir)
-    IEnumerator FadeTextMeshProGlobal(TextMeshProUGUI tmp, float startAlpha, float endAlpha, float duration)
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    static void SetAlpha(Image img, float a)
     {
-        if (tmp == null) yield break;
+        if (img == null) return;
+        Color c = img.color; c.a = a; img.color = c;
+    }
 
-        float elapsed = 0f;
-        Color cor = tmp.color;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / duration);
-            cor.a = alpha;
-            tmp.color = cor;
-            yield return null;
-        }
-
-        cor.a = endAlpha;
-        tmp.color = cor;
+    static void SetAlpha(TextMeshProUGUI tmp, float a)
+    {
+        if (tmp == null) return;
+        Color c = tmp.color; c.a = a; tmp.color = c;
     }
 
     GameObject CriarFadePanel()
     {
         GameObject fadePanel = new GameObject("FadePanel");
-        Canvas canvas = FindFirstObjectByType<Canvas>();
+
+        // Usa referência direta ao invés de FindFirstObjectByType para garantir o Canvas certo
+        Canvas canvas = canvasPrincipal != null
+            ? canvasPrincipal
+            : FindFirstObjectByType<Canvas>();
 
         if (canvas != null)
-            fadePanel.transform.SetParent(canvas.transform);
+            fadePanel.transform.SetParent(canvas.transform, false);
 
         fadePanel.transform.SetAsLastSibling();
 
         Image img = fadePanel.AddComponent<Image>();
-        img.color = Color.black;
+        img.color = new Color(0f, 0f, 0f, 0f);
 
         RectTransform rect = fadePanel.GetComponent<RectTransform>();
         rect.anchorMin = Vector2.zero;
         rect.anchorMax = Vector2.one;
-        rect.sizeDelta = Vector2.zero;
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;
 
