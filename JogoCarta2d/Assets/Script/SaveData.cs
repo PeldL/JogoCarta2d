@@ -25,11 +25,10 @@ public class SaveData
     public List<string> dicasReveladas = new List<string>(); // idDica das reveladas
 
     // ── Quadro de Dedução ─────────────────────────────────────────────────────
-    // Salva qual PistaItem foi colocada em cada slot
+    // Salva qual PistaItem foi colocada em cada slot (por tipo: "Vitima", "Suspeito", "Arma")
     public string slotVitima = "";
     public string slotSuspeito = "";
     public string slotArma = "";
-    public string slotLocal = ""; // NOVO
 
     // ── Suspeitos identificados ───────────────────────────────────────────────
     public List<string> suspeitosIdentificados = new List<string>();

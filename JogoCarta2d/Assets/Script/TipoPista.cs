@@ -4,6 +4,5 @@ public enum TipoPista
 {
     Vitima,
     Suspeito,
-    Arma,
-    Local  // NOVO: alinhado com o GDD
+    Arma
 }
