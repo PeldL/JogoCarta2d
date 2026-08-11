@@ -1,11 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Gerencia o auto-save a cada 1 minuto e nos eventos importantes do jogo.
-/// Coloque este componente no mesmo GameObject do GameManager (que já tem DontDestroyOnLoad).
-/// </summary>
 public class AutoSaveManager : MonoBehaviour
 {
     [Header("Slot atual (definido ao escolher slot na tela de seleção)")]
@@ -14,12 +11,9 @@ public class AutoSaveManager : MonoBehaviour
     [Header("Ícone de save (arraste o SaveIcon no Inspector)")]
     public SaveIcon saveIcon;
 
-    const float INTERVALO_SAVE = 60f; // 1 minuto
+    const float INTERVALO_SAVE = 60f;
 
-    // Referência ao GameManager para coletar os dados
     GameManager gm;
-
-    // Acumula o tempo de jogo
     float tempoJogo = 0f;
 
     void Start()
@@ -30,12 +24,9 @@ public class AutoSaveManager : MonoBehaviour
 
     void Update()
     {
-        // Só conta tempo quando o jogo não está pausado
         if (Time.timeScale > 0f)
             tempoJogo += Time.deltaTime;
     }
-
-    // ── Loop de auto-save ─────────────────────────────────────────────────────
 
     IEnumerator AutoSaveLoop()
     {
@@ -45,8 +36,6 @@ public class AutoSaveManager : MonoBehaviour
             Salvar();
         }
     }
-
-    // ── Salvar ────────────────────────────────────────────────────────────────
 
     public void Salvar()
     {
@@ -63,32 +52,31 @@ public class AutoSaveManager : MonoBehaviour
     {
         var data = new SaveData();
 
-        // ── Progresso principal ───────────────────────────────────────────────
-        data.progressoHistoria  = gm.progressoHistoria;
-        data.pistasEncontradas  = new System.Collections.Generic.List<string>(gm.pistasEncontradas);
-        data.cenaAtual          = SceneManager.GetActiveScene().name;
-        data.tempoTotalJogo     = tempoJogo;
+        data.progressoHistoria = gm.progressoHistoria;
+        data.pistasEncontradas = new List<string>(gm.pistasEncontradas);
+        data.cenaAtual = SceneManager.GetActiveScene().name;
+        data.tempoTotalJogo = tempoJogo;
 
-        // ── Inventário ────────────────────────────────────────────────────────
+        // Inventário
         if (gm.sistemaItens != null)
         {
-            data.itensColetados = new System.Collections.Generic.List<string>();
+            data.itensColetados = new List<string>();
             foreach (var item in gm.sistemaItens.itens)
                 if (item.coletado)
                     data.itensColetados.Add(item.idItem);
         }
 
-        // ── Sistema de Perícia ────────────────────────────────────────────────
+        // Perícia
         if (gm.pericia != null)
         {
             data.ligacoesDisponiveis = gm.pericia.ligacoesDisponiveis;
-            data.dicasReveladas      = new System.Collections.Generic.List<string>();
+            data.dicasReveladas = new List<string>();
             foreach (var dica in gm.pericia.dicas)
                 if (dica.revelada)
                     data.dicasReveladas.Add(dica.idDica);
         }
 
-        // ── Quadro de Dedução ─────────────────────────────────────────────────
+        // Quadro de Dedução — incluindo LOCAL
         if (gm.quadro != null)
         {
             foreach (var slot in gm.quadro.slots)
@@ -96,17 +84,18 @@ public class AutoSaveManager : MonoBehaviour
                 if (!slot.preenchido || slot.itemColocado == null) continue;
                 switch (slot.tipo)
                 {
-                    case TipoPista.Vitima:   data.slotVitima   = slot.itemColocado.nome; break;
+                    case TipoPista.Vitima: data.slotVitima = slot.itemColocado.nome; break;
                     case TipoPista.Suspeito: data.slotSuspeito = slot.itemColocado.nome; break;
-                    case TipoPista.Arma:     data.slotArma     = slot.itemColocado.nome; break;
+                    case TipoPista.Arma: data.slotArma = slot.itemColocado.nome; break;
+                    case TipoPista.Local: data.slotLocal = slot.itemColocado.nome; break; // NOVO
                 }
             }
         }
 
-        // ── Suspeitos identificados ───────────────────────────────────────────
+        // Suspeitos identificados
         if (gm.identificacao != null)
         {
-            data.suspeitosIdentificados = new System.Collections.Generic.List<string>();
+            data.suspeitosIdentificados = new List<string>();
             foreach (var suspeito in gm.identificacao.suspeitos)
                 if (suspeito.identificado)
                     data.suspeitosIdentificados.Add(suspeito.nome);
@@ -115,20 +104,15 @@ public class AutoSaveManager : MonoBehaviour
         return data;
     }
 
-    // ── Carregar ──────────────────────────────────────────────────────────────
-
     public void CarregarDados(SaveData data)
     {
         if (gm == null || data == null) return;
 
-        // Progresso principal
         gm.progressoHistoria = data.progressoHistoria;
-        gm.pistasEncontradas = data.pistasEncontradas
-            ?? new System.Collections.Generic.List<string>();
-
+        gm.pistasEncontradas = data.pistasEncontradas ?? new List<string>();
         tempoJogo = data.tempoTotalJogo;
 
-        // Inventário — marca itens como coletados; a UI é reconstruída pela cena
+        // Inventário
         if (gm.sistemaItens != null && data.itensColetados != null)
             foreach (var item in gm.sistemaItens.itens)
                 if (data.itensColetados.Contains(item.idItem))
@@ -150,7 +134,7 @@ public class AutoSaveManager : MonoBehaviour
                 if (data.suspeitosIdentificados.Contains(suspeito.nome))
                     suspeito.identificado = true;
 
-        // Quadro de dedução — restaura itens colocados nos slots
+        // Quadro de dedução — restaura todos os slots incluindo LOCAL
         RestaurarQuadro(data);
 
         Debug.Log($"[AutoSave] Dados carregados — fase {data.progressoHistoria}, " +
@@ -161,38 +145,12 @@ public class AutoSaveManager : MonoBehaviour
     {
         if (gm.quadro == null) return;
 
-        foreach (var slot in gm.quadro.slots)
-        {
-            string nomeParaRestaurar = slot.tipo switch
-            {
-                TipoPista.Vitima   => data.slotVitima,
-                TipoPista.Suspeito => data.slotSuspeito,
-                TipoPista.Arma     => data.slotArma,
-                _                  => ""
-            };
-
-            if (string.IsNullOrEmpty(nomeParaRestaurar)) continue;
-
-            var pistaItem = gm.quadro.todasPistas.Find(p => p.nome == nomeParaRestaurar);
-            if (pistaItem == null) continue;
-
-            slot.itemColocado = pistaItem;
-            slot.preenchido   = true;
-
-            if (slot.slotImage != null)
-            {
-                slot.slotImage.sprite = pistaItem.icone;
-                slot.slotImage.color  = UnityEngine.Color.white;
-            }
-        }
+        gm.quadro.RestaurarSlot(TipoPista.Vitima, data.slotVitima);
+        gm.quadro.RestaurarSlot(TipoPista.Suspeito, data.slotSuspeito);
+        gm.quadro.RestaurarSlot(TipoPista.Arma, data.slotArma);
+        gm.quadro.RestaurarSlot(TipoPista.Local, data.slotLocal); // NOVO
     }
 
-    // ── Salva automaticamente ao sair/pausar o app ────────────────────────────
-
-    void OnApplicationQuit()  => Salvar();
-
-    void OnApplicationPause(bool pausado)
-    {
-        if (pausado) Salvar();
-    }
+    void OnApplicationQuit() => Salvar();
+    void OnApplicationPause(bool pausado) { if (pausado) Salvar(); }
 }
