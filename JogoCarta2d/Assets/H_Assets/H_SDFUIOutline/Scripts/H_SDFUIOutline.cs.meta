@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c280d1ddc7af1a04e8f71ea529d0c27f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 394372
+  packageName: H SDF UI Outline
+  packageVersion: 1.0
+  assetPath: Assets/H_Assets/H_SDFUIOutline/Scripts/H_SDFUIOutline.cs
+  uploadId: 956328

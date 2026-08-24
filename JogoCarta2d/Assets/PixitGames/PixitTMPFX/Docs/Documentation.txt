@@ -1,0 +1,93 @@
+# TMPro Visual FX - Getting Started
+
+TMPro Visual FX is a small TextMeshPro add-on component for colorful, animated text.
+
+## Quick Start Documentation
+
+1. Add a TextMeshPro or TextMeshProUGUI object to your scene.
+2. Add the `TMProVisualFX` component to the same GameObject.
+3. Choose a `Color FX` mode:
+   - `Original`: keeps the TextMeshPro color.
+   - `Solid`: applies one color.
+   - `Gradient`: blends across visible characters.
+   - `Rainbow`: animates hue over time.
+4. Choose a `Motion FX` mode:
+   - `None`: no movement.
+   - `Bounce`: playful up/down character bounce.
+   - `Wave`: smooth sine wave motion.
+   - `Shake`: fast attention-grabbing shake.
+   - `Pulse`: characters scale up and down.
+   - `Jitter`: small random energetic movement.
+   - `Swing`: characters rotate side to side.
+   - `Jump`: sharper character jump motion.
+   - `Wiggle`: position and rotation wiggle together.
+   - `Glitch`: short horizontal glitch offsets.
+   - `Breath`: soft idle scale animation.
+   - `Explode`: characters fly outward and fade.
+5. Choose a `Type Animation` mode:
+   - `None`: no reveal animation.
+   - `Typewriter`: reveals visible characters one by one.
+   - `PopIn`: characters appear with a small scale pop.
+   - `FadeInWave`: characters fade in with a wave lift.
+   - `Spiral`: characters spiral into place.
+
+## Motion Controls
+
+Most motion modes use the same simple controls:
+
+- `Motion Amount`: movement distance.
+- `Motion Speed`: animation speed.
+- `Character Delay`: delay between visible characters.
+- `Scale Amount`: scale strength for scale-based effects.
+- `Rotation Amount`: rotation strength in degrees.
+
+Motion FX and Type Animation can be combined. For example, use `Type Animation = PopIn` with `Motion FX = Wave`.
+
+## Effect Ranges
+
+By default, effects apply to the full text.
+
+To affect only selected letters:
+
+1. Set `Effect Range` to `Custom Ranges`.
+2. Add as many items as you need to `Effect Ranges`.
+3. Set `Start Index` and `End Index` for each range.
+
+Indexes use visible characters only. Spaces and rich text tags are not counted.
+
+Example: for `HELLO`, index `0` is `H`, index `1` is `E`, index `4` is `O`.
+
+## Type Animation
+
+Set `Type Animation` to `Typewriter`, `PopIn`, `FadeInWave`, or `Spiral`, then adjust:
+
+- `Type Characters Per Second`: reveal speed.
+- `Type Fade Duration`: soft fade time for each character.
+
+Call `Play()` or `Restart()` to run the type animation again from the beginning.
+
+## Runtime Usage
+
+```csharp
+using Pixit.TMProVisualFX;
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [SerializeField] private TMProVisualFX visualFX;
+
+    public void Highlight()
+    {
+        visualFX.ClearEffectRanges();
+        visualFX.AddEffectRange(0, 4);
+        visualFX.SetSolidColor(Color.yellow);
+        visualFX.Play();
+    }
+}
+```
+
+## Suggested Product Direction
+
+- Keep the first version simple and reliable.
+- Add preset assets next: Neon, Warning, Reward, Dialogue, Magic, Damage.
+- Add editor preview controls after runtime behavior feels good.

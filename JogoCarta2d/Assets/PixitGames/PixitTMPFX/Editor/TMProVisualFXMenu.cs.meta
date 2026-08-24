@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c186370122c63af4c9ee4f063865bc0f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 378160
+  packageName: Pixit Simple TMP Text Animator
+  packageVersion: 1.0
+  assetPath: Assets/PixitGames/PixitTMPFX/Editor/TMProVisualFXMenu.cs
+  uploadId: 911722

@@ -25,15 +25,30 @@ public class SaveData
     public List<string> dicasReveladas = new List<string>(); // idDica das reveladas
 
     // ── Quadro de Dedução ─────────────────────────────────────────────────────
-    // Salva qual PistaItem foi colocada em cada slot
+    // Salva qual PistaItem foi colocada em cada slot (por tipo: "Vitima", "Suspeito", "Arma", "Local")
     public string slotVitima = "";
     public string slotSuspeito = "";
     public string slotArma = "";
-    public string slotLocal = ""; // NOVO
+    public string slotLocal = ""; // adicionado — condição de vitória exige Local
 
     // ── Suspeitos identificados ───────────────────────────────────────────────
     public List<string> suspeitosIdentificados = new List<string>();
 
     // ── Tempo de jogo ─────────────────────────────────────────────────────────
     public float tempoTotalJogo = 0f; // em segundos
+
+    // ── Pontuação / avaliação (GDD: erros e velocidade definem a nota final) ──
+    public int quantidadeErros = 0;
+    public bool casoResolvido = false;
+
+    // ── Fotografias de evidências ──────────────────────────────────────────────
+    public List<string> evidenciasFotografadas = new List<string>();
+
+    // ── Interrogatórios (perguntas já feitas a cada personagem) ───────────────
+    public List<string> perguntasFeitas = new List<string>();
+
+    // ── Sistema de ligações automáticas (GDD) ──────────────────────────────────
+    public List<string> ligacoesRecebidas = new List<string>();
+
+    public List<string> areasVisitadas = new List<string>();
 }

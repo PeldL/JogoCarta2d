@@ -1,8 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Gerencia o auto-save a cada 1 minuto e nos eventos importantes do jogo.
+/// Coloque este componente no mesmo GameObject do GameManager (que já tem DontDestroyOnLoad).
+/// </summary>
 public class AutoSaveManager : MonoBehaviour
 {
     [Header("Slot atual (definido ao escolher slot na tela de seleção)")]
@@ -11,9 +14,12 @@ public class AutoSaveManager : MonoBehaviour
     [Header("Ícone de save (arraste o SaveIcon no Inspector)")]
     public SaveIcon saveIcon;
 
-    const float INTERVALO_SAVE = 60f;
+    const float INTERVALO_SAVE = 60f; // 1 minuto
 
+    // Referência ao GameManager para coletar os dados
     GameManager gm;
+
+    // Acumula o tempo de jogo
     float tempoJogo = 0f;
 
     void Start()
@@ -24,9 +30,12 @@ public class AutoSaveManager : MonoBehaviour
 
     void Update()
     {
+        // Só conta tempo quando o jogo não está pausado
         if (Time.timeScale > 0f)
             tempoJogo += Time.deltaTime;
     }
+
+    // ── Loop de auto-save ─────────────────────────────────────────────────────
 
     IEnumerator AutoSaveLoop()
     {
@@ -36,6 +45,8 @@ public class AutoSaveManager : MonoBehaviour
             Salvar();
         }
     }
+
+    // ── Salvar ────────────────────────────────────────────────────────────────
 
     public void Salvar()
     {
@@ -52,31 +63,32 @@ public class AutoSaveManager : MonoBehaviour
     {
         var data = new SaveData();
 
+        // ── Progresso principal ───────────────────────────────────────────────
         data.progressoHistoria = gm.progressoHistoria;
-        data.pistasEncontradas = new List<string>(gm.pistasEncontradas);
+        data.pistasEncontradas = new System.Collections.Generic.List<string>(gm.pistasEncontradas);
         data.cenaAtual = SceneManager.GetActiveScene().name;
         data.tempoTotalJogo = tempoJogo;
 
-        // Inventário
+        // ── Inventário ────────────────────────────────────────────────────────
         if (gm.sistemaItens != null)
         {
-            data.itensColetados = new List<string>();
+            data.itensColetados = new System.Collections.Generic.List<string>();
             foreach (var item in gm.sistemaItens.itens)
                 if (item.coletado)
                     data.itensColetados.Add(item.idItem);
         }
 
-        // Perícia
+        // ── Sistema de Perícia ────────────────────────────────────────────────
         if (gm.pericia != null)
         {
             data.ligacoesDisponiveis = gm.pericia.ligacoesDisponiveis;
-            data.dicasReveladas = new List<string>();
+            data.dicasReveladas = new System.Collections.Generic.List<string>();
             foreach (var dica in gm.pericia.dicas)
                 if (dica.revelada)
                     data.dicasReveladas.Add(dica.idDica);
         }
 
-        // Quadro de Dedução — incluindo LOCAL
+        // ── Quadro de Dedução ─────────────────────────────────────────────────
         if (gm.quadro != null)
         {
             foreach (var slot in gm.quadro.slots)
@@ -87,32 +99,55 @@ public class AutoSaveManager : MonoBehaviour
                     case TipoPista.Vitima: data.slotVitima = slot.itemColocado.nome; break;
                     case TipoPista.Suspeito: data.slotSuspeito = slot.itemColocado.nome; break;
                     case TipoPista.Arma: data.slotArma = slot.itemColocado.nome; break;
-                    case TipoPista.Local: data.slotLocal = slot.itemColocado.nome; break; // NOVO
+                    case TipoPista.Local: data.slotLocal = slot.itemColocado.nome; break;
                 }
             }
+
+            if (gm.quadro.sistemaPontuacao != null)
+                data.quantidadeErros = gm.quadro.sistemaPontuacao.quantidadeErros;
         }
 
-        // Suspeitos identificados
+        // ── Suspeitos identificados ───────────────────────────────────────────
         if (gm.identificacao != null)
         {
-            data.suspeitosIdentificados = new List<string>();
+            data.suspeitosIdentificados = new System.Collections.Generic.List<string>();
             foreach (var suspeito in gm.identificacao.suspeitos)
                 if (suspeito.identificado)
                     data.suspeitosIdentificados.Add(suspeito.nome);
         }
 
+        // ── Ligações automáticas já recebidas ─────────────────────────────────
+        data.ligacoesRecebidas = new System.Collections.Generic.List<string>(gm.ligacoesRecebidas);
+
+        // ── Áreas do mapa já visitadas ─────────────────────────────────────────
+        if (gm.mapa != null)
+            data.areasVisitadas = gm.mapa.ObterAreasVisitadas();
+
+        // ── Evidências fotografadas ───────────────────────────────────────────
+        if (gm.fotografia != null)
+            data.evidenciasFotografadas = gm.fotografia.ObterIdsFotografadas();
+
+        // ── Perguntas já feitas nos interrogatórios ───────────────────────────
+        if (gm.interrogatorio != null)
+            data.perguntasFeitas = gm.interrogatorio.ObterIdsPerguntasFeitas();
+
         return data;
     }
+
+    // ── Carregar ──────────────────────────────────────────────────────────────
 
     public void CarregarDados(SaveData data)
     {
         if (gm == null || data == null) return;
 
+        // Progresso principal
         gm.progressoHistoria = data.progressoHistoria;
-        gm.pistasEncontradas = data.pistasEncontradas ?? new List<string>();
+        gm.pistasEncontradas = data.pistasEncontradas
+            ?? new System.Collections.Generic.List<string>();
+
         tempoJogo = data.tempoTotalJogo;
 
-        // Inventário
+        // Inventário — marca itens como coletados; a UI é reconstruída pela cena
         if (gm.sistemaItens != null && data.itensColetados != null)
             foreach (var item in gm.sistemaItens.itens)
                 if (data.itensColetados.Contains(item.idItem))
@@ -134,8 +169,25 @@ public class AutoSaveManager : MonoBehaviour
                 if (data.suspeitosIdentificados.Contains(suspeito.nome))
                     suspeito.identificado = true;
 
-        // Quadro de dedução — restaura todos os slots incluindo LOCAL
+        // Quadro de dedução — restaura itens colocados nos slots
         RestaurarQuadro(data);
+
+        // Pontuação — restaura erros e o tempo já decorrido (sem zerar o cronômetro)
+        if (gm.quadro != null && gm.quadro.sistemaPontuacao != null)
+            gm.quadro.sistemaPontuacao.RestaurarEstado(data.quantidadeErros, data.tempoTotalJogo);
+
+        // Ligações automáticas já recebidas — evita repetir a mesma ligação
+        gm.ligacoesRecebidas = data.ligacoesRecebidas ?? new System.Collections.Generic.List<string>();
+        gm.ligacoes?.RestaurarRecebidas(gm.ligacoesRecebidas);
+
+        // Áreas do mapa já visitadas — evita o indicador piscar de novo em área já vista
+        gm.mapa?.RestaurarAreasVisitadas(data.areasVisitadas);
+
+        // Evidências já fotografadas
+        gm.fotografia?.RestaurarIds(data.evidenciasFotografadas);
+
+        // Perguntas já feitas nos interrogatórios
+        gm.interrogatorio?.RestaurarPerguntasFeitas(data.perguntasFeitas);
 
         Debug.Log($"[AutoSave] Dados carregados — fase {data.progressoHistoria}, " +
                   $"{data.pistasEncontradas.Count} pistas.");
@@ -145,12 +197,39 @@ public class AutoSaveManager : MonoBehaviour
     {
         if (gm.quadro == null) return;
 
-        gm.quadro.RestaurarSlot(TipoPista.Vitima, data.slotVitima);
-        gm.quadro.RestaurarSlot(TipoPista.Suspeito, data.slotSuspeito);
-        gm.quadro.RestaurarSlot(TipoPista.Arma, data.slotArma);
-        gm.quadro.RestaurarSlot(TipoPista.Local, data.slotLocal); // NOVO
+        foreach (var slot in gm.quadro.slots)
+        {
+            string nomeParaRestaurar = slot.tipo switch
+            {
+                TipoPista.Vitima => data.slotVitima,
+                TipoPista.Suspeito => data.slotSuspeito,
+                TipoPista.Arma => data.slotArma,
+                TipoPista.Local => data.slotLocal,
+                _ => ""
+            };
+
+            if (string.IsNullOrEmpty(nomeParaRestaurar)) continue;
+
+            var pistaItem = gm.quadro.todasPistas.Find(p => p.nome == nomeParaRestaurar);
+            if (pistaItem == null) continue;
+
+            slot.itemColocado = pistaItem;
+            slot.preenchido = true;
+
+            if (slot.slotImage != null)
+            {
+                slot.slotImage.sprite = pistaItem.icone;
+                slot.slotImage.color = UnityEngine.Color.white;
+            }
+        }
     }
 
+    // ── Salva automaticamente ao sair/pausar o app ────────────────────────────
+
     void OnApplicationQuit() => Salvar();
-    void OnApplicationPause(bool pausado) { if (pausado) Salvar(); }
+
+    void OnApplicationPause(bool pausado)
+    {
+        if (pausado) Salvar();
+    }
 }

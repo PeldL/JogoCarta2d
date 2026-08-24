@@ -641,8 +641,7 @@ MonoBehaviour:
   botaoAbrirQuadro: {fileID: 0}
   textoResultadoFinal: {fileID: 0}
   painelVitoria: {fileID: 0}
-  textoDicaSolucao: {fileID: 0}
-  gameManager: {fileID: 0}
+  sistemaPontuacao: {fileID: 0}
 --- !u!1 &412191721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1542,7 +1541,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &788425398
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1798,7 +1797,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &855570144
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1844,10 +1843,26 @@ MonoBehaviour:
     textoNomeArea: {fileID: 0}
     textoDescricaoArea: {fileID: 0}
     fadeDuration: 0
+    indicadorNaoVisitado: {fileID: 0}
+    somHoverArea: {fileID: 0}
+    somCliqueArea: {fileID: 0}
     isHovering: 0
+    visitada: 0
   textoDescricaoGlobal: {fileID: 0}
   canvasPrincipal: {fileID: 0}
   tempoResetDescricao: 3
+  cursorCustomCanvasGroup: {fileID: 0}
+  cursorCustomRect: {fileID: 0}
+  cursorFadeDuration: 0.2
+  cursorInvestigar: {fileID: 0}
+  cursorHotspot: {x: 0, y: 0}
+  audioSource: {fileID: 0}
+  somHoverPadrao: {fileID: 0}
+  somCliquePadrao: {fileID: 0}
+  pulseMinAlpha: 0.65
+  pulseMaxAlpha: 1
+  pulseVelocidade: 1.5
+  indicadorVelocidade: 1
 --- !u!1 &910290721
 GameObject:
   m_ObjectHideFlags: 0
@@ -2172,8 +2187,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SistemaPericia
   dicas: []
   ligacoesDisponiveis: 3
-  tempoSemProgresso: 60
-  dicaAutomaticaAtiva: 1
   botaoLigarPericia: {fileID: 0}
   painelDica: {fileID: 0}
   textoDicaRevelada: {fileID: 0}
@@ -2608,7 +2621,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1300113161
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4329,20 +4342,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf37fefe1c2003c42ad1fcc4454fa1bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  todosCasos:
-  - {fileID: 0}
-  casoAtualIndex: 0
   mapa: {fileID: 0}
   pericia: {fileID: 0}
   sistemaItens: {fileID: 0}
   quadro: {fileID: 0}
   identificacao: {fileID: 0}
+  ligacoes: {fileID: 0}
+  fotografia: {fileID: 0}
+  interrogatorio: {fileID: 0}
+  ligacoesRecebidas: []
   painelPausa: {fileID: 0}
   pistasEncontradas:
   - 
   progressoHistoria: 0
-  erros: 0
-  maxErros: 3
 --- !u!114 &1718199330
 MonoBehaviour:
   m_ObjectHideFlags: 0
