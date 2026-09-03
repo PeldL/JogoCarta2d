@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 91660015}
   - component: {fileID: 91660017}
   - component: {fileID: 91660016}
+  - component: {fileID: 91660018}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -255,6 +256,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 91660014}
   m_CullTransparentMesh: 1
+--- !u!114 &91660018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91660014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f181be6387f18b45959546d118eeb34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetText: {fileID: 2016365017}
+  effectRangeMode: 0
+  effectRanges: []
+  colorMode: 0
+  solidColor: {r: 1, g: 1, b: 1, a: 1}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.22, b: 0.35, a: 1}
+    key1: {r: 0.2, g: 0.65, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  rainbowSpeed: 1
+  rainbowSaturation: 0.85
+  rainbowValue: 1
+  motionMode: 1
+  motionAmount: 8
+  motionSpeed: 3
+  characterDelay: 0.08
+  scaleAmount: 0.25
+  rotationAmount: 12
+  typeAnimationMode: 0
+  typeCharactersPerSecond: 1
+  typeFadeDuration: 0.06
+  playOnEnable: 1
+  useUnscaledTime: 0
 --- !u!1 &250994850
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,7 +833,7 @@ RectTransform:
   m_GameObject: {fileID: 979819659}
   m_LocalRotation: {x: -0, y: -0, z: 0.075517155, w: -0.9971445}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.8698893, y: 4.8698893, z: 4.8698893}
+  m_LocalScale: {x: 4.39639, y: 4.39639, z: 4.39639}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2114167559}
@@ -1054,7 +1116,7 @@ RectTransform:
   m_GameObject: {fileID: 1158430399}
   m_LocalRotation: {x: -0, y: -0, z: 0.075561486, w: -0.9971411}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.8698893, y: 4.8698893, z: 4.8698893}
+  m_LocalScale: {x: 4.2242393, y: 4.2242393, z: 4.2242393}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 91660015}
@@ -1413,6 +1475,7 @@ GameObject:
   - component: {fileID: 2016365016}
   - component: {fileID: 2016365018}
   - component: {fileID: 2016365017}
+  - component: {fileID: 2016365019}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1429,7 +1492,7 @@ RectTransform:
   m_GameObject: {fileID: 2016365015}
   m_LocalRotation: {x: 0.082017325, y: 0.09378353, z: -0.09275427, w: 0.9878636}
   m_LocalPosition: {x: 0, y: 0, z: 6.000183}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.92045, y: 0.92045, z: 0.92045}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 766354170}
@@ -1538,6 +1601,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016365015}
   m_CullTransparentMesh: 1
+--- !u!114 &2016365019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016365015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f181be6387f18b45959546d118eeb34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetText: {fileID: 2016365017}
+  effectRangeMode: 0
+  effectRanges: []
+  colorMode: 0
+  solidColor: {r: 1, g: 0.2028302, b: 0.2028302, a: 1}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.22, b: 0.35, a: 1}
+    key1: {r: 0.2, g: 0.65, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  rainbowSpeed: 1
+  rainbowSaturation: 0.85
+  rainbowValue: 1
+  motionMode: 1
+  motionAmount: 8
+  motionSpeed: 3
+  characterDelay: 0.08
+  scaleAmount: 0.25
+  rotationAmount: 12
+  typeAnimationMode: 0
+  typeCharactersPerSecond: 1
+  typeFadeDuration: 0.06
+  playOnEnable: 1
+  useUnscaledTime: 0
 --- !u!1 &2114167558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,6 +1673,7 @@ GameObject:
   - component: {fileID: 2114167559}
   - component: {fileID: 2114167561}
   - component: {fileID: 2114167560}
+  - component: {fileID: 2114167562}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1674,6 +1799,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2114167558}
   m_CullTransparentMesh: 1
+--- !u!114 &2114167562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2114167558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f181be6387f18b45959546d118eeb34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetText: {fileID: 2016365017}
+  effectRangeMode: 0
+  effectRanges: []
+  colorMode: 0
+  solidColor: {r: 1, g: 0.2028302, b: 0.2028302, a: 1}
+  gradient:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.22, b: 0.35, a: 1}
+    key1: {r: 0.2, g: 0.65, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_ColorSpace: -1
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  rainbowSpeed: 1
+  rainbowSaturation: 0.85
+  rainbowValue: 1
+  motionMode: 1
+  motionAmount: 8
+  motionSpeed: 3
+  characterDelay: 0.08
+  scaleAmount: 0.25
+  rotationAmount: 12
+  typeAnimationMode: 0
+  typeCharactersPerSecond: 1
+  typeFadeDuration: 0.06
+  playOnEnable: 1
+  useUnscaledTime: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
