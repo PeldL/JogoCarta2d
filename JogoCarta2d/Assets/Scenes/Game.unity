@@ -4351,7 +4351,7 @@ MonoBehaviour:
   fotografia: {fileID: 0}
   interrogatorio: {fileID: 0}
   ligacoesRecebidas: []
-  painelPausa: {fileID: 0}
+  painelPausa: {fileID: 1986377371}
   pistasEncontradas:
   - 
   progressoHistoria: 0
