@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
+using EasyTransition;
 
 public class MapaInterativo : MonoBehaviour
 {
@@ -18,8 +19,7 @@ public class MapaInterativo : MonoBehaviour
 
         [Header("Elementos Visuais")]
         public Button botaoArea;
-        public Image outlineEffect;
-        public CanvasGroup areaCanvasGroup;
+        public H_SDFUIOutline outlineEffect;
 
         [Header("Textos (TextMeshPro)")]
         public TextMeshProUGUI textoNomeArea;
@@ -36,7 +36,6 @@ public class MapaInterativo : MonoBehaviour
         public AudioClip somHoverArea;
         public AudioClip somCliqueArea;
 
-        // Coroutines em andamento — necessário para cancelar antes de inverter
         [HideInInspector] public Coroutine hoverCoroutine;
         [HideInInspector] public Coroutine pulseCoroutine;
         [HideInInspector] public Coroutine indicadorCoroutine;
@@ -49,46 +48,32 @@ public class MapaInterativo : MonoBehaviour
 
     [Header("UI Global")]
     public TextMeshProUGUI textoDescricaoGlobal;
-    public Canvas canvasPrincipal; // Arraste o Canvas principal aqui — evita FindFirstObjectByType
+    public Canvas canvasPrincipal;
 
     public float tempoResetDescricao = 3f;
 
-    [Header("Cursor customizado — imagem de UI que segue o mouse (permite fade)")]
-    [Tooltip("CanvasGroup do objeto de UI que representa o cursor customizado. Ele deve ser filho do canvasPrincipal, começar com alpha 0, e seu RectTransform é movido a cada frame para seguir o mouse.")]
-    public CanvasGroup cursorCustomCanvasGroup;
-    public RectTransform cursorCustomRect;
-    public float cursorFadeDuration = 0.2f;
-
-    [Tooltip("Fallback: se cursorCustomCanvasGroup estiver vazio, usa o cursor de sistema (sem transição/fade) com esta textura.")]
-    public Texture2D cursorInvestigar;
-    public Vector2 cursorHotspot = Vector2.zero;
-
-    [Header("Som — arraste um AudioSource (pode ser deste mesmo objeto)")]
+    [Header("Som")]
     public AudioSource audioSource;
     public AudioClip somHoverPadrao;
     public AudioClip somCliquePadrao;
 
-    [Header("Pulso do outline (enquanto o mouse permanece em cima)")]
+    [Header("Pulso do outline")]
     public float pulseMinAlpha = 0.65f;
     public float pulseMaxAlpha = 1f;
-    public float pulseVelocidade = 1.5f; // ciclos completos por segundo, aproximado
+    public float pulseVelocidade = 1.5f;
 
     [Header("Piscar do indicador de área não visitada")]
-    public float indicadorVelocidade = 1f; // ciclos por segundo
+    public float indicadorVelocidade = 1f;
+
+    [Header("Transição de cena (EasyTransitions)")]
+    [Tooltip("Arraste aqui o TransitionSettings configurado no projeto.")]
+    public TransitionSettings transitionSettings;
+    public float transitionDelay = 0f;
 
     private Coroutine resetDescricaoCoroutine;
-    private Coroutine cursorFadeCoroutine;
 
     void Start()
     {
-        // Cursor de UI: não deve bloquear cliques nem ser "interagível"
-        if (cursorCustomCanvasGroup != null)
-        {
-            cursorCustomCanvasGroup.alpha = 0f;
-            cursorCustomCanvasGroup.blocksRaycasts = false;
-            cursorCustomCanvasGroup.interactable = false;
-        }
-
         foreach (var area in areas)
         {
             InitArea(area);
@@ -97,33 +82,12 @@ public class MapaInterativo : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        // Cursor de UI segue a posição do mouse todo frame
-        if (cursorCustomRect != null && canvasPrincipal != null)
-        {
-            Camera cam = canvasPrincipal.renderMode == RenderMode.ScreenSpaceOverlay
-                ? null
-                : canvasPrincipal.worldCamera;
-
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvasPrincipal.transform as RectTransform,
-                Input.mousePosition,
-                cam,
-                out Vector2 localPoint);
-
-            cursorCustomRect.localPosition = localPoint;
-        }
-    }
-
     void InitArea(AreaMapa area)
     {
         SetAlpha(area.outlineEffect, 0f);
         SetAlpha(area.textoNomeArea, 0f);
         SetAlpha(area.textoDescricaoArea, 0f);
-        if (area.areaCanvasGroup != null) area.areaCanvasGroup.alpha = 0f;
 
-        // Indicador de "não visitado" — começa piscando se a área ainda não foi clicada
         if (area.indicadorNaoVisitado != null && !area.visitada)
         {
             area.indicadorNaoVisitado.SetActive(true);
@@ -156,7 +120,6 @@ public class MapaInterativo : MonoBehaviour
 
     void StartHover(AreaMapa area, bool entering)
     {
-        // Cancela coroutine anterior para evitar animações sobrepostas
         if (area.hoverCoroutine != null)
             StopCoroutine(area.hoverCoroutine);
 
@@ -166,26 +129,19 @@ public class MapaInterativo : MonoBehaviour
 
     IEnumerator HoverEnter(AreaMapa area)
     {
-        // Cursor customizado — com transição se cursorCustomCanvasGroup estiver configurado
-        MostrarCursorCustomizado();
-
-        // Som de hover — usa o clip específico da área, senão o padrão global
         TocarSom(area.somHoverArea != null ? area.somHoverArea : somHoverPadrao);
 
-        // Atualiza textos antes do fade para não ficar em branco durante a animação
         if (area.textoNomeArea != null) area.textoNomeArea.text = area.nomeArea;
         if (area.textoDescricaoArea != null) area.textoDescricaoArea.text = area.descricao;
 
         yield return FadeArea(area, 0f, 1f);
 
-        // Pulso contínuo do outline enquanto o mouse permanecer em cima
         if (area.outlineEffect != null)
         {
             if (area.pulseCoroutine != null) StopCoroutine(area.pulseCoroutine);
             area.pulseCoroutine = StartCoroutine(PulseOutline(area));
         }
 
-        // Texto global
         if (textoDescricaoGlobal != null)
         {
             yield return StartCoroutine(FadeUtils.FadeTMP(this, textoDescricaoGlobal, textoDescricaoGlobal.color.a, 0f, 0.2f));
@@ -202,24 +158,20 @@ public class MapaInterativo : MonoBehaviour
 
     IEnumerator HoverExit(AreaMapa area)
     {
-        // Cursor volta ao padrão — com transição se cursorCustomCanvasGroup estiver configurado
-        EsconderCursorCustomizado();
-
-        // Para o pulso e usa o alpha atual (não necessariamente 1) como ponto de partida do fade de saída
         if (area.pulseCoroutine != null)
         {
             StopCoroutine(area.pulseCoroutine);
             area.pulseCoroutine = null;
         }
 
-        float alphaAtual = area.outlineEffect != null ? area.outlineEffect.color.a : 1f;
+        float alphaAtual = area.outlineEffect != null ? GetAlpha(area.outlineEffect) : 1f;
         yield return FadeArea(area, alphaAtual, 0f);
 
         if (textoDescricaoGlobal != null && resetDescricaoCoroutine == null)
             resetDescricaoCoroutine = StartCoroutine(ResetarDescricaoComFade());
     }
 
-    // ── Pulso contínuo do outline (respiração) ──────────────────────────────────
+    // ── Pulso contínuo do outline ────────────────────────────────────────────
 
     IEnumerator PulseOutline(AreaMapa area)
     {
@@ -233,7 +185,7 @@ public class MapaInterativo : MonoBehaviour
         }
     }
 
-    // ── Piscar do indicador de área não visitada ────────────────────────────────
+    // ── Piscar do indicador de área não visitada ────────────────────────────
 
     IEnumerator BlinkIndicador(AreaMapa area)
     {
@@ -248,55 +200,12 @@ public class MapaInterativo : MonoBehaviour
 
             if (cg != null) cg.alpha = alpha;
             else if (img != null) SetAlpha(img, alpha);
-            // Se não tiver CanvasGroup nem Image, o objeto só fica ativo sem animação de alpha.
 
             yield return null;
         }
     }
 
-    // ── Cursor customizado com transição ────────────────────────────────────────
-
-    void MostrarCursorCustomizado()
-    {
-        if (cursorCustomCanvasGroup != null)
-        {
-            // Esconde o cursor de sistema e faz fade-in da imagem de UI
-            Cursor.visible = false;
-
-            if (cursorFadeCoroutine != null) StopCoroutine(cursorFadeCoroutine);
-            cursorFadeCoroutine = StartCoroutine(
-                FadeUtils.FadeCanvasGroup(this, cursorCustomCanvasGroup, cursorCustomCanvasGroup.alpha, 1f, cursorFadeDuration));
-        }
-        else if (cursorInvestigar != null)
-        {
-            // Fallback sem transição — cursor de sistema trocado instantaneamente
-            Cursor.SetCursor(cursorInvestigar, cursorHotspot, CursorMode.Auto);
-        }
-    }
-
-    void EsconderCursorCustomizado()
-    {
-        if (cursorCustomCanvasGroup != null)
-        {
-            if (cursorFadeCoroutine != null) StopCoroutine(cursorFadeCoroutine);
-            cursorFadeCoroutine = StartCoroutine(FadeOutCursorEReativarSistema());
-        }
-        else if (cursorInvestigar != null)
-        {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        }
-    }
-
-    IEnumerator FadeOutCursorEReativarSistema()
-    {
-        yield return FadeUtils.FadeCanvasGroup(this, cursorCustomCanvasGroup, cursorCustomCanvasGroup.alpha, 0f, cursorFadeDuration);
-
-        // Só reativa o cursor de sistema depois que o fade-out terminou,
-        // pra não dar aquele "flash" do cursor padrão no meio da transição.
-        Cursor.visible = true;
-    }
-
-    // ── Som ───────────────────────────────────────────────────────────────────
+    // ── Som ──────────────────────────────────────────────────────────────────
 
     void TocarSom(AudioClip clip)
     {
@@ -311,11 +220,10 @@ public class MapaInterativo : MonoBehaviour
             SetAlpha(area.outlineEffect, a);
             SetAlpha(area.textoNomeArea, a);
             SetAlpha(area.textoDescricaoArea, a);
-            if (area.areaCanvasGroup != null) area.areaCanvasGroup.alpha = a;
         }, from, to, area.fadeDuration);
     }
 
-    // ── Click / cena ──────────────────────────────────────────────────────────
+    // ── Click / cena ─────────────────────────────────────────────────────────
 
     void OnAreaClicada(AreaMapa area)
     {
@@ -323,7 +231,7 @@ public class MapaInterativo : MonoBehaviour
         MarcarComoVisitada(area);
 
         if (!string.IsNullOrEmpty(area.nomeCenaParaCarregar))
-            StartCoroutine(TransicaoDeCena(area.nomeCenaParaCarregar));
+            IniciarTransicaoDeCena(area.nomeCenaParaCarregar);
     }
 
     void MarcarComoVisitada(AreaMapa area)
@@ -341,9 +249,8 @@ public class MapaInterativo : MonoBehaviour
             area.indicadorNaoVisitado.SetActive(false);
     }
 
-    // ── Save/load das áreas visitadas ───────────────────────────────────────────
+    // ── Save/load das áreas visitadas ──────────────────────────────────────────
 
-    /// <summary>Chamado pelo AutoSaveManager ao salvar — retorna os nomes das áreas já visitadas.</summary>
     public List<string> ObterAreasVisitadas()
     {
         var lista = new List<string>();
@@ -352,11 +259,6 @@ public class MapaInterativo : MonoBehaviour
         return lista;
     }
 
-    /// <summary>
-    /// Chamado pelo AutoSaveManager ao carregar. Funciona independente da ordem de execução:
-    /// se chamado antes do Start(), InitArea() vai respeitar o "visitada" já restaurado e nem
-    /// iniciar o pisca-pisca; se chamado depois, para a coroutine em andamento e esconde o ícone.
-    /// </summary>
     public void RestaurarAreasVisitadas(List<string> nomesVisitados)
     {
         if (nomesVisitados == null) return;
@@ -378,16 +280,21 @@ public class MapaInterativo : MonoBehaviour
         }
     }
 
-    IEnumerator TransicaoDeCena(string nomeCena)
-    {
-        GameObject fadePanel = CriarFadePanel();
-        Image img = fadePanel.GetComponent<Image>();
+    // ── Transição de cena via EasyTransitions ───────────────────────────────
 
-        yield return FadeUtils.FadeImage(this, img, 0f, 1f, 0.5f);
-        UnityEngine.SceneManagement.SceneManager.LoadScene(nomeCena);
+    void IniciarTransicaoDeCena(string nomeCena)
+    {
+        if (transitionSettings == null)
+        {
+            Debug.LogWarning("TransitionSettings não configurado no MapaInterativo — carregando cena sem transição.");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(nomeCena);
+            return;
+        }
+
+        TransitionManager.Instance().Transition(nomeCena, transitionSettings, transitionDelay);
     }
 
-    // ── Texto global ──────────────────────────────────────────────────────────
+    // ── Texto global ─────────────────────────────────────────────────────────
 
     IEnumerator ResetarDescricaoComFade()
     {
@@ -403,7 +310,7 @@ public class MapaInterativo : MonoBehaviour
         resetDescricaoCoroutine = null;
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // ── Helpers ──────────────────────────────────────────────────────────────
 
     static void SetAlpha(Image img, float a)
     {
@@ -417,29 +324,14 @@ public class MapaInterativo : MonoBehaviour
         Color c = tmp.color; c.a = a; tmp.color = c;
     }
 
-    GameObject CriarFadePanel()
+    static void SetAlpha(H_SDFUIOutline outline, float a)
     {
-        GameObject fadePanel = new GameObject("FadePanel");
+        if (outline == null) return;
+        Color c = outline.color; c.a = a; outline.color = c;
+    }
 
-        // Usa referência direta ao invés de FindFirstObjectByType para garantir o Canvas certo
-        Canvas canvas = canvasPrincipal != null
-            ? canvasPrincipal
-            : FindFirstObjectByType<Canvas>();
-
-        if (canvas != null)
-            fadePanel.transform.SetParent(canvas.transform, false);
-
-        fadePanel.transform.SetAsLastSibling();
-
-        Image img = fadePanel.AddComponent<Image>();
-        img.color = new Color(0f, 0f, 0f, 0f);
-
-        RectTransform rect = fadePanel.GetComponent<RectTransform>();
-        rect.anchorMin = Vector2.zero;
-        rect.anchorMax = Vector2.one;
-        rect.offsetMin = Vector2.zero;
-        rect.offsetMax = Vector2.zero;
-
-        return fadePanel;
+    static float GetAlpha(H_SDFUIOutline outline)
+    {
+        return outline == null ? 1f : outline.color.a;
     }
 }
