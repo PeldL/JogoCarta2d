@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
+
 public class PointClickInteractionController : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private LayerMask interactableLayer = ~0; // por padrão, todas as layers
+    [SerializeField] private LayerMask interactableLayer = ~0;
 
-    private EvidenceInteractable currentHover;
+    private IClickable2D currentHover;
 
     private void Awake()
     {
@@ -16,31 +16,25 @@ public class PointClickInteractionController : MonoBehaviour
 
     private void Update()
     {
-        if (Mouse.current == null) return; // sem mouse conectado (ex: build mobile)
+        if (Mouse.current == null) return;
 
         Vector2 screenPos = Mouse.current.position.ReadValue();
         Vector2 worldPos = mainCamera.ScreenToWorldPoint(screenPos);
 
         Collider2D hit = Physics2D.OverlapPoint(worldPos, interactableLayer);
-        EvidenceInteractable hitInteractable = hit != null ? hit.GetComponent<EvidenceInteractable>() : null;
+        IClickable2D hitInteractable = hit != null ? hit.GetComponent<IClickable2D>() : null;
 
-        // Gerencia troca de hover
         if (hitInteractable != currentHover)
         {
-            if (currentHover != null)
-                currentHover.OnHoverExit();
-
+            currentHover?.OnHoverExit();
             currentHover = hitInteractable;
-
-            if (currentHover != null)
-                currentHover.OnHoverEnter();
+            currentHover?.OnHoverEnter();
         }
 
-        // Clique
         if (Mouse.current.leftButton.wasPressedThisFrame && currentHover != null)
         {
             currentHover.OnClicked();
-            currentHover = null; // evita chamar hover exit num objeto já desativado
+            currentHover = null;
         }
     }
 }

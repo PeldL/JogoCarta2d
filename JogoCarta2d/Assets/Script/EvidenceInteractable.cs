@@ -1,10 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.InputSystem;
+using TMPro;
 
 [RequireComponent(typeof(Collider2D))]
-
-public class EvidenceInteractable : MonoBehaviour
+public class EvidenceInteractable : MonoBehaviour, IClickable2D
 {
     [Header("Dados da evidência")]
     public EvidenceData evidence;
