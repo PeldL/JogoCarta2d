@@ -12,8 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Suspeito 1
   m_EditorClassIdentifier: Assembly-CSharp::SuspectAsset
-  suspectName: 
-  portrait: {fileID: 0}
-  description: 
+  suspectName: Rogerinho
+  portrait: {fileID: 2353571312451627304, guid: 8f45204d4bb3852479e9b06aea21725e, type: 3}
+  description: PRATA
   startNodeId: start
-  nodes: []
+  nodes:
+  - nodeId: start
+    message: "N\xE3o sei do que voc\xEA est\xE1 falando. Eu s\xF3 estava no bar tomando
+      uma."
+    choices:
+    - choiceText: "As digitais no fuzil n\xE3o s\xE3o suas. Sabe de quem s\xE3o?"
+      nextNodeId: 
+      requiredEvidence:
+        id: Arma
+        evidenceName: Fuzil
+        description: 
+        icon: {fileID: 0}
+        linkedCall: {fileID: 11400000, guid: ae64059daabf589428ab00d266a07685, type: 2}
+    - choiceText: "Por enquanto \xE9 s\xF3"
+      nextNodeId: 
+      requiredEvidence:
+        id: 
+        evidenceName: 
+        description: 
+        icon: {fileID: 0}
+        linkedCall: {fileID: 0}
+  - nodeId: alibi
+    message: "Eu fiquei no bar at\xE9 fechar. Pergunta pro dono, ele confirma."
+    choices:
+    - choiceText: Vou perguntar.
+      nextNodeId: 
+      requiredEvidence:
+        id: 
+        evidenceName: 
+        description: 
+        icon: {fileID: 0}
+        linkedCall: {fileID: 0}
+    - choiceText: Deixa eu te perguntar outra coisa.
+      nextNodeId: start
+      requiredEvidence:
+        id: 
+        evidenceName: 
+        description: 
+        icon: {fileID: 0}
+        linkedCall: {fileID: 0}
