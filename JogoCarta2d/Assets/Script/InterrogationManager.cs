@@ -23,12 +23,14 @@ public class InterrogationManager : MonoBehaviour
 
     public void StartInterrogation(SuspectAsset suspect)
     {
+        if (suspect == null) return;
         CurrentSuspect = suspect;
         GoToNode(suspect.startNodeId);
     }
 
     public void SelectChoice(InterrogationChoice choice)
     {
+        if (choice == null || CurrentSuspect == null || !IsChoiceAvailable(choice)) return;
         if (string.IsNullOrEmpty(choice.nextNodeId))
             EndInterrogation();
         else
@@ -41,7 +43,7 @@ public class InterrogationManager : MonoBehaviour
 
         if (CurrentNode == null)
         {
-            Debug.LogError($"[InterrogationManager] NÛ '{nodeId}' n„o encontrado em '{CurrentSuspect.suspectName}'.");
+            Debug.LogError($"[InterrogationManager] N√≥ '{nodeId}' n√£o encontrado em '{CurrentSuspect.suspectName}'.");
             EndInterrogation();
             return;
         }
@@ -58,7 +60,8 @@ public class InterrogationManager : MonoBehaviour
 
     public bool IsChoiceAvailable(InterrogationChoice choice)
     {
-        if (choice.requiredEvidence == null)
+        if (choice == null) return false;
+        if (choice.requiredEvidence == null || string.IsNullOrEmpty(choice.requiredEvidence.id))
             return true;
 
         return EvidenceManager.Instance != null &&

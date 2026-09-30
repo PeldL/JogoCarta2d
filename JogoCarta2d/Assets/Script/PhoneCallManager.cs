@@ -29,6 +29,7 @@ public class PhoneCallManager : MonoBehaviour
             return;
         }
         Instance = this;
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
     }
 
@@ -65,6 +66,7 @@ public class PhoneCallManager : MonoBehaviour
 
     public void QueueCall(PhoneCallAsset call)
     {
+        if (call == null || call == CurrentCall || pendingCalls.Contains(call)) return;
         pendingCalls.Enqueue(call);
         if (!isCallActive)
             OnCallIncoming?.Invoke(call);
@@ -78,6 +80,15 @@ public class PhoneCallManager : MonoBehaviour
         CurrentCall = pendingCalls.Dequeue();
         isCallActive = true;
         GoToNode(CurrentCall.startNodeId);
+    }
+
+    public void ResetCalls()
+    {
+        StopAllCoroutines();
+        pendingCalls.Clear();
+        CurrentCall = null;
+        CurrentNode = null;
+        isCallActive = false;
     }
 
     public void SelectChoice(PhoneDialogueChoice choice)

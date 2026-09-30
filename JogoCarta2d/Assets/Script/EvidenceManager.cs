@@ -5,7 +5,7 @@ public class EvidenceManager : MonoBehaviour
 {
     public static EvidenceManager Instance { get; private set; }
 
-    [Header("Evidências coletadas nesta sessão")]
+    [Header("EvidÃªncias coletadas nesta sessÃ£o")]
     [SerializeField] private List<EvidenceData> collectedEvidence = new List<EvidenceData>();
 
     // Evento simples pra UI/painel investigativo escutar futuramente
@@ -20,24 +20,34 @@ public class EvidenceManager : MonoBehaviour
             return;
         }
         Instance = this;
+        transform.SetParent(null);
         DontDestroyOnLoad(gameObject);
     }
 
     public bool HasEvidence(string evidenceId)
     {
-        return collectedEvidence.Exists(e => e.id == evidenceId);
+        return collectedEvidence.Exists(e => e != null && e.id == evidenceId);
+    }
+
+    public void RestoreEvidence(IEnumerable<EvidenceData> evidence)
+    {
+        collectedEvidence.Clear();
+        if (evidence == null) return;
+        foreach (var item in evidence)
+            if (item != null && !string.IsNullOrEmpty(item.id) && !HasEvidence(item.id)) collectedEvidence.Add(item);
     }
 
     public void CollectEvidence(EvidenceData evidence)
     {
+        if (evidence == null || string.IsNullOrEmpty(evidence.id)) return;
         if (HasEvidence(evidence.id))
         {
-            Debug.Log($"[EvidenceManager] Evidência '{evidence.evidenceName}' já foi coletada.");
+            Debug.Log($"[EvidenceManager] EvidÃªncia '{evidence.evidenceName}' jÃ¡ foi coletada.");
             return;
         }
 
         collectedEvidence.Add(evidence);
-        Debug.Log($"[EvidenceManager] Evidência coletada: {evidence.evidenceName}");
+        Debug.Log($"[EvidenceManager] EvidÃªncia coletada: {evidence.evidenceName}");
         OnEvidenceCollected?.Invoke(evidence);
     }
 
