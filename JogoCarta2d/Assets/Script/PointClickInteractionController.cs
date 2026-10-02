@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class PointClickInteractionController : MonoBehaviour
 {
@@ -16,7 +17,13 @@ public class PointClickInteractionController : MonoBehaviour
 
     private void Update()
     {
-        if (Mouse.current == null) return;
+        if (Mouse.current == null || mainCamera == null) return;
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            currentHover?.OnHoverExit();
+            currentHover = null;
+            return;
+        }
 
         Vector2 screenPos = Mouse.current.position.ReadValue();
         Vector2 worldPos = mainCamera.ScreenToWorldPoint(screenPos);
