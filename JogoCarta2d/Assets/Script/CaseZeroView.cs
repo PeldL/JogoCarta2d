@@ -32,6 +32,14 @@ public sealed class CaseZeroView : MonoBehaviour
     public Button[] evidenceMarkers;
     public TMP_Text[] evidenceMarkerLabels;
     public TMP_Text cameraLabel;
+    [Header("Campanha • referências montadas na cena")]
+    public Button[] interviewSuspectButtons = new Button[0];
+    public TMP_Text[] suspectLabels = new TMP_Text[0], objectLabels = new TMP_Text[0], placeLabels = new TMP_Text[0], evidenceCardLabels = new TMP_Text[0];
+    public TMP_Text objectQuestion, placeQuestion, suspectsSummary, caseBriefing, worldInterviewLabel;
+    public TMP_Text solutionText, nextCaseLabel;
+    public Button nextCaseButton;
+    public Button[] caseMapButtons = new Button[0];
+    public string investigationLocation = "Bar";
 
     [Header("Evidências • fichas fixas")]
     public Button[] evidenceCards;
@@ -117,7 +125,7 @@ public sealed class CaseZeroView : MonoBehaviour
     {
         atMap = location == "Mapa";
         mapRoot.SetActive(!mapInDocument && atMap);
-        foreach (var control in barControls) control.SetActive(location == "Bar");
+        foreach (var control in barControls) control.SetActive(location == investigationLocation);
         if (locationLabel != null) locationLabel.text = location;
         if (mapControls != null) mapControls.interactable = mapInDocument || !documentRoot.activeSelf;
     }
@@ -126,6 +134,7 @@ public sealed class CaseZeroView : MonoBehaviour
     {
         documentRoot.SetActive(true);
         if (objective != null) objective.gameObject.SetActive(false);
+        if (caseBriefing != null) caseBriefing.gameObject.SetActive(false);
         if (worldControls != null) worldControls.interactable = false;
         if (mapControls != null) mapControls.interactable = mapInDocument && name == "Mapa" && canNavigate;
         if (launchButtons != null)
@@ -157,6 +166,7 @@ public sealed class CaseZeroView : MonoBehaviour
     {
         documentRoot.SetActive(false);
         if (objective != null) objective.gameObject.SetActive(true);
+        if (caseBriefing != null) caseBriefing.gameObject.SetActive(false);
         if (worldControls != null) worldControls.interactable = true;
         if (backgroundMap) mapRoot.SetActive(!mapInDocument && atMap);
         if (mapControls != null) mapControls.interactable = true;

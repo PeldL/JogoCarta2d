@@ -26,6 +26,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mercadinho.unity
     guid: d4527721ae5ee1682fbefe1b4de8711e
+  - enabled: 1
+    path: Assets/Scenes/Apartamento.unity
+    guid: 39625d3e95df2a425d085bcd7e58f0d0
+  - enabled: 1
+    path: Assets/Scenes/Escritorio.unity
+    guid: 7b94f58b723bf42ddeaf9737259ae0bb
+  - enabled: 1
+    path: Assets/Scenes/ApresentacaoCaso.unity
+    guid: fe08c770af7b69ea8fe7dabfd36d8a23
+  - enabled: 1
+    path: Assets/Scenes/FinalCampanha.unity
+    guid: 2c3798f9b4f6db2b9e6c510bf53bcec4
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

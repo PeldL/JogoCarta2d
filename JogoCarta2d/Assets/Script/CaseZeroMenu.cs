@@ -17,7 +17,7 @@ public sealed class CaseZeroMenu : MonoBehaviour
     int selectedSlot = 1;
     bool newGame, loading;
 
-    void Start() { ClosePanels(); Refresh(); }
+    void Start() { ClosePanels(); Refresh(); if (CaseZeroSession.ShowCredits) { CaseZeroSession.ShowCredits = false; OpenCredits(); } }
     void Refresh()
     {
         bool any = false;
@@ -27,7 +27,7 @@ public sealed class CaseZeroMenu : MonoBehaviour
             any |= saved != null;
             string summary = saved == null ? (CaseZeroSave.ExistsInSlot(slot) ? "Indisponível" : "Vazio")
                 : saved.solved ? "Caso resolvido" : saved.failed ? "Caso encerrado • derrota" : $"{saved.evidence.Count}/5 provas";
-            slotLabels[slot - 1].text = $"{(selectedSlot == slot ? "• " : "")}SLOT {slot}\n{summary}";
+            slotLabels[slot - 1].text = $"{(selectedSlot == slot ? "• " : "")}SLOT {slot}\n{(saved != null ? "Caso " + (saved.CaseIndex + 1) + " • " : "")}{summary}";
         }
         continueButton.interactable = any;
         proceedButton.interactable = newGame || CaseZeroSave.Read(out _, selectedSlot) != null;

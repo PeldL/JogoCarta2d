@@ -4,12 +4,21 @@ using UnityEngine;
 
 public static class CaseZeroSave
 {
+#if UNITY_EDITOR
+    // Editor validation uses isolated temporary files, never the player's slots.
+    public static string ValidationDirectory
+    {
+        get => UnityEditor.SessionState.GetString("CaseZero.ValidationDirectory", "");
+        set => UnityEditor.SessionState.SetString("CaseZero.ValidationDirectory", value ?? "");
+    }
+#endif
     public const int SlotCount = 3;
     public static string DirectoryPath
     {
         get
         {
 #if UNITY_EDITOR
+            if (!string.IsNullOrEmpty(ValidationDirectory)) return ValidationDirectory;
             // Preserve existing editor tests, but never import them into a player.
             return Application.persistentDataPath;
 #else
