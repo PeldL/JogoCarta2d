@@ -44,6 +44,7 @@ public sealed class CaseZeroPanelMotion : MonoBehaviour
             var rect = child as RectTransform;
             if (rect == null || !child.gameObject.activeSelf ||
                 child.GetComponent<CaseZeroPanelMotion>() != null ||
+                (child.TryGetComponent<CaseZeroButtonMotion>(out var buttonMotion) && buttonMotion.IsFolderTab) ||
                 (child.GetComponent<Selectable>() == null && child.GetComponent<TMPro.TMP_Text>() == null)) continue;
             Vector2 origin = rect.anchoredPosition;
             children.Add(rect); positions.Add(origin);

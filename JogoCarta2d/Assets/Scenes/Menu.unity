@@ -1778,7 +1778,7 @@ MonoBehaviour:
   canvasGroup: {fileID: 3000000824}
   creditsPanel: {fileID: 6000000028}
   transitionTemplate: {fileID: 5276914992623515724, guid: 616d511151a6c554caddf1c754e4f91d, type: 3}
-  sceneTransition: {fileID: 11400000, guid: c9f7b34f761c5c342ada8a4b2ab7a716, type: 2}
+  sceneTransition: {fileID: 11400000, guid: 013263c83b6a84c4d95beaa8bd163ac8, type: 2}
 --- !u!225 &3000000824
 CanvasGroup:
   m_ObjectHideFlags: 0

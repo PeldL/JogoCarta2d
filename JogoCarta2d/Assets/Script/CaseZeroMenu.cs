@@ -1,8 +1,6 @@
-using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // Every control and panel is authored in Menu.unity; no runtime UI generation.
@@ -103,24 +101,9 @@ public sealed class CaseZeroMenu : MonoBehaviour
         if (!newGame && CaseZeroSave.Read(out _, selectedSlot) == null) { Refresh(); return; }
         loading = true;
         CaseZeroSession.Request(selectedSlot, newGame);
-        StartCoroutine(ChangeScene());
-    }
-    IEnumerator ChangeScene()
-    {
         FinishEntrance();
         canvasGroup.interactable = false;
-        if (transitionTemplate != null && sceneTransition != null &&
-            sceneTransition.transitionIn != null && sceneTransition.transitionOut != null)
-        {
-            var overlay = Instantiate(transitionTemplate).GetComponent<EasyTransition.Transition>();
-            overlay.transitionSettings = sceneTransition;
-            float speed = sceneTransition.autoAdjustTransitionTime ? Mathf.Max(0.01f, sceneTransition.transitionSpeed) : 1f;
-            yield return new WaitForSecondsRealtime(sceneTransition.transitionTime / speed);
-            SceneManager.LoadScene("UI");
-            yield break;
-        }
-        yield return DOTween.To(() => canvasGroup.alpha, value => canvasGroup.alpha = value, 0f, 0.45f).SetUpdate(true).WaitForCompletion();
-        SceneManager.LoadScene("UI");
+        CaseZeroSceneLoading.Load("UI", transitionTemplate, sceneTransition, title != null ? title.font : null);
     }
     public void OpenOptions() { if (loading) return; ClosePanels(); optionsPanel.SetActive(true); }
     public void OpenCredits() { if (loading) return; ClosePanels(); creditsPanel.SetActive(true); }

@@ -132,6 +132,16 @@ public sealed class CaseZeroView : MonoBehaviour
         if (mapControls != null) mapControls.interactable = mapInDocument || !documentRoot.activeSelf;
     }
 
+    void Awake()
+    {
+        foreach (var page in pages)
+        {
+            if (page.tab == null) continue;
+            var motion = page.tab.GetComponent<CaseZeroButtonMotion>();
+            if (motion == null) motion = page.tab.gameObject.AddComponent<CaseZeroButtonMotion>();
+            motion.SetFolderTab(false);
+        }
+    }
     string animatedPage;
     public void ShowPage(string name, bool canNavigate)
     {
@@ -169,7 +179,12 @@ public sealed class CaseZeroView : MonoBehaviour
                     else if (wasActive) motion.Play();
                 }
             }
-            if (page.tab != null) page.tab.interactable = canNavigate;
+            if (page.tab != null)
+            {
+                page.tab.interactable = canNavigate;
+                var motion = page.tab.GetComponent<CaseZeroButtonMotion>();
+                if (motion != null) motion.SetFolderTab(selected);
+            }
             if (page.selectedMark != null) page.selectedMark.SetActive(selected);
         }
         closeDocumentButton.interactable = canNavigate;

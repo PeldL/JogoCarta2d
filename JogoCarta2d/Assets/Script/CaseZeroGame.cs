@@ -41,6 +41,9 @@ public sealed class CaseZeroGame : MonoBehaviour
     bool presenting;
     public CaseZeroState CampaignState => state;
     public bool Presenting => presenting;
+    bool startupInitialized;
+    public bool ReadyForReveal => startupInitialized && !travelling &&
+        (!presenting || SceneManager.GetSceneByName("ApresentacaoCaso").isLoaded);
 
     void Start()
     {
@@ -64,6 +67,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             if (newGame) StartInSlot(slot);
             else LoadGame();
         }
+        startupInitialized = true;
     }
 
     void CreateContent()
