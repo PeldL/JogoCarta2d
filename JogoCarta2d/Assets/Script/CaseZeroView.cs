@@ -83,6 +83,8 @@ public sealed class CaseZeroView : MonoBehaviour
         ClearNotice();
         evidenceNoticeText.text = "NOVA EVIDÊNCIA\n" + name + "\nAdicionada ao documento.";
         evidenceNotice.SetActive(true);
+        if (evidenceNotice.GetComponent<CaseZeroPanelMotion>() == null)
+            evidenceNotice.AddComponent<CaseZeroPanelMotion>();
         noticeRoutine = StartCoroutine(HideNotice());
     }
     System.Collections.IEnumerator HideNotice()
@@ -130,8 +132,11 @@ public sealed class CaseZeroView : MonoBehaviour
         if (mapControls != null) mapControls.interactable = mapInDocument || !documentRoot.activeSelf;
     }
 
+    string animatedPage;
     public void ShowPage(string name, bool canNavigate)
     {
+        bool changedPage = animatedPage != name || !documentRoot.activeSelf;
+        animatedPage = name;
         documentRoot.SetActive(true);
         if (objective != null) objective.gameObject.SetActive(false);
         if (caseBriefing != null) caseBriefing.gameObject.SetActive(false);
@@ -154,7 +159,16 @@ public sealed class CaseZeroView : MonoBehaviour
         foreach (var page in pages)
         {
             bool selected = page.name == name;
-            if (page.panel != null && !(backgroundMap && !mapInDocument && page.name == "Mapa")) page.panel.SetActive(selected);
+            if (page.panel != null && !(backgroundMap && !mapInDocument && page.name == "Mapa")) {
+                bool wasActive = page.panel.activeInHierarchy;
+                page.panel.SetActive(selected);
+                if (selected && changedPage)
+                {
+                    var motion = page.panel.GetComponent<CaseZeroPanelMotion>();
+                    if (motion == null) page.panel.AddComponent<CaseZeroPanelMotion>();
+                    else if (wasActive) motion.Play();
+                }
+            }
             if (page.tab != null) page.tab.interactable = canNavigate;
             if (page.selectedMark != null) page.selectedMark.SetActive(selected);
         }

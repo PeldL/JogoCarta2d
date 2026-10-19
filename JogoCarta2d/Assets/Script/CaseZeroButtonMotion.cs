@@ -20,7 +20,11 @@ public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
     {
         motion?.Kill();
         float scale = !button.IsInteractable() ? 1 : pressed ? pressedScale : hovered || selected ? hoverScale : 1;
-        motion = transform.DOScale(restingScale * scale, duration).SetEase(Ease.OutQuad).SetUpdate(true);
+        motion = transform.DOScale(restingScale * scale, duration).SetEase(pressed ? Ease.OutQuad : Ease.OutBack).SetUpdate(true);
+    }
+    void OnEnable()
+    {
+        if (button != null) transform.localScale = restingScale;
     }
     public void OnPointerEnter(PointerEventData e) { hovered = true; Animate(); }
     public void OnPointerExit(PointerEventData e) { hovered = false; pressed = false; Animate(); }

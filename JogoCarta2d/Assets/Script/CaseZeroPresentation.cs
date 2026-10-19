@@ -1,4 +1,5 @@
 using System.Text;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,8 +42,29 @@ public sealed class CaseZeroPresentation : MonoBehaviour
         if (finale) { game.ReturnToMenu(); return; }
         if (step > 0 && game.CampaignState.CaseIndex == 0) { step--; Refresh(); }
     }
+    Sequence slide;
+    void OnDestroy() => slide?.Kill(true);
+    void AnimateSlide()
+    {
+        slide?.Kill(true);
+        slide = DOTween.Sequence().SetUpdate(true);
+        TMP_Text[] labels = { stepLabel, title, body };
+        for (int i = 0; i < labels.Length; i++)
+        {
+            var label = labels[i];
+            if (label == null) continue;
+            var rect = label.rectTransform;
+            Vector2 origin = rect.anchoredPosition;
+            rect.anchoredPosition = origin + Vector2.right * 36;
+            float alpha = label.alpha;
+            label.alpha = 0;
+            slide.Insert(i * 0.10f, rect.DOAnchorPos(origin, 0.48f).SetEase(Ease.OutCubic));
+            slide.Insert(i * 0.10f, DOTween.To(() => label.alpha, value => label.alpha = value, alpha, 0.4f));
+        }
+    }
     void Refresh()
     {
+        AnimateSlide();
         var state = game.CampaignState;
         if (finale)
         {

@@ -14,10 +14,44 @@ public sealed class CaseZeroMenu : MonoBehaviour
     public TMP_Text[] slotLabels;
     public TMP_Text title, status, confirmation;
     public CanvasGroup canvasGroup;
+    [Header("Easy Transitions • abertura da investigação")]
+    [SerializeField] GameObject transitionTemplate;
+    [SerializeField] EasyTransition.TransitionSettings sceneTransition;
     int selectedSlot = 1;
     bool newGame, loading;
+    Sequence entrance;
+    readonly System.Collections.Generic.Dictionary<RectTransform, Vector2> entrancePositions = new System.Collections.Generic.Dictionary<RectTransform, Vector2>();
 
-    void Start() { ClosePanels(); Refresh(); if (CaseZeroSession.ShowCredits) { CaseZeroSession.ShowCredits = false; OpenCredits(); } }
+    void PlayEntrance()
+    {
+        entrance = DOTween.Sequence().SetUpdate(true);
+        int order = 0;
+        foreach (Transform child in canvasGroup.transform)
+        {
+            var rect = child as RectTransform;
+            if (rect == null || !child.gameObject.activeSelf ||
+                (child.GetComponent<Button>() == null && child.name != "Titulo")) continue;
+            Vector2 origin = rect.anchoredPosition;
+            entrancePositions[rect] = origin;
+            rect.anchoredPosition = origin + Vector2.left * (child.name == "Titulo" ? 85 : 55);
+            var fade = child.GetComponent<CanvasGroup>();
+            if (fade == null) fade = child.gameObject.AddComponent<CanvasGroup>();
+            fade.alpha = 0;
+            float delay = child.name == "Titulo" ? 0 : 0.22f + order++ * 0.09f;
+            entrance.Insert(delay, rect.DOAnchorPos(origin, 0.65f).SetEase(Ease.OutCubic));
+            entrance.Insert(delay, fade.DOFade(1, 0.45f));
+        }
+    }
+    void FinishEntrance()
+    {
+        entrance?.Complete();
+        entrance?.Kill();
+        foreach (var entry in entrancePositions)
+            if (entry.Key != null) entry.Key.anchoredPosition = entry.Value;
+    }
+    void OnDestroy() => entrance?.Kill();
+
+    void Start() { ClosePanels(); Refresh(); PlayEntrance(); if (CaseZeroSession.ShowCredits) { CaseZeroSession.ShowCredits = false; OpenCredits(); } }
     void Refresh()
     {
         bool any = false;
@@ -73,8 +107,19 @@ public sealed class CaseZeroMenu : MonoBehaviour
     }
     IEnumerator ChangeScene()
     {
+        FinishEntrance();
         canvasGroup.interactable = false;
-        yield return DOTween.To(() => canvasGroup.alpha, value => canvasGroup.alpha = value, 0f, 0.2f).SetUpdate(true).WaitForCompletion();
+        if (transitionTemplate != null && sceneTransition != null &&
+            sceneTransition.transitionIn != null && sceneTransition.transitionOut != null)
+        {
+            var overlay = Instantiate(transitionTemplate).GetComponent<EasyTransition.Transition>();
+            overlay.transitionSettings = sceneTransition;
+            float speed = sceneTransition.autoAdjustTransitionTime ? Mathf.Max(0.01f, sceneTransition.transitionSpeed) : 1f;
+            yield return new WaitForSecondsRealtime(sceneTransition.transitionTime / speed);
+            SceneManager.LoadScene("UI");
+            yield break;
+        }
+        yield return DOTween.To(() => canvasGroup.alpha, value => canvasGroup.alpha = value, 0f, 0.45f).SetUpdate(true).WaitForCompletion();
         SceneManager.LoadScene("UI");
     }
     public void OpenOptions() { if (loading) return; ClosePanels(); optionsPanel.SetActive(true); }
@@ -83,6 +128,7 @@ public sealed class CaseZeroMenu : MonoBehaviour
     public void ClosePanels()
     {
         if (loading) return;
+        FinishEntrance();
         slotPanel.SetActive(false); optionsPanel.SetActive(false); confirmationPanel.SetActive(false);
         if (creditsPanel != null) creditsPanel.SetActive(false);
     }
