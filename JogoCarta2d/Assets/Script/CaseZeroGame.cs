@@ -704,7 +704,8 @@ public sealed class CaseZeroGame : MonoBehaviour
         bool solved = state.Accuse();
         OpenPage(state.Finished ? "Resultado" : "Dedução");
         Save(false);
-        if (!solved) view.Feedback?.ShowWrongAccusation(state.AttemptsRemaining, state.failed);
+        if (solved) view.Feedback?.ShowVictory(state.Score, state.Rating, state.CaseIndex == CaseZeroCases.All.Length - 1);
+        else view.Feedback?.ShowWrongAccusation(state.AttemptsRemaining, state.failed);
         Say(solved ? "Caso encerrado. Sua avaliação foi salva." : state.failed ? "As tentativas acabaram. Você pode tentar novamente." : $"Acusação incorreta. Restam {state.AttemptsRemaining} tentativa(s). Revise as provas.");
     }
 

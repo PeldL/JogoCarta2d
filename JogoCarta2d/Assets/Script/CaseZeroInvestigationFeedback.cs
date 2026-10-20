@@ -17,11 +17,13 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
     CanvasGroup alert;
     RectTransform alertRect;
     TMP_Text alertTitle, alertMessage;
-    Image accent;
+    Image accent, noticeBackground;
     Sequence notice;
     Tween shake;
     AudioSource ringSource, errorSource;
-    AudioClip ringtone, errorTone;
+    AudioClip ringtone, errorTone, victoryTone;
+    readonly List<GameObject> confetti = new List<GameObject>();
+    readonly List<Sequence> confettiTweens = new List<Sequence>();
     bool ringing;
     float nextRing, ringTime;
     RectTransform phoneButton, phonePanel;
@@ -44,6 +46,7 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
         ringSource.loop = errorSource.loop = false;
         ringtone = MakeTone(true);
         errorTone = MakeTone(false);
+        victoryTone = MakeVictoryTone();
         ringSource.clip = ringtone;
         errorSource.clip = errorTone;
         ApplyVolume();
@@ -98,23 +101,90 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
     {
         if (alert == null) return;
         notice?.Kill();
+        ClearCelebration();
+        noticeBackground.color = new Color(0.1f, 0.065f, 0.055f, 0.97f);
+        alertTitle.color = new Color(1, 0.93f, 0.86f);
         alertTitle.text = failed ? "INVESTIGAÇÃO ENCERRADA" : "ACUSAÇÃO INCORRETA";
         alertMessage.text = failed ? "As três tentativas acabaram. Você pode tentar o caso novamente."
             : $"Restam {remaining} tentativa(s). Revise as provas e os depoimentos.";
         accent.color = failed ? new Color(0.75f, 0.14f, 0.14f) : new Color(0.86f, 0.29f, 0.12f);
+        PlayNotice(failed ? 4.5f : 3.5f, false);
+        if (errorSource != null) { errorSource.Stop(); errorSource.Play(); }
+        ShakeScreen();
+    }
+
+    public void ShowVictory(int score, string rating, bool campaignComplete)
+    {
+        if (alert == null) return;
+        StopShake();
+        ClearCelebration();
+        SetPhoneRinging(false);
+        alertTitle.text = campaignComplete ? "CAMPANHA CONCLUÍDA!" : "CASO RESOLVIDO!";
+        alertMessage.text = campaignComplete
+            ? $"Parabéns, detetive! Os três casos estão resolvidos.\n{score}/1000 pontos neste caso • {rating}"
+            : $"Excelente trabalho, detetive!\n{score}/1000 pontos • {rating}";
+        noticeBackground.color = new Color(0.035f, 0.14f, 0.105f, 0.98f);
+        accent.color = new Color(1, 0.78f, 0.25f);
+        alertTitle.color = new Color(1, 0.86f, 0.42f);
+        PlayNotice(campaignComplete ? 6 : 4.5f, true);
+        Celebrate();
+        if (errorSource != null && victoryTone != null)
+        {
+            errorSource.Stop();
+            errorSource.PlayOneShot(victoryTone);
+        }
+    }
+
+    void PlayNotice(float hold, bool victory)
+    {
+        notice?.Kill();
         alert.gameObject.SetActive(true);
         alert.alpha = 0;
         alertRect.anchoredPosition = new Vector2(0, -145);
-        alertRect.localScale = Vector3.one * 0.95f;
+        alertRect.localScale = Vector3.one * (victory ? 0.8f : 0.95f);
         notice = DOTween.Sequence().SetUpdate(true)
             .Append(alert.DOFade(1, 0.12f))
-            .Join(alertRect.DOAnchorPos(new Vector2(0, -110), 0.25f).SetEase(Ease.OutCubic))
-            .Join(alertRect.DOScale(1, 0.25f).SetEase(Ease.OutBack))
-            .AppendInterval(failed ? 4.5f : 3.5f)
-            .Append(alert.DOFade(0, 0.25f))
+            .Join(alertRect.DOAnchorPos(new Vector2(0, -110), 0.3f).SetEase(Ease.OutCubic))
+            .Join(alertRect.DOScale(1, victory ? 0.5f : 0.25f).SetEase(Ease.OutBack))
+            .AppendInterval(hold)
+            .Append(alert.DOFade(0, 0.3f))
             .OnComplete(() => alert.gameObject.SetActive(false));
-        if (errorSource != null) errorSource.Play();
-        ShakeScreen();
+    }
+
+    void Celebrate()
+    {
+        for (int i = 0; i < 24; i++)
+        {
+            var piece = new GameObject("Confete de vitória", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            piece.transform.SetParent(overlayRoot.transform, false);
+            piece.transform.SetAsFirstSibling(); // Keep the notice text clear.
+            confetti.Add(piece);
+            var rect = piece.GetComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 1);
+            rect.sizeDelta = new Vector2(i % 2 == 0 ? 9 : 6, 16);
+            float x = (i - 11.5f) * 49;
+            rect.anchoredPosition = new Vector2(x, 25 + (i % 4) * 18);
+            var image = piece.GetComponent<Image>();
+            image.raycastTarget = false;
+            image.color = i % 3 == 0 ? new Color(1, 0.8f, 0.3f) : i % 3 == 1
+                ? new Color(0.3f, 0.9f, 0.65f) : new Color(1, 0.95f, 0.7f);
+            float duration = 1.7f + (i % 5) * 0.13f;
+            var sequence = DOTween.Sequence().SetUpdate(true)
+                .AppendInterval((i % 6) * 0.04f)
+                .Append(rect.DOAnchorPos(new Vector2(x + (i % 2 == 0 ? 85 : -85), -600), duration).SetEase(Ease.InQuad))
+                .Join(rect.DOLocalRotate(new Vector3(0, 0, i % 2 == 0 ? 300 : -300), duration, RotateMode.FastBeyond360))
+                .Insert(duration - 0.4f, image.DOFade(0, 0.6f))
+                .OnComplete(() => { if (piece != null) Destroy(piece); });
+            confettiTweens.Add(sequence);
+        }
+    }
+
+    void ClearCelebration()
+    {
+        foreach (var tween in confettiTweens) tween?.Kill();
+        confettiTweens.Clear();
+        foreach (var piece in confetti) if (piece != null) Destroy(piece);
+        confetti.Clear();
     }
 
     void ShakeScreen()
@@ -160,6 +230,8 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
     public void ResetFeedback()
     {
         SetPhoneRinging(false);
+        ClearCelebration();
+        if (errorSource != null) errorSource.Stop();
         notice?.Kill(); notice = null;
         StopShake();
         if (alert != null) alert.gameObject.SetActive(false);
@@ -177,6 +249,7 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
         if (errorSource != null) Destroy(errorSource);
         if (ringtone != null) Destroy(ringtone);
         if (errorTone != null) Destroy(errorTone);
+        if (victoryTone != null) Destroy(victoryTone);
     }
 
     static AudioClip MakeTone(bool phone)
@@ -201,6 +274,30 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
         return clip;
     }
 
+    static AudioClip MakeVictoryTone()
+    {
+        const int rate = 22050;
+        var notes = new[] { 523.25f, 659.25f, 783.99f, 1046.5f };
+        var samples = new float[rate];
+        for (int i = 0; i < samples.Length; i++)
+        {
+            float time = i / (float)rate;
+            float sample = 0;
+            for (int note = 0; note < notes.Length; note++)
+            {
+                float local = time - note * 0.14f;
+                float length = note == notes.Length - 1 ? 0.58f : 0.3f;
+                if (local < 0 || local >= length) continue;
+                float envelope = Mathf.Sin(Mathf.PI * local / length);
+                sample += Mathf.Sin(2 * Mathf.PI * notes[note] * local) * envelope * 0.17f;
+            }
+            samples[i] = sample;
+        }
+        var clip = AudioClip.Create("Caso Zero • Vitória", samples.Length, 1, rate, false);
+        clip.SetData(samples, 0);
+        return clip;
+    }
+
     void BuildAlert(TMP_FontAsset font)
     {
         overlayRoot = new GameObject("Caso Zero • Aviso de investigação", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
@@ -217,7 +314,8 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
         alertRect = panel.GetComponent<RectTransform>();
         alertRect.anchorMin = alertRect.anchorMax = new Vector2(0.5f, 1);
         alertRect.sizeDelta = new Vector2(920, 175);
-        panel.GetComponent<Image>().color = new Color(0.1f, 0.065f, 0.055f, 0.97f);
+        noticeBackground = panel.GetComponent<Image>();
+        noticeBackground.color = new Color(0.1f, 0.065f, 0.055f, 0.97f);
         panel.GetComponent<Image>().raycastTarget = false;
         alert = panel.GetComponent<CanvasGroup>();
         alert.interactable = alert.blocksRaycasts = false;
