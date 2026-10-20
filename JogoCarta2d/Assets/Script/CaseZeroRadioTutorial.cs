@@ -19,36 +19,36 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     string[] lines;
     int caseIndex;
     static readonly string[] TutorialLines = {
-        "CENTRAL\nDetetive, está na escuta? Recebemos um chamado de uma morte em um bar. Precisamos de você no local.",
-        "DETETIVE\nEstou ouvindo. É meu primeiro plantão com esse sistema. Como acesso o material da investigação?",
-        "CENTRAL\nEstou encaminhando o resumo do plantão para o seu celular. Em Documentos você pode consultar a ocorrência e as instruções. Abra a pasta de investigação com Tab ou pelo botão na tela; use o Mapa para escolher um local.",
-        "CENTRAL\nNo cenário, examine os objetos identificados. Cada descoberta fica em Evidências. Consulte os registros e ouça os envolvidos no Interrogatório. Algumas perguntas só aparecem quando você encontra uma prova que permite fazê-las.",
-        "DETETIVE\nE quando eu reunir o material?",
-        "CENTRAL\nAbra o celular e solicite os exames do material que encontrar. Um envio à perícia não encerra a busca por pistas. Enquanto ela trabalha, continue investigando. Quando a ligação chegar, atenda, leia o retorno e registre o laudo. Se ficar sem saber como avançar, pode pedir orientação pelo celular.",
-        "CENTRAL\nCom as provas, os depoimentos e o laudo registrados, use Dedução para apresentar sua conclusão. Confira antes de confirmar: uma acusação errada gasta uma das três tentativas. O progresso é salvo automaticamente. Vamos começar pela observação do local."
+        "DISPATCH\nDetective, do you copy? We have a report of a death at a bar. We need you at the scene.",
+        "DETECTIVE\nI hear you. This is my first shift using this system. How do I access the case material?",
+        "DISPATCH\nI am sending the shift briefing to your phone. Documents contains the incident report and instructions. Open the case file with Tab or the on-screen button; use the Map to choose a location.",
+        "DISPATCH\nExamine the marked objects at the scene. Every discovery is stored in Evidence. Read the records and listen to those involved in Interviews. Some questions only become available when you find evidence that supports them.",
+        "DETECTIVE\nAnd once I have collected the material?",
+        "DISPATCH\nOpen your phone and request examinations of the material you find. Sending something to forensics does not end the search for clues. Keep investigating while they work. When the call arrives, answer, read the findings, and record the report. If you get stuck, you can ask for guidance through your phone.",
+        "DISPATCH\nWith the evidence, testimony, and report recorded, use Deduction to present your conclusion. Check before confirming: an incorrect accusation costs one of your three attempts. Progress is saved automatically. Start by examining the scene."
     };
     static string[] BriefingLines(int index)
     {
         var data = CaseZeroCases.All[index];
         if (index == 1)
             return new[] {
-                "CENTRAL\nDetetive, quanto tempo! Pensei que tivesse esquecido esta frequência. Bom trabalho no bar. Temos uma nova ocorrência para você.",
-                "DETETIVE\nCentral, bom ouvir sua voz de novo. O que aconteceu desta vez?",
-                "CENTRAL\n" + data.introduction,
-                "DETETIVE\nEntendido. Vou apurar o desaparecimento do pendrive. Já sabemos quem esteve no apartamento?",
-                "CENTRAL\nQuatro pessoas precisam ser ouvidas: Marina, amiga de Helena; Lucas, o vizinho; Carlos, o síndico; e André, o técnico que consertou o notebook.",
-                "CENTRAL\nA ocorrência é no Apartamento 302. Precisamos descobrir quem levou o pendrive, o que foi retirado e onde aconteceu o roubo. Ainda não temos uma conclusão sobre a autoria do ataque contra Helena.",
-                "DETETIVE\nRecebido. Estou a caminho do apartamento. Vamos descobrir o que aconteceu."
+                "DISPATCH\nDetective, it has been a while! I thought you had forgotten this frequency. Good work at the bar. We have a new incident for you.",
+                "DETECTIVE\nDispatch, good to hear your voice again. What happened this time?",
+                "DISPATCH\n" + data.introduction,
+                "DETECTIVE\nUnderstood. I will investigate the missing USB drive. Do we know who visited the apartment?",
+                "DISPATCH\nWe need to hear from four people: Marina, Helena's friend; Lucas, the neighbor; Carlos, the building manager; and André, the technician who repaired the laptop.",
+                "DISPATCH\nThe incident took place in Apartment 302. We need to establish who took the USB drive, what was removed, and where the theft happened. Responsibility for the assault on Helena remains unresolved.",
+                "DETECTIVE\nCopy that. I am on my way to the apartment. Let us find out what happened."
             };
         return new[] {
-            "CENTRAL\nDetetive, está na escuta? O caso de Helena ainda não acabou. A investigação do pendrive abriu uma nova frente.",
-            "DETETIVE\nEstou ouvindo. Carlos admitiu o roubo, mas alguém deu a ordem. O que temos sobre essa ligação?",
-            "CENTRAL\nHelena acordou e confirmou que o pendrive guardava provas contra a Vértice. Agora precisamos seguir o rastro dos pagamentos no escritório da empresa.",
-            "CENTRAL\n" + data.introduction,
-            "DETETIVE\nQuem pode esclarecer a movimentação no escritório?",
-            "CENTRAL\nBeatriz, a contadora; Augusto, o diretor; Renato, o segurança; e Fábio, o técnico. Existem registros financeiros, acessos ao sistema e ordens que precisam ser comparados com o que eles dizem.",
-            "CENTRAL\nSeu destino é o escritório. A ocorrência agora é identificar quem comandava o esquema, qual era o crime e qual empresa era usada como fachada. Não tome um nome na planilha como prova de culpa.",
-            "DETETIVE\nEntendido. Vou ao escritório seguir essas pistas e esclarecer a ligação com Helena."
+            "DISPATCH\nDetective, do you copy? Helena's case is not over yet. The missing USB drive has opened a new line of inquiry.",
+            "DETECTIVE\nI hear you. Carlos admitted the theft, but someone gave the order. What do we know about that connection?",
+            "DISPATCH\nHelena is awake and confirmed that the USB drive held evidence against Vértice. We now need to follow the payments at the company office.",
+            "DISPATCH\n" + data.introduction,
+            "DETECTIVE\nWho can explain what was happening at the office?",
+            "DISPATCH\nBeatriz, the accountant; Augusto, the director; Renato, the security guard; and Fábio, the technician. Financial records, system access logs, and instructions need to be compared with their statements.",
+            "DISPATCH\nYour destination is the office. Establish who ran the scheme, what the crime was, and which company was used as a front. A name on a spreadsheet is not proof of guilt.",
+            "DETECTIVE\nUnderstood. I will follow those leads at the office and clarify the connection to Helena."
         };
     }
 
@@ -61,14 +61,14 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         caseIndex = game.CampaignState.CaseIndex;
         lines = caseIndex == 0 ? TutorialLines : BriefingLines(caseIndex);
         view.back.gameObject.SetActive(false);
-        view.title.text = "EM CASA • UM CHAMADO NO RÁDIO";
-        view.stepLabel.text = "PRIMEIRO PLANTÃO";
-        view.body.text = "O rádio interrompe o silêncio da casa. Há uma voz do outro lado, mas o sinal está fraco.\n\nAjuste a frequência até encontrar a central. Quanto melhor o sinal, mais perto você está. Mantenha a sintonia por um instante.";
-        view.primaryLabel.text = "Aguardando sinal…";
+        view.title.text = "AT HOME • A CALL ON THE RADIO";
+        view.stepLabel.text = "FIRST SHIFT";
+        view.body.text = "The radio breaks the silence at home. There is a voice on the other end, but the signal is weak.\n\nAdjust the frequency until you find dispatch. The clearer the signal, the closer you are. Hold the frequency steady for a moment.";
+        view.primaryLabel.text = "Waiting for signal…";
         view.primary.interactable = false;
         var art = Resources.Load<CaseZeroArtLibrary>("ArtesCasoZero");
-        detectivePortrait = Portrait("Detetive", 140, art != null ? art.radioDetetive : null);
-        centralPortrait = Portrait("Central", 1480, art != null ? art.radioCentral : null);
+        detectivePortrait = Portrait("Detective", 140, art != null ? art.radioDetetive : null);
+        centralPortrait = Portrait("Dispatch", 1480, art != null ? art.radioCentral : null);
         view.body.rectTransform.anchoredPosition = new Vector2(140, -640);
         view.body.rectTransform.sizeDelta = new Vector2(1640, 245);
         if (caseIndex > 0)
@@ -158,7 +158,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         }
         stableTime = 0;
         float distance = Mathf.Abs(value - Target);
-        frequency.text = $"{value:0.0} MHz • " + (distance <= 0.6f ? "SINAL LIMPO — mantenha aqui" : distance < 2.5f ? "Sinal próximo" : "Sinal fraco");
+        frequency.text = $"{value:0.0} MHz • " + (distance <= 0.6f ? "CLEAR SIGNAL — hold here" : distance < 2.5f ? "Signal nearby" : "Weak signal");
     }
 
     void Update()
@@ -170,7 +170,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         dialogue = 0;
         CaseZeroSoundFeedback.Current?.PlayTransmission();
         tuning.gameObject.SetActive(false);
-        frequency.text = "104,5 MHz\nCONEXÃO ESTABELECIDA";
+        frequency.text = "104.5 MHz\nCONNECTION ESTABLISHED";
         view.primary.interactable = true;
         view.primary.Select();
         ShowDialogue();
@@ -192,14 +192,14 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     {
         textFade?.Kill();
         view.body.alpha = 0;
-        view.title.text = "CENTRAL ↔ DETETIVE";
-        view.stepLabel.text = caseIndex == 0 ? "RÁDIO • CONEXÃO ESTABELECIDA"
-            : $"CASO {caseIndex + 1} • {game.CampaignState.Definition.title.ToUpperInvariant()}";
+        view.title.text = "DISPATCH ↔ DETECTIVE";
+        view.stepLabel.text = caseIndex == 0 ? "RADIO • CONNECTION ESTABLISHED"
+            : $"CASE {caseIndex + 1} • {game.CampaignState.Definition.title.ToUpperInvariant()}";
         view.primaryLabel.text = dialogue == lines.Length - 1
-            ? caseIndex == 1 ? "Ir ao apartamento" : caseIndex == 2 ? "Ir ao escritório" : "Ir ao local"
-            : "Continuar conversa";
+            ? caseIndex == 1 ? "Go to the apartment" : caseIndex == 2 ? "Go to the office" : "Go to the scene"
+            : "Continue conversation";
         view.body.text = lines[dialogue];
-        bool detectiveSpeaking = lines[dialogue].StartsWith("DETETIVE\n", System.StringComparison.Ordinal);
+        bool detectiveSpeaking = lines[dialogue].StartsWith("DETECTIVE\n", System.StringComparison.Ordinal);
         detectivePortrait.color = detectiveSpeaking ? Color.white : new Color(0.7f, 0.7f, 0.7f);
         centralPortrait.color = detectiveSpeaking ? new Color(0.7f, 0.7f, 0.7f) : Color.white;
         textFade = DOTween.To(() => view.body.alpha, value => view.body.alpha = value, 1, 0.35f).SetUpdate(true);

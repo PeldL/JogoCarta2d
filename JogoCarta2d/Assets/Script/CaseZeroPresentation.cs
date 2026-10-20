@@ -20,8 +20,8 @@ public sealed class CaseZeroPresentation : MonoBehaviour
         game = FindFirstObjectByType<CaseZeroGame>();
         if (game == null || game.CampaignState == null)
         {
-            title.text = "PRÉVIA DA APRESENTAÇÃO";
-            body.text = "Inicie uma partida pelo Menu para testar o fluxo completo. Os elementos desta tela podem ser editados na cena.";
+            title.text = "PRESENTATION PREVIEW";
+            body.text = "Start a game from the Menu to test the full flow. The elements on this screen can be edited in the scene.";
             primary.interactable = false;
             back.gameObject.SetActive(false);
             return;
@@ -77,65 +77,65 @@ public sealed class CaseZeroPresentation : MonoBehaviour
         var state = game.CampaignState;
         if (finale)
         {
-            title.text = "CAMPANHA CONCLUÍDA";
-            stepLabel.text = "3 CASOS RESOLVIDOS";
+            title.text = "CAMPAIGN COMPLETE";
+            stepLabel.text = "3 CASES SOLVED";
             body.text = Summary(state);
-            primaryLabel.text = "Ver créditos";
+            primaryLabel.text = "View credits";
             back.gameObject.SetActive(true);
             return;
         }
         back.gameObject.SetActive(state.CaseIndex == 0 && step > 0);
-        primaryLabel.text = step == 3 ? "Iniciar investigação" : "Continuar";
-        stepLabel.text = step < 3 ? $"TUTORIAL • {step + 1}/3" : "APRESENTAÇÃO DO CASO";
+        primaryLabel.text = step == 3 ? "Start investigation" : "Continue";
+        stepLabel.text = step < 3 ? $"TUTORIAL • {step + 1}/3" : "CASE BRIEFING";
         if (step == 0)
         {
-            title.text = "OBSERVE E RECOLHA PISTAS";
-            body.text = "Você é o detetive responsável pela investigação.\n\nClique nos objetos identificados no cenário para examinar e coletar pistas. Um aviso confirma cada nova evidência.\n\nAs pistas ficam no documento de investigação. Não é necessário tirar fotos.";
+            title.text = "OBSERVE AND GATHER CLUES";
+            body.text = "You are the detective in charge of the investigation.\n\nClick marked objects in the scene to examine them and collect evidence. A notification confirms each discovery.\n\nClues are stored in the case file. You do not need to take photographs.";
         }
         else if (step == 1)
         {
-            title.text = "COMPARE PROVAS E DEPOIMENTOS";
-            body.text = "Abra a investigação pelo botão na tela ou pela tecla Tab.\n\nEm Evidências, leia o que foi encontrado. Em Interrogatório, ouça os envolvidos e compare seus relatos com as provas.\n\nO Mapa permite visitar outros locais. O telefone avisa quando há novas informações: abra, atenda e registre a mensagem.";
+            title.text = "COMPARE EVIDENCE AND TESTIMONY";
+            body.text = "Open the investigation using the on-screen button or Tab.\n\nIn Evidence, read what you have found. In Interviews, listen to those involved and compare their accounts with the evidence.\n\nThe Map lets you visit other locations. The phone alerts you to new information: open it, answer, and record the message.";
         }
         else if (step == 2)
         {
-            title.text = "CONCLUA COM CUIDADO";
-            body.text = "Quando reunir as provas necessárias, abra Dedução e selecione a combinação que explica o caso.\n\nUma acusação errada consome uma tentativa. Após três erros, você pode repetir o caso. Cancelar a confirmação não consome tentativas.\n\nO progresso é salvo automaticamente. Use a aba Saves para salvar ou carregar outro slot; Opções reúne tela cheia, música e efeitos.";
+            title.text = "CONCLUDE WITH CARE";
+            body.text = "When you have the necessary evidence, open Deduction and select the combination that explains the case.\n\nAn incorrect accusation costs one attempt. After three mistakes, you can restart the case. Canceling the confirmation does not use an attempt.\n\nProgress is saved automatically. Use Saves to save or load another slot; Settings contains fullscreen, music, and sound effects.";
         }
         else
         {
-            title.text = $"CASO {state.CaseIndex + 1} • {state.Definition.title}";
+            title.text = $"CASE {state.CaseIndex + 1} • {state.Definition.title}";
             body.text = state.Definition.introduction + "\n\n" + (state.CaseIndex == 0
-                ? "Seu objetivo: descobrir quem cometeu o crime, qual arma foi usada e onde aconteceu."
-                : state.CaseIndex == 1 ? "Investigue o local, ouça os envolvidos e confronte os relatos. Descubra quem roubou, o que levou e onde ocorreu o roubo."
-                : "Examine os registros, ouça os quatro envolvidos e confronte os relatos. Identifique o responsável, o crime e a empresa de fachada.");
+                ? "Your objective: identify the culprit, the weapon, and where the crime took place."
+                : state.CaseIndex == 1 ? "Investigate the scene, interview those involved, and challenge their accounts. Find out who stole the item, what was taken, and where the theft happened."
+                : "Examine the records, interview the four people involved, and challenge their accounts. Identify the organizer, the crime, and the shell company.");
         }
     }
 
     public static string Summary(CaseZeroState state)
     {
         state.RecordResult();
-        var text = new StringBuilder("Você concluiu todos os casos de Detetive: Caso Zero!\n\n");
+        var text = new StringBuilder("You have completed every case in Detective: Case Zero!\n\n");
         int total = 0, errors = 0, known = 0; float elapsed = 0;
         for (int i = 0; i < CaseZeroCases.All.Length; i++)
         {
             var definition = CaseZeroCases.All[i];
             var result = state.results.Find(r => r != null && r.caseId == definition.id);
-            if (result == null) { text.AppendLine($"Caso {i + 1} • Histórico não disponível neste save antigo.\n"); continue; }
+            if (result == null) { text.AppendLine($"Case {i + 1} • History unavailable in this older save.\n"); continue; }
             known++; total += result.score; errors += result.errors; elapsed += result.elapsed;
-            text.AppendLine($"Caso {i + 1} • {definition.title}");
-            text.AppendLine($"{result.score}/1000 pontos ({result.score / 10f:0.#}%)  •  {Clock(result.elapsed)}  •  {result.errors} erro(s)\n");
+            text.AppendLine($"Case {i + 1} • {definition.title}");
+            text.AppendLine($"{result.score}/1000 points ({result.score / 10f:0.#}%)  •  {Clock(result.elapsed)}  •  {result.errors} mistake(s)\n");
         }
         if (known == 3)
         {
-            string award = total == 3000 ? "DISTINÇÃO MÁXIMA • DETETIVE LENDÁRIO" : total >= 2400 ? "PRÊMIO • DETETIVE EXEMPLAR" : "PRÊMIO • DETETIVE PERSISTENTE";
+            string award = total == 3000 ? "HIGHEST DISTINCTION • LEGENDARY DETECTIVE" : total >= 2400 ? "AWARD • EXEMPLARY DETECTIVE" : "AWARD • PERSISTENT DETECTIVE";
             text.AppendLine(award);
-            text.AppendLine($"Pontuação total: {total}/3000 ({total / 30f:0.#}%)");
-            text.AppendLine($"Tempo total dos casos concluídos: {Clock(elapsed)}  •  Erros: {errors}");
-            if (total == 3000) text.AppendLine("100% da pontuação nos três casos!");
+            text.AppendLine($"Total score: {total}/3000 ({total / 30f:0.#}%)");
+            text.AppendLine($"Total time for completed cases: {Clock(elapsed)}  •  Mistakes: {errors}");
+            if (total == 3000) text.AppendLine("A perfect score across all three cases!");
         }
-        else text.AppendLine("CAMPANHA CONCLUÍDA • Estatísticas totais indisponíveis: este save não registrou todos os casos anteriores.");
-        text.Append("\nA avaliação considera a tentativa concluída de cada caso. Repetir um caso substitui o resultado desse caso.");
+        else text.AppendLine("CAMPAIGN COMPLETE • Overall statistics unavailable: this save did not record every earlier case.");
+        text.Append("\nThe evaluation uses the completed attempt for each case. Replaying a case replaces its previous result.");
         return text.ToString();
     }
     static string Clock(float seconds) => $"{(int)seconds / 60:00}:{(int)seconds % 60:00}";

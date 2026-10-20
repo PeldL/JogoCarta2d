@@ -10,9 +10,9 @@ public sealed class CaseZeroSettingsPanel : MonoBehaviour
     void OnEnable() { Refresh(); }
     void Refresh()
     {
-        fullscreenLabel.text = Screen.fullScreen ? "Tela cheia: ativada" : "Tela cheia: desativada";
-        musicLabel.text = $"Música: {Mathf.RoundToInt(MusicVolume * 100)}%";
-        sfxLabel.text = $"Efeitos: {Mathf.RoundToInt(SfxVolume * 100)}%";
+        fullscreenLabel.text = Screen.fullScreen ? "Fullscreen: on" : "Fullscreen: off";
+        musicLabel.text = $"Music: {Mathf.RoundToInt(MusicVolume * 100)}%";
+        sfxLabel.text = $"Sound effects: {Mathf.RoundToInt(SfxVolume * 100)}%";
     }
     public void ToggleFullscreen()
     {

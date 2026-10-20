@@ -12,23 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: Fuzil
   m_EditorClassIdentifier: Assembly-CSharp::PhoneCallAsset
-  callerName: Delegado
+  callerName: "Police chief"
   startNodeId: start
   nodes:
   - nodeId: start
-    message: "Per\xEDcia confirmou digitais no fuzil encontrado na cena. Quer saber
-      de quem s\xE3o?"
+    message: "Forensics confirmed fingerprints on the rifle found at the scene. Want to know whose they are?"
     choices:
-    - choiceText: Sim, quero saber.
+    - choiceText: "Yes, tell me."
       nextNodeId: detalhes
       postponesCall: 0
-    - choiceText: Depois eu vejo.
+    - choiceText: "I will check later."
       nextNodeId: 
       postponesCall: 1
   - nodeId: detalhes
-    message: "As digitais pertencem ao dono do bar, n\xE3o ao suspeito. Isso pode
-      mudar tudo."
+    message: "The prints belong to the bar owner, not the suspect. This could change everything."
     choices:
-    - choiceText: Entendido
+    - choiceText: "Understood"
       nextNodeId: 
       postponesCall: 0

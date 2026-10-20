@@ -53,25 +53,25 @@ public sealed class CaseZeroState
     {
         get
         {
-            if (solved) return "Caso resolvido. Confira sua avaliação.";
-            if (failed) return "Investigação encerrada. Tente novamente pelo resultado.";
+            if (solved) return "Case solved. View your evaluation.";
+            if (failed) return "Investigation over. Try again from the results screen.";
             if (CaseIndex > 0)
             {
-                if (callPending && !callRead) return "Atenda a ligação da central pelo telefone.";
+                if (callPending && !callRead) return "Answer the call from dispatch on your phone.";
                 if (!HasSceneEvidence)
-                    return "Investigue os registros e vestígios em " + (CaseIndex == 1 ? "Apartamento 302." : "Escritório.");
-                if (!AllInterviewed) return "Ouça os quatro suspeitos na aba Interrogatório.";
-                if (!Has("depoimento")) return "Compare as provas e confronte os depoimentos.";
-                if (!callRead) return callDelay >= 0 ? "A perícia está analisando. Revise os depoimentos enquanto aguarda a ligação." : "Envie as provas para análise pelo celular.";
-                return "Abra Dedução e confirme a combinação sustentada pelas provas.";
+                    return "Investigate the records and traces at " + (CaseIndex == 1 ? "Apartment 302." : "the office.");
+                if (!AllInterviewed) return "Interview the four suspects in the Interviews tab.";
+                if (!Has("depoimento")) return "Compare the evidence and challenge the statements.";
+                if (!callRead) return callDelay >= 0 ? "Forensics is analyzing the material. Review the statements while awaiting the call." : "Submit material for analysis through your phone.";
+                return "Open Deduction and confirm the combination supported by the evidence.";
             }
-            if (callPending && !callRead) return "Atenda a ligação da perícia pelo telefone.";
+            if (callPending && !callRead) return "Answer the call from forensics on your phone.";
             if (!Has("registro") || !Has("pistola") || !Has("capsula"))
-                return location == "Bar" ? "Examine os objetos do bar e recolha as pistas." : "Vá ao bar pelo mapa e examine os objetos.";
-            if (!Has("sangue")) return "Examine os vestígios do local e compare com os depoimentos.";
-            if (!Has("depoimento")) return "No interrogatório, confronte o depoimento com as provas.";
-            if (!callRead) return callDelay >= 0 ? "A perícia está analisando. Revise as evidências enquanto aguarda a ligação." : "Envie as provas para análise pelo celular.";
-            return "Abra Dedução e compare culpado, arma e local com as provas.";
+                return location == "Bar" ? "Examine the objects in the bar and collect evidence." : "Travel to the bar using the map and examine the objects.";
+            if (!Has("sangue")) return "Examine the traces at the scene and compare them with the statements.";
+            if (!Has("depoimento")) return "In Interviews, challenge the testimony with evidence.";
+            if (!callRead) return callDelay >= 0 ? "Forensics is analyzing the material. Review the evidence while awaiting the call." : "Submit material for analysis through your phone.";
+            return "Open Deduction and compare the culprit, weapon, and location.";
         }
     }
     public bool HasSceneEvidence => Has("pistola") && Has("capsula") && Has("registro") && Has("sangue");
@@ -89,7 +89,7 @@ public sealed class CaseZeroState
     }
 
     public int Score => Math.Max(0, 1000 - errors * 100 - (int)(Math.Min(1, Math.Max(0, (elapsed - 300) / 600)) * 500));
-    public string Rating => Score >= 900 ? "Detetive lendário" : Score >= 700 ? "Detetive exemplar" : Score >= 500 ? "Detetive competente" : "Caso resolvido";
+    public string Rating => Score >= 900 ? "Legendary detective" : Score >= 700 ? "Exemplary detective" : Score >= 500 ? "Skilled detective" : "Case solved";
 
     public void RecordResult()
     {

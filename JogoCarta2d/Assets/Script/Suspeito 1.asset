@@ -14,22 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SuspectAsset
   suspectName: Rogerinho
   portrait: {fileID: 2353571312451627304, guid: 8f45204d4bb3852479e9b06aea21725e, type: 3}
-  description: PRATA
+  description: "SILVER"
   startNodeId: start
   nodes:
   - nodeId: start
-    message: "N\xE3o sei do que voc\xEA est\xE1 falando. Eu s\xF3 estava no bar tomando
-      uma."
+    message: "I do not know what you are talking about. I was just having a drink at the bar."
     choices:
-    - choiceText: "As digitais no fuzil n\xE3o s\xE3o suas. Sabe de quem s\xE3o?"
+    - choiceText: "The prints on the rifle are not yours. Do you know whose they are?"
       nextNodeId: 
       requiredEvidence:
         id: Arma
-        evidenceName: Fuzil
+        evidenceName: "Rifle"
         description: 
         icon: {fileID: 0}
         linkedCall: {fileID: 11400000, guid: ae64059daabf589428ab00d266a07685, type: 2}
-    - choiceText: "Por enquanto \xE9 s\xF3"
+    - choiceText: "That is all for now"
       nextNodeId: 
       requiredEvidence:
         id: 
@@ -38,9 +37,9 @@ MonoBehaviour:
         icon: {fileID: 0}
         linkedCall: {fileID: 0}
   - nodeId: alibi
-    message: "Eu fiquei no bar at\xE9 fechar. Pergunta pro dono, ele confirma."
+    message: "I stayed at the bar until closing. Ask the owner; he will confirm it."
     choices:
-    - choiceText: Vou perguntar.
+    - choiceText: "I will ask."
       nextNodeId: 
       requiredEvidence:
         id: 
@@ -48,7 +47,7 @@ MonoBehaviour:
         description: 
         icon: {fileID: 0}
         linkedCall: {fileID: 0}
-    - choiceText: Deixa eu te perguntar outra coisa.
+    - choiceText: "Let me ask you something else."
       nextNodeId: start
       requiredEvidence:
         id: 

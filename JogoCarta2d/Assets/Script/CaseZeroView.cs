@@ -7,6 +7,30 @@ using UnityEngine.UI;
 // UI objects are saved in the scenes. This component only changes their state.
 public sealed class CaseZeroView : MonoBehaviour
 {
+    public static string DisplayName(string key)
+    {
+        switch (key)
+        {
+            case "Evidências": return "Evidence";
+            case "Interrogatório": return "Interviews";
+            case "Dedução": return "Deduction";
+            case "Opções": return "Settings";
+            case "Suspeitos": return "Suspects";
+            case "Introdução": return "Introduction";
+            case "Confirmar reinício": return "Confirm restart";
+            case "Resultado": return "Results";
+            case "Mapa": return "Map";
+            case "Ligações": case "Telefone": return "Phone";
+            case "Local": return "Crime scene";
+            case "Apartamento": return "Apartment 302";
+            case "Escritorio": return "Office";
+            case "Delegacia": return "Police station";
+            case "Joalheria": return "Jewelry store";
+            case "Mercadinho": return "Convenience store";
+            default: return key;
+        }
+    }
+
     [Serializable]
     public class Page
     {
@@ -124,7 +148,7 @@ public sealed class CaseZeroView : MonoBehaviour
     {
         if (evidenceNotice == null || evidenceNoticeText == null) return;
         ClearNotice();
-        evidenceNoticeText.text = "NOVA EVIDÊNCIA\n" + name + "\nAdicionada ao documento.";
+        evidenceNoticeText.text = "NEW EVIDENCE\n" + name + "\nAdded to the case file.";
         evidenceNotice.SetActive(true);
         if (evidenceNotice.GetComponent<CaseZeroPanelMotion>() == null)
             evidenceNotice.AddComponent<CaseZeroPanelMotion>();
@@ -171,7 +195,7 @@ public sealed class CaseZeroView : MonoBehaviour
         atMap = location == "Mapa";
         mapRoot.SetActive(!mapInDocument && atMap);
         foreach (var control in barControls) control.SetActive(location == investigationLocation);
-        if (locationLabel != null) locationLabel.text = location;
+        if (locationLabel != null) locationLabel.text = DisplayName(location);
         if (mapControls != null) mapControls.interactable = mapInDocument || !documentRoot.activeSelf;
     }
 
@@ -233,7 +257,7 @@ public sealed class CaseZeroView : MonoBehaviour
             if (page.selectedMark != null) page.selectedMark.SetActive(selected);
         }
         closeDocumentButton.interactable = canNavigate;
-        documentTitle.text = name.ToUpperInvariant();
+        documentTitle.text = DisplayName(name).ToUpperInvariant();
     }
 
     public void CloseDocument()

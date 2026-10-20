@@ -87,19 +87,19 @@ public static class CaseZeroCampaignChecks
                 Check(!State(game).introductionSeen, "Frequência incorreta não pula o tutorial");
                 slider.value = 104.5f;
                 while (!intro.primary.interactable) yield return null;
-                Check(intro.body.text.Contains("CENTRAL"), "Sintonia estável libera a central");
+                Check(intro.body.text.Contains("DISPATCH"), "Sintonia estável libera a central");
                 for (int i = 0; i < 10 && game.Presenting; i++) intro.Advance();
             }
             else
             {
                 Check(intro.GetComponent<CaseZeroRadioTutorial>() != null, "Próximos casos também apresentam conversa no rádio");
                 Check(intro.GetComponentInChildren<UnityEngine.UI.Slider>(true) == null, "Casos 2 e 3 não repetem a sintonia do tutorial");
-                Check(intro.primary.interactable && intro.body.text.StartsWith("CENTRAL"), "Central reconecta diretamente no novo caso");
+                Check(intro.primary.interactable && intro.body.text.StartsWith("DISPATCH"), "Central reconecta diretamente no novo caso");
                 intro.Advance();
                 Check(game.Presenting && !State(game).introductionSeen, "Uma fala não encerra todo o briefing do caso");
                 for (int i = 0; i < 12 && game.Presenting; i++)
                 {
-                    Check(!intro.body.text.Contains("Tab") && !intro.body.text.Contains("três tentativas"), "Briefing posterior apresenta história sem repetir instruções");
+                    Check(!intro.body.text.Contains("Tab") && !intro.body.text.Contains("three attempts"), "Briefing posterior apresenta história sem repetir instruções");
                     intro.Advance();
                 }
             }
@@ -141,7 +141,7 @@ public static class CaseZeroCampaignChecks
             int[] examinationMaterial = caseIndex == 0 ? new[] { 1, 2 } : new[] { 0, 1 };
             foreach (int marker in examinationMaterial) { view.evidenceMarkers[marker].onClick.Invoke(); yield return null; }
             Check(state.CanRequestAnalysis && !state.HasSceneEvidence, "Perícia pode ser solicitada antes de encerrar a busca no local");
-            Check(!view.progress.text.Contains("/5") && !view.progress.text.Contains("PROVAS"), "HUD não revela contagem de evidências");
+            Check(!view.progress.text.Contains("/5") && !view.progress.text.Contains("EVIDENCE"), "HUD não revela contagem de evidências");
             yield return Analyze(game, view);
             state = State(game);
             Check(state.callRead && !state.CanConclude, "Laudo antecipado não libera acusação sem as demais provas");
@@ -208,7 +208,7 @@ public static class CaseZeroCampaignChecks
         Check(state.CanRequestAnalysis && !state.CanConclude, "Provas prontas; conclusão exige laudo");
         game.OpenPhone();
         game.OpenCaseDocuments();
-        Check(view.phoneState.text.Contains("DOCUMENTOS"), "Celular permite consultar documentos");
+        Check(view.phoneState.text.Contains("DOCUMENTS"), "Celular permite consultar documentos");
         Check(view.sendAnalysisButton != null && view.sendAnalysisButton.interactable, "Botão de envio disponível com material apropriado para exame");
         view.sendAnalysisButton.onClick.Invoke();
         Check(state.callDelay >= 0, "Jogador envia provas pelo celular");
@@ -221,7 +221,7 @@ public static class CaseZeroCampaignChecks
         game.EndPhone();
         Check(state.callRead, "Atender e registrar guarda o laudo");
         game.OpenAnalysisReport();
-        Check(view.phoneState.text.Contains("LAUDO"), "Laudo pode ser consultado novamente");
+        Check(view.phoneState.text.Contains("REPORT"), "Laudo pode ser consultado novamente");
         game.CloseDocument();
     }
     static void Tick()

@@ -12,7 +12,7 @@ public class InterrogationChoiceButtonUI : MonoBehaviour
         string label = choice.choiceText;
 
         if (!available && choice.requiredEvidence != null)
-            label += $" (precisa: {choice.requiredEvidence.evidenceName})";
+            label += $" (requires: {choice.requiredEvidence.evidenceName})";
 
         if (choiceLabel != null)
             choiceLabel.text = label;

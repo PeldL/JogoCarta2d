@@ -104,9 +104,9 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
         ClearCelebration();
         noticeBackground.color = new Color(0.1f, 0.065f, 0.055f, 0.97f);
         alertTitle.color = new Color(1, 0.93f, 0.86f);
-        alertTitle.text = failed ? "INVESTIGAÇÃO ENCERRADA" : "ACUSAÇÃO INCORRETA";
-        alertMessage.text = failed ? "As três tentativas acabaram. Você pode tentar o caso novamente."
-            : $"Restam {remaining} tentativa(s). Revise as provas e os depoimentos.";
+        alertTitle.text = failed ? "INVESTIGATION OVER" : "INCORRECT ACCUSATION";
+        alertMessage.text = failed ? "All three attempts have been used. You can try the case again."
+            : $"{remaining} attempt(s) remaining. Review the evidence and testimony.";
         accent.color = failed ? new Color(0.75f, 0.14f, 0.14f) : new Color(0.86f, 0.29f, 0.12f);
         PlayNotice(failed ? 4.5f : 3.5f, false);
         if (errorSource != null) { errorSource.Stop(); errorSource.Play(); }
@@ -119,10 +119,10 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
         StopShake();
         ClearCelebration();
         SetPhoneRinging(false);
-        alertTitle.text = campaignComplete ? "CAMPANHA CONCLUÍDA!" : "CASO RESOLVIDO!";
+        alertTitle.text = campaignComplete ? "CAMPAIGN COMPLETE!" : "CASE SOLVED!";
         alertMessage.text = campaignComplete
-            ? $"Parabéns, detetive! Os três casos estão resolvidos.\n{score}/1000 pontos neste caso • {rating}"
-            : $"Excelente trabalho, detetive!\n{score}/1000 pontos • {rating}";
+            ? $"Congratulations, detective! All three cases are solved.\n{score}/1000 points in this case • {rating}"
+            : $"Excellent work, detective!\n{score}/1000 points • {rating}";
         noticeBackground.color = new Color(0.035f, 0.14f, 0.105f, 0.98f);
         accent.color = new Color(1, 0.78f, 0.25f);
         alertTitle.color = new Color(1, 0.86f, 0.42f);

@@ -22,12 +22,12 @@ public static class CaseZeroWindowsBuild
         var report = result.summary.result + "\n" + folder + "\nErrors: " + result.summary.totalErrors + "\nWarnings: " + result.summary.totalWarnings;
         File.WriteAllText(Path.Combine(Path.GetTempPath(), "CasoZeroWindowsBuild.txt"), report);
         if (result.summary.result != BuildResult.Succeeded) throw new Exception("Build Windows falhou: " + report);
-        File.WriteAllText(Path.Combine(folder, "LEIA-ME.txt"),
-            "DETETIVE: CASO ZERO\n\nAbra CasoZero.exe. Mantenha todas as pastas junto do executável.\n" +
-            "Novo jogo: escolha um slot. Tab abre/fecha o documento; clique nas pistas para investigar.\n" +
-            "Conclua cada caso para liberar o próximo. Os novos casos têm quatro suspeitos.\n" +
-            "Save automático e manual em JSON; os saves desta build são separados dos saves do Editor.\n" +
-            "Os cenários novos são rascunhos para receber a arte da equipe.\n");
+        File.WriteAllText(Path.Combine(folder, "README.txt"),
+            "DETECTIVE: CASE ZERO\n\nOpen CasoZero.exe. Keep all folders beside the executable.\n" +
+            "New game: choose a slot. Tab opens/closes the case file; click clues to investigate.\n" +
+            "Solve each case to unlock the next. Later cases feature four suspects.\n" +
+            "Automatic and manual saves use JSON; build saves are separate from Editor saves.\n" +
+            "New locations are drafts awaiting the team's artwork.\n");
         Debug.Log("[Caso Zero] Build Windows concluída em " + folder);
     }
 }

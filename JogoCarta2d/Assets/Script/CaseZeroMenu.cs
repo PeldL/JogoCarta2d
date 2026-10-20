@@ -64,9 +64,9 @@ public sealed class CaseZeroMenu : MonoBehaviour
         {
             var saved = CaseZeroSave.Read(out _, slot);
             any |= saved != null;
-            string summary = saved == null ? (CaseZeroSave.ExistsInSlot(slot) ? "Indisponível" : "Vazio")
-                : saved.solved ? "Caso resolvido" : saved.failed ? "Caso encerrado • derrota" : "Em investigação";
-            slotLabels[slot - 1].text = $"{(selectedSlot == slot ? "• " : "")}SLOT {slot}\n{(saved != null ? "Caso " + (saved.CaseIndex + 1) + " • " : "")}{summary}";
+            string summary = saved == null ? (CaseZeroSave.ExistsInSlot(slot) ? "Unavailable" : "Empty")
+                : saved.solved ? "Case solved" : saved.failed ? "Case closed • defeat" : "Under investigation";
+            slotLabels[slot - 1].text = $"{(selectedSlot == slot ? "• " : "")}SLOT {slot}\n{(saved != null ? "Case " + (saved.CaseIndex + 1) + " • " : "")}{summary}";
         }
         continueButton.interactable = any;
         proceedButton.interactable = newGame || CaseZeroSave.Read(out _, selectedSlot) != null;
@@ -80,8 +80,8 @@ public sealed class CaseZeroMenu : MonoBehaviour
         if (!fresh)
             for (int slot = 1; slot <= CaseZeroSave.SlotCount; slot++)
                 if (CaseZeroSave.Read(out _, slot) != null) { selectedSlot = slot; break; }
-        title.text = fresh ? "NOVO JOGO • ESCOLHA UM SLOT" : "CONTINUAR • ESCOLHA UM SLOT";
-        status.text = "Selecione o arquivo da investigação.";
+        title.text = fresh ? "NEW GAME • CHOOSE A SLOT" : "CONTINUE • CHOOSE A SLOT";
+        status.text = "Select an investigation file.";
         slotPanel.SetActive(true); Refresh();
     }
     public void SelectSlot(int slot)
@@ -94,7 +94,7 @@ public sealed class CaseZeroMenu : MonoBehaviour
         if (loading) return;
         if (newGame && CaseZeroSave.ExistsInSlot(selectedSlot))
         {
-            confirmation.text = $"Iniciar um novo jogo substituirá o SLOT {selectedSlot}. Deseja continuar?";
+            confirmation.text = $"Starting a new game will overwrite SLOT {selectedSlot}. Continue?";
             confirmationPanel.SetActive(true);
         }
         else Launch();
@@ -104,7 +104,7 @@ public sealed class CaseZeroMenu : MonoBehaviour
     void Launch()
     {
         if (loading) return;
-        if (!Application.CanStreamedLevelBeLoaded("UI")) { status.text = "Inclua a cena UI no perfil de build."; return; }
+        if (!Application.CanStreamedLevelBeLoaded("UI")) { status.text = "Add the UI scene to the build profile."; return; }
         if (!newGame && CaseZeroSave.Read(out _, selectedSlot) == null) { Refresh(); return; }
         loading = true;
         CaseZeroSession.Request(selectedSlot, newGame);

@@ -23,7 +23,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     bool restartCurrentCase;
     readonly Dictionary<string, EvidenceData> catalog = new Dictionary<string, EvidenceData>();
     readonly string[] evidenceIds = { "registro", "pistola", "capsula", "sangue", "depoimento" };
-    readonly string[] markerNames = { "Escala de funcionários", "Pistola sob o balcão", "Cápsula no chão", "Examinar vestígios" };
+    readonly string[] markerNames = { "Employee schedule", "Pistol under the counter", "Cartridge case on the floor", "Examine traces" };
     float saveTimer;
     bool paused;
     bool restoring;
@@ -78,24 +78,24 @@ public sealed class CaseZeroGame : MonoBehaviour
         foreach (var asset in caseSuspects) Destroy(asset);
         caseSuspects.Clear();
         if (state != null && state.CaseIndex > 0) { CreateLaterCase(); return; }
-        AddEvidence("pistola", "Pistola sob o balcão", "Uma pistola foi encontrada escondida sob o balcão. Preserve-a para confronto balístico.");
-        AddEvidence("capsula", "Cápsula no chão", "Cápsula encontrada próxima ao corpo, na área de atendimento do bar. Indica um disparo neste local.");
-        AddEvidence("registro", "Registro de funcionários", "A escala identifica o verdadeiro funcionário: ele saiu antes do crime. O homem visto no balcão não trabalha aqui.");
-        AddEvidence("sangue", "Vestígios da cena do crime", "Marcas de sangue junto ao balcão. A posição é compatível com o relato da entrada da vítima.");
-        AddEvidence("depoimento", "Depoimento confrontado", "Ao ser confrontado com a escala e a pistola, o homem admite que assaltava o bar. A vítima entrou durante o roubo.");
+        AddEvidence("pistola", "Pistol under the counter", "A pistol was found hidden under the counter. Preserve it for ballistic comparison.");
+        AddEvidence("capsula", "Cartridge case on the floor", "A cartridge case was found near the body in the bar service area. It indicates a shot was fired here.");
+        AddEvidence("registro", "Employee records", "The schedule identifies the actual employee: he left before the crime. The man seen behind the counter does not work here.");
+        AddEvidence("sangue", "Crime scene traces", "Bloodstains by the counter. Their position is consistent with the account of the victim's arrival.");
+        AddEvidence("depoimento", "Challenged testimony", "Confronted with the schedule and the pistol, the man admits he was robbing the bar. The victim entered during the robbery.");
         forensicCall = ScriptableObject.CreateInstance<PhoneCallAsset>();
-        forensicCall.callerName = "Laboratório de perícia";
+        forensicCall.callerName = "Forensics laboratory";
         forensicCall.nodes = new List<PhoneDialogueNode> {
-            new PhoneDialogueNode { nodeId = "start", message = "O confronto balístico é compatível: a cápsula recolhida no bar foi disparada pela pistola encontrada sob o balcão. Cruze esse resultado com o registro de funcionários e o depoimento.", choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Registrar laudo e encerrar" } } }
+            new PhoneDialogueNode { nodeId = "start", message = "The ballistic comparison is a match: the cartridge case recovered in the bar was fired by the pistol found under the counter. Compare this finding with the employee records and the testimony.", choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Record report and end call" } } }
         };
         suspectAsset = ScriptableObject.CreateInstance<SuspectAsset>();
-        suspectAsset.suspectName = "Homem do balcão";
+        suspectAsset.suspectName = "Man behind the counter";
         suspectAsset.nodes = new List<InterrogationNode> {
-            Node("start", "Eu estava atrás do balcão quando aquela mulher entrou. Não tenho mais nada a dizer.",
-                Choice("O que você fazia no bar?", "trabalho"), Choice("Você conhecia a vítima?", "vitima"), Choice("Confrontar a escala e a arma", "confronto", catalog["registro"])),
-            Node("trabalho", "Eu... estava ajudando no atendimento. Não lembro quem me chamou.", Choice("Voltar às perguntas", "start")),
-            Node("vitima", "Nunca a tinha visto. Ela entrou e pediu uma bebida. Foi tudo muito rápido.", Choice("Voltar às perguntas", "start")),
-            Node("confronto", "Está bem. Eu não era funcionário. Estava roubando o bar. Ela entrou, viu meu rosto... atirei porque tive medo de que me denunciasse.", Choice("Encerrar depoimento", ""))
+            Node("start", "I was behind the counter when that woman came in. I have nothing else to say.",
+                Choice("What were you doing at the bar?", "trabalho"), Choice("Did you know the victim?", "vitima"), Choice("Challenge with the schedule and weapon", "confronto", catalog["registro"])),
+            Node("trabalho", "I... was helping with the service. I do not remember who called me.", Choice("Back to questions", "start")),
+            Node("vitima", "I had never seen her before. She came in and ordered a drink. It all happened so fast.", Choice("Back to questions", "start")),
+            Node("confronto", "All right. I was not an employee. I was robbing the bar. She came in, saw my face... I shot her because I was afraid she would report me.", Choice("End interview", ""))
         };
     }
 
@@ -108,16 +108,16 @@ public sealed class CaseZeroGame : MonoBehaviour
         var data = CurrentCase;
         for (int i = 0; i < evidenceIds.Length; i++) AddEvidence(evidenceIds[i], data.evidenceNames[i], data.evidenceDescriptions[i]);
         forensicCall = ScriptableObject.CreateInstance<PhoneCallAsset>();
-        forensicCall.callerName = "Central de investigação";
+        forensicCall.callerName = "Investigation dispatch";
         forensicCall.nodes = new List<PhoneDialogueNode> { new PhoneDialogueNode { nodeId = "start", message = data.call,
-            choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Registrar e encerrar" } } } };
+            choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Record and end call" } } } };
         for (int i = 0; i < data.suspects.Length; i++)
         {
             var asset = ScriptableObject.CreateInstance<SuspectAsset>();
             asset.suspectName = data.suspects[i];
             asset.nodes = new List<InterrogationNode> {
-                Node("start", data.statements[i], Choice("Comparar depoimento com as provas", "confronto", catalog["registro"]), Choice("Encerrar conversa", "")),
-                Node("confronto", data.explanations[i], Choice("Voltar ao depoimento", "start"), Choice("Encerrar conversa", ""))
+                Node("start", data.statements[i], Choice("Compare testimony with evidence", "confronto", catalog["registro"]), Choice("End conversation", "")),
+                Node("confronto", data.explanations[i], Choice("Back to testimony", "start"), Choice("End conversation", ""))
             };
             caseSuspects.Add(asset);
         }
@@ -140,11 +140,11 @@ public sealed class CaseZeroGame : MonoBehaviour
         for (int i = 0; i < view.evidenceCardLabels.Length; i++) view.evidenceCardLabels[i].text = catalog[evidenceIds[i]].evidenceName;
         if (view.objectQuestion != null) view.objectQuestion.text = data.objectQuestion;
         if (view.placeQuestion != null) view.placeQuestion.text = data.placeQuestion;
-        if (view.worldInterviewLabel != null) view.worldInterviewLabel.text = state.CaseIndex == 0 ? "Homem do balcão" : "Conversar com suspeitos";
-        if (view.caseBriefing != null) view.caseBriefing.text = $"CASO {state.CaseIndex + 1} • {data.title}\n{data.introduction}";
+        if (view.worldInterviewLabel != null) view.worldInterviewLabel.text = state.CaseIndex == 0 ? "Man behind the counter" : "Talk to suspects";
+        if (view.caseBriefing != null) view.caseBriefing.text = $"CASE {state.CaseIndex + 1} • {data.title}\n{data.introduction}";
         if (view.suspectsSummary != null) view.suspectsSummary.text = state.CaseIndex == 0
-            ? "Homem do balcão: afirma que trabalhava no bar.\nFuncionário: confira a escala.\nCliente desconhecido: compare essa hipótese com as provas."
-            : string.Join("\n\n", System.Array.ConvertAll(data.suspects, n => n)) + "\n\nOuça todos na aba Interrogatório e compare os relatos com as evidências.";
+            ? "Man behind the counter: claims he worked at the bar.\nEmployee: check the schedule.\nUnknown customer: compare this possibility with the evidence."
+            : string.Join("\n\n", System.Array.ConvertAll(data.suspects, n => n)) + "\n\nInterview everyone in the Interviews tab and compare their accounts with the evidence.";
         for (int i = 0; i < view.caseMapButtons.Length; i++) view.caseMapButtons[i].gameObject.SetActive(i == state.CaseIndex);
         for (int i = 0; i < view.interviewSuspectButtons.Length; i++)
         {
@@ -169,7 +169,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state == null || !state.solved || travelling || confirming) return;
         var next = state.NextCase();
         if (next == null) { state.RecordResult(); Save(false); StartCoroutine(ShowPresentation("FinalCampanha")); return; }
-        if (!Application.CanStreamedLevelBeLoaded(next.Definition.location)) { Say("Inclua o próximo local no perfil de build."); return; }
+        if (!Application.CanStreamedLevelBeLoaded(next.Definition.location)) { Say("Add the next location to the build profile."); return; }
         if (!CaseZeroSave.Write(next, out string error, activeSlot)) { Say(error); return; }
         Begin(next);
     }
@@ -179,7 +179,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         view.Feedback?.ResetFeedback();
         RefreshSlots();
         view.ShowPage("Introdução", false);
-        Say("Inicie ou continue a investigação.");
+        Say("Start or continue an investigation.");
     }
 
     public void StartNewGame()
@@ -193,7 +193,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (slot < 1 || slot > CaseZeroSave.SlotCount || confirming) return;
         selectedSlot = slot;
         RefreshSlots();
-        Say($"Slot {slot} selecionado. Escolha iniciar, salvar ou carregar.");
+        Say($"Slot {slot} selected. Choose to start, save, or load.");
     }
 
     void RefreshSlots()
@@ -201,15 +201,15 @@ public sealed class CaseZeroGame : MonoBehaviour
         for (int slot = 1; slot <= CaseZeroSave.SlotCount; slot++)
         {
             var saved = CaseZeroSave.Read(out _, slot);
-            string summary = saved != null ? (saved.solved ? "Caso resolvido" : saved.failed ? "Caso encerrado • derrota" : $"Em investigação • {TimeText(saved.elapsed)}")
-                : CaseZeroSave.ExistsInSlot(slot) ? "Save indisponível" : "Vazio";
-            string label = $"{(slot == selectedSlot ? "• " : "")}SLOT {slot}\n{(saved != null ? "Caso " + (saved.CaseIndex + 1) + " • " : "")}{summary}";
+            string summary = saved != null ? (saved.solved ? "Case solved" : saved.failed ? "Case closed • defeat" : $"Under investigation • {TimeText(saved.elapsed)}")
+                : CaseZeroSave.ExistsInSlot(slot) ? "Save unavailable" : "Empty";
+            string label = $"{(slot == selectedSlot ? "• " : "")}SLOT {slot}\n{(saved != null ? "Case " + (saved.CaseIndex + 1) + " • " : "")}{summary}";
             for (int i = slot - 1; i < view.slotLabels.Length; i += CaseZeroSave.SlotCount) view.slotLabels[i].text = label;
         }
         view.continueButton.interactable = view.loadButton.interactable = CaseZeroSave.Read(out _, selectedSlot) != null;
         foreach (var button in view.deleteButtons) button.interactable = CaseZeroSave.ExistsInSlot(selectedSlot);
-        view.slotContext.text = state == null ? $"Destino selecionado: slot {selectedSlot}"
-            : $"Automático: slot {activeSlot} • Salvar/carregar: slot {selectedSlot}";
+        view.slotContext.text = state == null ? $"Selected destination: slot {selectedSlot}"
+            : $"Autosave: slot {activeSlot} • Save/load: slot {selectedSlot}";
     }
 
     void StartInSlot(int slot)
@@ -219,7 +219,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         activeSlot = selectedSlot = slot;
         Begin(fresh);
         RefreshSlots();
-        Say($"Nova investigação no slot {slot}. Salvamento automático neste slot.");
+        Say($"New investigation in slot {slot}. Autosave uses this slot.");
     }
 
     void Begin(CaseZeroState next)
@@ -250,7 +250,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state.Finished) OpenPage("Resultado");
         else if (state.documentOpen) OpenPage(NormalizePage(state.page));
         else view.CloseDocument();
-        Say("Tab abre o documento. Clique nas provas do cenário para investigar.");
+        Say("Tab opens the case file. Click evidence in the scene to investigate.");
     }
 
     string NormalizePage(string page)
@@ -285,7 +285,7 @@ public sealed class CaseZeroGame : MonoBehaviour
                 state.callDelay = -1;
                 state.callPending = true;
                 phone.QueueCall(forensicCall);
-                Say("Chamada da central. Abra o telefone para atender.");
+                Say("Dispatch is calling. Open the phone to answer.");
                 if (view.documentRoot.activeSelf && state.page == "Ligações") RefreshPhone();
                 Save(false);
             }
@@ -293,7 +293,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (!state.idleHintShown && state.idleTime >= inactivityHintDelay)
         {
             state.idleHintShown = true;
-            Say("Central: " + state.Objective);
+            Say("Dispatch: " + state.Objective);
         }
         if (saveTimer >= Mathf.Max(10, autosaveInterval)) Save(false);
         RefreshProgress();
@@ -301,12 +301,12 @@ public sealed class CaseZeroGame : MonoBehaviour
 
     void RefreshProgress()
     {
-        if (view.objective != null) view.objective.text = "OBJETIVO • " + state.Objective;
+        if (view.objective != null) view.objective.text = "OBJECTIVE • " + state.Objective;
         bool ringing = !state.Finished && state.callPending && !state.callRead && phone.CurrentCall == null;
         if (view.incomingCallPulse != null) view.incomingCallPulse.enabled = ringing;
         view.Feedback?.SetPhoneRinging(ringing);
-        view.phoneNotification.text = !state.Finished && state.callPending && !state.callRead ? "CHAMADA RECEBIDA • abra o telefone" : "";
-        view.progress.text = $"CASO {state.CaseIndex + 1} • {CurrentCase.title.ToUpperInvariant()}";
+        view.phoneNotification.text = !state.Finished && state.callPending && !state.callRead ? "INCOMING CALL • open the phone" : "";
+        view.progress.text = $"CASE {state.CaseIndex + 1} • {CurrentCase.title.ToUpperInvariant()}";
     }
 
     public void ToggleDocument()
@@ -338,11 +338,11 @@ public sealed class CaseZeroGame : MonoBehaviour
     public void OpenSaves() => OpenPage("Saves");
     public void OpenCredits() { CaseZeroSession.ShowCredits = true; ReturnToMenu(); }
     public void OpenSuspects() => OpenPage("Suspeitos");
-    public void UnavailableLocation() => Say("Esse local ainda não está disponível neste caso.");
+    public void UnavailableLocation() => Say("This location is not available in the current case.");
     public void ReturnToMenu()
     {
         if (travelling) return;
-        if (!UnityEngine.Application.CanStreamedLevelBeLoaded("Menu")) { Say("Inclua a cena Menu no perfil de build."); return; }
+        if (!UnityEngine.Application.CanStreamedLevelBeLoaded("Menu")) { Say("Add the Menu scene to the build profile."); return; }
         Save(false);
         UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
     }
@@ -369,7 +369,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         if (destination != "Mapa" && !Application.CanStreamedLevelBeLoaded(destination))
         {
-            Say("O local não está no perfil de build: " + destination);
+            Say("Location not included in the build profile: " + destination);
             view.SetLocation(loadedLocation ?? "Mapa");
             yield break;
         }
@@ -393,9 +393,9 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (restore && state.Finished) OpenPage("Resultado");
         else if (reopen && (view.mapInDocument || page != "Mapa") && page != "Local") OpenPage(NormalizePage(page));
         Save(false);
-        Say(view.mapInDocument ? "" : destination == "Mapa" ? "Escolha um local no mapa. Tab abre a investigação."
-            : destination == "Bar" ? "Investigue as pistas do bar. Use Mapa para sair."
-            : destination + " • Use Mapa para voltar à cidade.");
+        Say(view.mapInDocument ? "" : destination == "Mapa" ? "Choose a location on the map. Tab opens the investigation."
+            : destination == "Bar" ? "Investigate the bar. Use the Map to leave."
+            : CaseZeroView.DisplayName(destination) + " • Use the Map to return to town.");
         yield return DOTween.To(() => view.travelCurtain.alpha, a => view.travelCurtain.alpha = a, 0f, 0.18f).SetUpdate(true).WaitForCompletion();
         view.travelCurtain.blocksRaycasts = false;
         view.travelCurtain.gameObject.SetActive(false);
@@ -406,7 +406,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     IEnumerator ShowPresentation(string scene)
     {
         if (presenting) yield break;
-        if (!Application.CanStreamedLevelBeLoaded(scene)) { Say("Inclua a apresentação no perfil de build: " + scene); yield break; }
+        if (!Application.CanStreamedLevelBeLoaded(scene)) { Say("Add the presentation to the build profile: " + scene); yield break; }
         presenting = true;
         view.ClearNotice();
         yield return SceneManager.LoadSceneAsync(scene, LoadSceneMode.Additive);
@@ -421,7 +421,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         Save(false);
         var scene = SceneManager.GetSceneByName("ApresentacaoCaso");
         if (scene.isLoaded) SceneManager.UnloadSceneAsync(scene);
-        TutorialHint(1, "Comece clicando em um objeto identificado no cenário para examiná-lo.");
+        TutorialHint(1, "Start by clicking a marked object in the scene to examine it.");
     }
 
     void OpenPage(string page)
@@ -446,19 +446,19 @@ public sealed class CaseZeroGame : MonoBehaviour
                 view.ClearNotice();
                 if (view.solutionText != null) view.solutionText.text = CurrentCase.ending;
                 if (view.nextCaseButton != null) view.nextCaseButton.gameObject.SetActive(state.solved);
-                if (view.nextCaseLabel != null) view.nextCaseLabel.text = state.CaseIndex < 2 ? "Ir para o Caso " + (state.CaseIndex + 2) : "Ver resultado da campanha";
+                if (view.nextCaseLabel != null) view.nextCaseLabel.text = state.CaseIndex < 2 ? "Go to Case " + (state.CaseIndex + 2) : "View campaign results";
                 if (view.resultSolution != null) view.resultSolution.SetActive(state.solved);
-                view.documentTitle.text = state.failed ? "CASO NÃO RESOLVIDO" : "CASO RESOLVIDO";
+                view.documentTitle.text = state.failed ? "CASE UNSOLVED" : "CASE SOLVED";
                 view.resultStats.text = state.failed
-                    ? $"As três acusações estavam incorretas.\nA investigação foi encerrada.\n{TimeText(state.elapsed)} • {state.errors} erros\nVocê pode recomeçar o caso ou voltar ao menu."
-                    : $"{state.Rating}\n{state.Score} pontos  •  {TimeText(state.elapsed)}  •  {state.errors} erro(s)";
+                    ? $"All three accusations were incorrect.\nThe investigation is over.\n{TimeText(state.elapsed)} • {state.errors} mistakes\nYou can restart this case or return to the menu."
+                    : $"{state.Rating}\n{state.Score} points  •  {TimeText(state.elapsed)}  •  {state.errors} mistake(s)";
                 view.closeDocumentButton.interactable = false;
                 break;
         }
-        if (page == "Evidências") TutorialHint(4, "Leia as pistas registradas. Depois, ouça os envolvidos em Interrogatório e compare as informações.");
-        else if (page == "Interrogatório") TutorialHint(8, "Escolha uma pergunta. Algumas perguntas só ficam disponíveis depois de encontrar provas.");
-        else if (page == "Dedução") TutorialHint(16, "Escolha a combinação sustentada pelas provas. Confirmar uma acusação errada gasta uma tentativa; cancelar não. Você tem três tentativas.");
-        else if (page == "Ligações") TutorialHint(32, "Atenda quando houver uma chamada e leia a informação da central.");
+        if (page == "Evidências") TutorialHint(4, "Read the recorded clues. Then interview the people involved and compare their accounts.");
+        else if (page == "Interrogatório") TutorialHint(8, "Choose a question. Some questions become available only after you find supporting evidence.");
+        else if (page == "Dedução") TutorialHint(16, "Choose the combination supported by the evidence. Confirming an incorrect accusation costs an attempt; canceling does not. You have three attempts.");
+        else if (page == "Ligações") TutorialHint(32, "Answer incoming calls and read the information from dispatch.");
     }
 
     public void ToggleCamera()
@@ -472,7 +472,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         for (int i = 0; i < view.evidenceMarkers.Length; i++)
         {
             bool found = state.Has(evidenceIds[i]);
-            view.evidenceMarkerLabels[i].text = (state.CaseIndex == 0 ? markerNames[i] : CurrentCase.evidenceNames[i]) + (found ? " • registrado" : "");
+            view.evidenceMarkerLabels[i].text = (state.CaseIndex == 0 ? markerNames[i] : CurrentCase.evidenceNames[i]) + (found ? " • recorded" : "");
             view.evidenceMarkers[i].interactable = !state.Finished || found;
         }
     }
@@ -498,7 +498,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         Say("");
         Save(false);
         RefreshProgress();
-        TutorialHint(2, "Pista registrada. Abra o documento com Tab ou pelo botão de investigação e consulte Evidências.");
+        TutorialHint(2, "Clue recorded. Open the case file with Tab or the investigation button and check Evidence.");
     }
 
     public void SelectEvidence(string id)
@@ -520,7 +520,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         var data = catalog[selectedEvidence];
         view.evidenceName.text = data.evidenceName;
         view.evidenceDescription.text = data.description;
-        view.evidenceType.text = "EVIDÊNCIA • CASO 01";
+        view.evidenceType.text = "EVIDENCE • CASE 01";
     }
 
     void ShowInterview()
@@ -529,14 +529,14 @@ public sealed class CaseZeroGame : MonoBehaviour
         for (int i = 0; i < view.interviewSuspectButtons.Length; i++)
         {
             view.interviewSuspectButtons[i].interactable = i != state.interviewSuspect;
-            if (state.CaseIndex > 0) view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = CurrentCase.suspects[i] + ((state.interviewedMask & (1 << i)) != 0 ? " • ouvido" : "");
+            if (state.CaseIndex > 0) view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = CurrentCase.suspects[i] + ((state.interviewedMask & (1 << i)) != 0 ? " • interviewed" : "");
         }
         if (interrogation.CurrentSuspect != suspectAsset)
         {
             string nodeId = state.interviewNode;
             interrogation.StartInterrogation(suspectAsset);
             if (nodeId != "start" && suspectAsset.GetNode(nodeId) != null)
-                interrogation.SelectChoice(Choice("Retomar", nodeId));
+                interrogation.SelectChoice(Choice("Resume", nodeId));
         }
         else RenderInterview(interrogation.CurrentNode);
         Save(false);
@@ -561,7 +561,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             if (!exists) continue;
             var choice = node.choices[i];
             bool available = interrogation.IsChoiceAvailable(choice) && (choice.nextNodeId != "confronto" || CanConfront());
-            view.interviewChoiceLabels[i].text = available ? choice.choiceText : state.CaseIndex == 0 ? "Confrontar • procure evidências que contradigam o relato" : "Comparar • investigue os registros e as contradições";
+            view.interviewChoiceLabels[i].text = available ? choice.choiceText : state.CaseIndex == 0 ? "Challenge • find evidence that contradicts the account" : "Compare • investigate records and contradictions";
             view.interviewChoices[i].interactable = available;
         }
     }
@@ -589,24 +589,24 @@ public sealed class CaseZeroGame : MonoBehaviour
         view.endPhoneButton.gameObject.SetActive(active);
         if (state.callRead || active)
         {
-            view.phoneState.text = active ? "EM LINHA • " + forensicCall.callerName.ToUpperInvariant() : "INFORMAÇÃO REGISTRADA";
+            view.phoneState.text = active ? "ON THE LINE • " + forensicCall.callerName.ToUpperInvariant() : "INFORMATION RECORDED";
             if (!view.phonePresentation.IsRevealing)
                 view.phonePresentation.ShowImmediate(forensicCall.nodes[0].message);
         }
         else if (state.callPending)
         {
-            view.phoneState.text = "CHAMADA RECEBIDA";
-            view.phonePresentation.ShowImmediate(forensicCall.callerName + ".\nAtenda para receber novas informações sobre o caso.");
+            view.phoneState.text = "INCOMING CALL";
+            view.phonePresentation.ShowImmediate(forensicCall.callerName + ".\nAnswer to receive new information about the case.");
         }
         else
         {
-            view.phoneState.text = "SEM CHAMADAS PENDENTES";
+            view.phoneState.text = "NO PENDING CALLS";
             view.phonePresentation.ShowImmediate(state.callDelay >= 0
-                ? "Provas enviadas. A perícia está preparando o retorno. Você pode continuar investigando; o celular avisará quando chegar a ligação."
-                : state.CanRequestAnalysis ? "Você pode solicitar o exame do material disponível. Isso não significa que a investigação esteja completa: continue buscando pistas e comparando relatos."
+                ? "Material submitted. Forensics is preparing its response. Keep investigating; the phone will alert you when the call arrives."
+                : state.CanRequestAnalysis ? "You can request an examination of the available material. This does not mean the investigation is complete: keep looking for clues and comparing accounts."
                 : (state.CaseIndex == 0
-                    ? "CENTRAL DISPONÍVEL\nConsulte os documentos ou peça orientação. Para um confronto balístico, preserve a arma e o material do disparo."
-                    : "CENTRAL DISPONÍVEL\nConsulte os documentos ou peça orientação. Preserve os registros e os vestígios do local para solicitar uma análise."));
+                    ? "DISPATCH AVAILABLE\nRead the documents or ask for guidance. For a ballistic comparison, preserve the weapon and the material from the shooting."
+                    : "DISPATCH AVAILABLE\nRead the documents or ask for guidance. Preserve the records and traces at the scene to request an examination."));
         }
     }
 
@@ -618,32 +618,32 @@ public sealed class CaseZeroGame : MonoBehaviour
         state.idleTime = 0;
         Save(false);
         RefreshPhone();
-        Say("Provas enviadas à perícia. Continue investigando e atenda quando o celular avisar.");
+        Say("Material sent to forensics. Keep investigating and answer when the phone rings.");
     }
     bool CanConsultPhone()
     {
         if (state == null || state.Finished) return false;
         if (phone.CurrentCall == null) return true;
-        Say("Registre o laudo e encerre a chamada antes de consultar outro documento.");
+        Say("Record the report and end the call before opening another document.");
         return false;
     }
     public void AskCentral()
     {
         if (!CanConsultPhone()) return;
-        view.phoneState.text = "CENTRAL • ORIENTAÇÃO";
-        view.phonePresentation.PlayMessage("Central: " + state.Objective + "\n\nLeia o que cada prova confirma e compare com os depoimentos. Uma suspeita só deve virar acusação quando as informações combinarem.");
+        view.phoneState.text = "DISPATCH • GUIDANCE";
+        view.phonePresentation.PlayMessage("Dispatch: " + state.Objective + "\n\nRead what each piece of evidence establishes and compare it with the statements. A suspicion should become an accusation only when the information fits.");
     }
     public void OpenCaseDocuments()
     {
         if (!CanConsultPhone()) return;
-        view.phoneState.text = "DOCUMENTOS DO PLANTÃO";
-        view.phonePresentation.ShowImmediate((state.CaseIndex == 0 ? "Ocorrência inicial: uma mulher foi encontrada morta em um bar. As circunstâncias precisam ser investigadas." : CurrentCase.introduction)
-            + "\n\nLocal de referência: " + CurrentCase.location + ".\n\nAbra o documento de investigação por Tab ou pelo botão na tela. Mapa: visitar locais. Evidências: consultar registros coletados. Interrogatório: ouvir e comparar relatos. Dedução: apresentar a conclusão após registrar o laudo.");
+        view.phoneState.text = "SHIFT DOCUMENTS";
+        view.phonePresentation.ShowImmediate((state.CaseIndex == 0 ? "Initial incident: a woman was found shot dead in a bar. The circumstances need to be investigated." : CurrentCase.introduction)
+            + "\n\nReference location: " + CaseZeroView.DisplayName(CurrentCase.location) + ".\n\nOpen the case file with Tab or the on-screen button. Map: visit locations. Evidence: read collected records. Interviews: listen and compare accounts. Deduction: present your conclusion after recording the report.");
     }
     public void OpenAnalysisReport()
     {
         if (!CanConsultPhone()) return;
-        if (state.callRead) { view.phoneState.text = "LAUDO REGISTRADO"; view.phonePresentation.ShowImmediate(forensicCall.nodes[0].message); }
+        if (state.callRead) { view.phoneState.text = "FORENSIC REPORT RECORDED"; view.phonePresentation.ShowImmediate(forensicCall.nodes[0].message); }
         else RefreshPhone();
     }
 
@@ -680,10 +680,10 @@ public sealed class CaseZeroGame : MonoBehaviour
         view.ShowSelection(view.weaponChecks, state.weapon);
         view.ShowSelection(view.placeChecks, state.place);
         view.concludeButton.interactable = state.CanConclude && !state.Finished;
-        view.deductionHint.text = state.Finished ? "Caso já encerrado. Consulte o resultado ou reinicie em Opções."
-            : state.CanConclude ? $"Revise sua hipótese antes de confirmar. Restam {state.AttemptsRemaining} tentativa(s) de acusação."
-            : state.HasSceneEvidence && state.Has("depoimento") && state.AllInterviewed && !state.callRead ? "Falta o laudo: envie as provas pelo celular, atenda e registre o retorno."
-            : state.CaseIndex == 0 ? "Investigue o local, compare os depoimentos e consulte a perícia." : "Examine os registros, ouça os envolvidos e confronte as contradições.";
+        view.deductionHint.text = state.Finished ? "This case is already closed. View the result or restart through Settings."
+            : state.CanConclude ? $"Review your theory before confirming. {state.AttemptsRemaining} accusation attempt(s) remaining."
+            : state.HasSceneEvidence && state.Has("depoimento") && state.AllInterviewed && !state.callRead ? "The forensic report is missing: submit the material by phone, answer, and record the response."
+            : state.CaseIndex == 0 ? "Investigate the scene, compare statements, and consult forensics." : "Examine the records, interview those involved, and challenge contradictions.";
     }
 
     public void ConcludeCase()
@@ -691,9 +691,9 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state == null || paused || state.Finished || !state.CanConclude || confirming) return;
         ShowSlotConfirmation(false);
         accusationConfirmation = true;
-        view.documentTitle.text = "CONFIRMAR ACUSAÇÃO";
-        view.confirmationButtonLabel.text = "Confirmar acusação";
-        view.confirmationMessage.text = $"Você tem {state.AttemptsRemaining} tentativa(s).\n\nUma acusação incorreta consome uma tentativa. Após três erros, a investigação termina em derrota.\n\nConfirmar a combinação escolhida?";
+        view.documentTitle.text = "CONFIRM ACCUSATION";
+        view.confirmationButtonLabel.text = "Confirm accusation";
+        view.confirmationMessage.text = $"You have {state.AttemptsRemaining} attempt(s).\n\nAn incorrect accusation costs one attempt. After three mistakes, the investigation ends in defeat.\n\nConfirm the selected combination?";
     }
 
     void AccusationConfirmed()
@@ -706,7 +706,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         Save(false);
         if (solved) view.Feedback?.ShowVictory(state.Score, state.Rating, state.CaseIndex == CaseZeroCases.All.Length - 1);
         else view.Feedback?.ShowWrongAccusation(state.AttemptsRemaining, state.failed);
-        Say(solved ? "Caso encerrado. Sua avaliação foi salva." : state.failed ? "As tentativas acabaram. Você pode tentar novamente." : $"Acusação incorreta. Restam {state.AttemptsRemaining} tentativa(s). Revise as provas.");
+        Say(solved ? "Case closed. Your evaluation has been saved." : state.failed ? "No attempts remaining. You can try again." : $"Incorrect accusation. {state.AttemptsRemaining} attempt(s) remaining. Review the evidence.");
     }
 
     public void ConfirmRestart()
@@ -714,7 +714,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state != null) selectedSlot = activeSlot;
         ShowSlotConfirmation(false);
         restartCurrentCase = state != null;
-        if (restartCurrentCase) view.confirmationMessage.text = "Recomeçar somente o caso atual? As pistas e tentativas deste caso serão reiniciadas. Os casos anteriores concluídos serão preservados.";
+        if (restartCurrentCase) view.confirmationMessage.text = "Restart only the current case? Its clues and attempts will be reset. Previously completed cases will be preserved.";
     }
 
     void ShowSlotConfirmation(bool saveCopy)
@@ -728,11 +728,11 @@ public sealed class CaseZeroGame : MonoBehaviour
         returnPage = state == null ? "Introdução" : state.page;
         paused = true;
         view.ShowPage("Confirmar reinício", false);
-        view.documentTitle.text = "CONFIRMAR SUBSTITUIÇÃO";
-        view.confirmationButtonLabel.text = "Confirmar substituição";
+        view.documentTitle.text = "CONFIRM OVERWRITE";
+        view.confirmationButtonLabel.text = "Confirm overwrite";
         view.confirmationMessage.text = saveCopy
-            ? $"Salvar a investigação atual no SLOT {confirmationSlot} substitui o progresso que já está nele.\n\nDepois de salvar, o automático continuará nesse slot. Deseja continuar?"
-            : $"Iniciar um novo caso no SLOT {confirmationSlot} substitui o progresso que já está nele.\n\nOs outros slots permanecem intactos. Deseja continuar?";
+            ? $"Saving the current investigation to SLOT {confirmationSlot} overwrites its existing progress.\n\nAutosave will then use this slot. Continue?"
+            : $"Starting a new case in SLOT {confirmationSlot} overwrites its existing progress.\n\nThe other slots will remain intact. Continue?";
         if (state != null) state.documentOpen = true;
     }
 
@@ -770,12 +770,12 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (confirming || !CaseZeroSave.ExistsInSlot(selectedSlot)) return;
         ShowSlotConfirmation(false);
         deleteConfirmation = true;
-        view.documentTitle.text = "APAGAR SAVE";
-        view.confirmationButtonLabel.text = "Apagar definitivamente";
-        view.confirmationMessage.text = $"Apagar o SLOT {confirmationSlot} e suas cópias de segurança? Essa ação não pode ser desfeita.\n\n"
+        view.documentTitle.text = "DELETE SAVE";
+        view.confirmationButtonLabel.text = "Delete permanently";
+        view.confirmationMessage.text = $"Delete SLOT {confirmationSlot} and its backup files? This cannot be undone.\n\n"
             + (state != null && confirmationSlot == activeSlot
-                ? "A investigação atual será encerrada e você voltará à introdução."
-                : "Os outros slots e a investigação atual permanecem intactos.");
+                ? "The current investigation will end and you will return to the introduction."
+                : "The other slots and the current investigation will remain intact.");
     }
 
     void DeleteConfirmed()
@@ -796,12 +796,12 @@ public sealed class CaseZeroGame : MonoBehaviour
             selectedEvidence = null;
             view.incomingCallPulse.enabled = false;
             view.Feedback?.ResetFeedback();
-            view.progress.text = "NENHUMA INVESTIGAÇÃO ATIVA";
-            view.phoneNotification.text = "Inicie ou carregue uma investigação.";
+            view.progress.text = "NO ACTIVE INVESTIGATION";
+            view.phoneNotification.text = "Start or load an investigation.";
         }
         CancelRestart();
         RefreshSlots();
-        Say($"Slot {slot} apagado, incluindo as cópias de segurança.");
+        Say($"Slot {slot} deleted, including its backups.");
     }
 
     public void SaveGame()
@@ -817,7 +817,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         activeSlot = selectedSlot = slot;
         saveTimer = 0;
         RefreshSlots();
-        Say($"Investigação salva no slot {slot}. Automático vinculado a esse slot.");
+        Say($"Investigation saved to slot {slot}. Autosave now uses this slot.");
     }
 
     void Save(bool manual)
@@ -825,7 +825,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state == null || restoring) return;
         saveTimer = 0;
         if (!CaseZeroSave.Write(state, out string error, activeSlot)) Say(error);
-        else if (manual) Say($"Investigação salva no slot {activeSlot}.");
+        else if (manual) Say($"Investigation saved to slot {activeSlot}.");
     }
 
     public void LoadGame()
@@ -836,7 +836,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         activeSlot = selectedSlot;
         Begin(loaded);
         RefreshSlots();
-        Say(notice ?? $"Investigação restaurada do slot {activeSlot}.");
+        Say(notice ?? $"Investigation restored from slot {activeSlot}.");
     }
 
     void OnApplicationPause(bool value) { if (value) Save(false); }
@@ -853,7 +853,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         if (state == null || state.CaseIndex != 0 || state.Finished || !state.introductionSeen || (state.tutorialHints & flag) != 0) return;
         state.tutorialHints |= flag;
-        Say("Central: " + message);
+        Say("Dispatch: " + message);
         Save(false);
     }
     void Say(string message) { if (view != null) view.status.text = message; }

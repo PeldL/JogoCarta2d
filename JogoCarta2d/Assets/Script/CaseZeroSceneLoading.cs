@@ -45,7 +45,7 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
         loader.label.alignment = TextAlignmentOptions.Center;
         loader.label.color = new Color(0.94f, 0.9f, 0.8f);
         loader.label.raycastTarget = false;
-        loader.label.text = "CARREGANDO A INVESTIGAÇÃO…";
+        loader.label.text = "LOADING THE INVESTIGATION…";
         loader.StartCoroutine(loader.Run(scene, template, settings));
     }
 
@@ -86,7 +86,7 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
         if (game != null && !game.ReadyForReveal)
             Debug.LogWarning("[Caso Zero] A inicialização não terminou em 30 segundos. Revelando a interface para permitir diagnóstico.");
         Canvas.ForceUpdateCanvases();
-        label.text = "INVESTIGAÇÃO PRONTA";
+        label.text = "INVESTIGATION READY";
         if (overlay != null)
         {
             overlay.OnSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
