@@ -176,6 +176,7 @@ public sealed class CaseZeroGame : MonoBehaviour
 
     void ShowWelcome()
     {
+        view.Feedback?.ResetFeedback();
         RefreshSlots();
         view.ShowPage("Introdução", false);
         Say("Inicie ou continue a investigação.");
@@ -223,6 +224,7 @@ public sealed class CaseZeroGame : MonoBehaviour
 
     void Begin(CaseZeroState next)
     {
+        view.Feedback?.ResetFeedback();
         view.ClearNotice();
         restoring = true;
         view.phonePresentation.ShowImmediate("");
@@ -284,7 +286,6 @@ public sealed class CaseZeroGame : MonoBehaviour
                 state.callPending = true;
                 phone.QueueCall(forensicCall);
                 Say("Chamada da central. Abra o telefone para atender.");
-                CaseZeroSoundFeedback.Current?.PlayNotification();
                 if (view.documentRoot.activeSelf && state.page == "Ligações") RefreshPhone();
                 Save(false);
             }
@@ -301,7 +302,9 @@ public sealed class CaseZeroGame : MonoBehaviour
     void RefreshProgress()
     {
         if (view.objective != null) view.objective.text = "OBJETIVO • " + state.Objective;
-        view.incomingCallPulse.enabled = !state.Finished && state.callPending && !state.callRead && phone.CurrentCall == null;
+        bool ringing = !state.Finished && state.callPending && !state.callRead && phone.CurrentCall == null;
+        if (view.incomingCallPulse != null) view.incomingCallPulse.enabled = ringing;
+        view.Feedback?.SetPhoneRinging(ringing);
         view.phoneNotification.text = !state.Finished && state.callPending && !state.callRead ? "CHAMADA RECEBIDA • abra o telefone" : "";
         view.progress.text = $"CASO {state.CaseIndex + 1}  •  PROVAS {state.evidence.Count}/5";
     }
@@ -650,6 +653,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     void CallUpdated(PhoneCallAsset call, PhoneDialogueNode node)
     {
         if (state == null || restoring) return;
+        view.Feedback?.SetPhoneRinging(false);
         OpenPage("Ligações");
         view.phonePresentation.PlayMessage(node.message);
     }
@@ -700,6 +704,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         bool solved = state.Accuse();
         OpenPage(state.Finished ? "Resultado" : "Dedução");
         Save(false);
+        if (!solved) view.Feedback?.ShowWrongAccusation(state.AttemptsRemaining, state.failed);
         Say(solved ? "Caso encerrado. Sua avaliação foi salva." : state.failed ? "As tentativas acabaram. Você pode tentar novamente." : $"Acusação incorreta. Restam {state.AttemptsRemaining} tentativa(s). Revise as provas.");
     }
 
@@ -789,6 +794,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             saveTimer = 0;
             selectedEvidence = null;
             view.incomingCallPulse.enabled = false;
+            view.Feedback?.ResetFeedback();
             view.progress.text = "PROVAS 0/5     TEMPO 00:00     ERROS 0";
             view.phoneNotification.text = "Inicie ou carregue uma investigação.";
         }

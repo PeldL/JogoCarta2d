@@ -24,6 +24,8 @@ public sealed class CaseZeroView : MonoBehaviour
     public TMP_Text status;
     public TMP_Text progress;
     public TMP_Text phoneNotification;
+    public Button phoneAttentionButton;
+    public CaseZeroInvestigationFeedback Feedback { get; private set; }
     public SpankyBoy.JuiceUI.Free.Animate_Pulse_Free incomingCallPulse;
 
     [Header("Introdução")]
@@ -175,6 +177,8 @@ public sealed class CaseZeroView : MonoBehaviour
 
     void Awake()
     {
+        Feedback = gameObject.AddComponent<CaseZeroInvestigationFeedback>();
+        Feedback.Initialize(this);
         foreach (var page in pages)
         {
             if (page.tab == null) continue;
