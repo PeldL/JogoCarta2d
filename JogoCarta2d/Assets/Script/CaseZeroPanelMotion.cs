@@ -14,6 +14,8 @@ public sealed class CaseZeroPanelMotion : MonoBehaviour
     Sequence motion;
     readonly List<RectTransform> children = new List<RectTransform>();
     readonly List<Vector2> positions = new List<Vector2>();
+    readonly List<CanvasGroup> childGroups = new List<CanvasGroup>();
+    readonly List<float> childAlphas = new List<float>();
     bool captured;
 
     void Awake()
@@ -49,8 +51,14 @@ public sealed class CaseZeroPanelMotion : MonoBehaviour
             Vector2 origin = rect.anchoredPosition;
             children.Add(rect); positions.Add(origin);
             rect.anchoredPosition = origin + Vector2.down * 22f;
-            motion.Insert(0.06f + Mathf.Min(order++, 6) * 0.045f,
-                rect.DOAnchorPos(origin, time).SetEase(Ease.OutCubic));
+            float delay = 0.06f + Mathf.Min(order++, 6) * 0.045f;
+            motion.Insert(delay, rect.DOAnchorPos(origin, time).SetEase(Ease.OutCubic));
+            var childGroup = child.GetComponent<CanvasGroup>();
+            if (childGroup == null) childGroup = child.gameObject.AddComponent<CanvasGroup>();
+            float targetAlpha = childGroup.alpha;
+            childGroups.Add(childGroup); childAlphas.Add(targetAlpha);
+            childGroup.alpha = 0;
+            motion.Insert(delay, childGroup.DOFade(targetAlpha, time * 0.75f).SetEase(Ease.OutSine));
         }
     }
 
@@ -60,6 +68,9 @@ public sealed class CaseZeroPanelMotion : MonoBehaviour
         for (int i = 0; i < children.Count; i++)
             if (children[i] != null) children[i].anchoredPosition = positions[i];
         children.Clear(); positions.Clear();
+        for (int i = 0; i < childGroups.Count; i++)
+            if (childGroups[i] != null) childGroups[i].alpha = childAlphas[i];
+        childGroups.Clear(); childAlphas.Clear();
         if (group != null) group.alpha = 1;
         if (captured) transform.localScale = restingScale;
     }

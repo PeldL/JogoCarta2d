@@ -13,9 +13,26 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
     TextMeshProUGUI label;
     Transition overlay;
     Tween fade;
+    Image progress;
+    static CaseZeroSceneLoading active;
+    string loadingText;
+    bool waiting;
+    float progressTarget;
+
+    void Update()
+    {
+        if (progress != null)
+            progress.rectTransform.anchorMax = new Vector2(progress.fillAmount, 1);
+        if (!waiting) return;
+        label.text = loadingText + new string('.', 1 + (int)(Time.unscaledTime * 2) % 3);
+        label.alpha = 0.82f + Mathf.Sin(Time.unscaledTime * 3f) * 0.18f;
+        progress.fillAmount = Mathf.MoveTowards(progress.fillAmount, progressTarget, Time.unscaledDeltaTime * 1.4f);
+    }
 
     public static void Load(string scene, GameObject template, TransitionSettings settings, TMP_FontAsset font)
     {
+        if (active != null || !Application.CanStreamedLevelBeLoaded(scene)) return;
+        CaseZeroSoundFeedback.Current?.PlayTransition();
         var root = new GameObject("Caso Zero • Carregamento", typeof(RectTransform), typeof(Canvas),
             typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(CanvasGroup), typeof(CaseZeroSceneLoading));
         DontDestroyOnLoad(root);
@@ -27,6 +44,8 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
         scaler.referenceResolution = new Vector2(1920, 1080);
         scaler.matchWidthOrHeight = 0.5f;
         var loader = root.GetComponent<CaseZeroSceneLoading>();
+        active = loader;
+        loader.loadingText = scene == "Menu" ? "RETURNING TO MENU" : "LOADING THE INVESTIGATION";
         loader.curtain = root.GetComponent<CanvasGroup>();
         loader.curtain.alpha = 0;
         loader.curtain.blocksRaycasts = true;
@@ -45,7 +64,25 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
         loader.label.alignment = TextAlignmentOptions.Center;
         loader.label.color = new Color(0.94f, 0.9f, 0.8f);
         loader.label.raycastTarget = false;
-        loader.label.text = "LOADING THE INVESTIGATION…";
+        loader.label.text = loader.loadingText;
+        var track = new GameObject("Progress track", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        track.transform.SetParent(root.transform, false);
+        var trackRect = track.GetComponent<RectTransform>();
+        trackRect.sizeDelta = new Vector2(440, 3);
+        trackRect.anchoredPosition = new Vector2(0, -65);
+        track.GetComponent<Image>().color = new Color(0.94f, 0.9f, 0.8f, 0.15f);
+        track.GetComponent<Image>().raycastTarget = false;
+        var bar = new GameObject("Progress", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        bar.transform.SetParent(track.transform, false);
+        var barRect = bar.GetComponent<RectTransform>();
+        barRect.anchorMin = Vector2.zero; barRect.anchorMax = Vector2.one;
+        barRect.offsetMin = barRect.offsetMax = Vector2.zero;
+        loader.progress = bar.GetComponent<Image>();
+        loader.progress.color = new Color(0.94f, 0.9f, 0.8f);
+        loader.progress.type = Image.Type.Simple;
+        barRect.anchorMax = new Vector2(0, 1);
+        loader.progress.fillAmount = 0;
+        loader.progress.raycastTarget = false;
         loader.StartCoroutine(loader.Run(scene, template, settings));
     }
 
@@ -75,8 +112,14 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
             yield return fade.WaitForCompletion();
         }
 
+        waiting = true;
         var operation = SceneManager.LoadSceneAsync(scene);
-        if (operation != null) yield return operation;
+        while (operation != null && !operation.isDone)
+        {
+            progressTarget = Mathf.Clamp01(operation.progress / 0.9f) * 0.85f;
+            yield return null;
+        }
+        progressTarget = 0.95f;
         // sceneLoaded fires before Start and before additive location/tutorial loads finish.
         yield return null;
         float deadline = Time.realtimeSinceStartup + 30;
@@ -86,7 +129,12 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
         if (game != null && !game.ReadyForReveal)
             Debug.LogWarning("[Caso Zero] A inicialização não terminou em 30 segundos. Revelando a interface para permitir diagnóstico.");
         Canvas.ForceUpdateCanvases();
-        label.text = "INVESTIGATION READY";
+        waiting = false;
+        label.alpha = 1;
+        label.text = scene == "Menu" ? "MENU READY" : "INVESTIGATION READY";
+        fade = progress.DOFillAmount(1, 0.2f).SetUpdate(true);
+        yield return fade.WaitForCompletion();
+        yield return new WaitForSecondsRealtime(0.12f);
         if (overlay != null)
         {
             overlay.OnSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
@@ -106,6 +154,7 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
 
     void OnDestroy()
     {
+        if (active == this) active = null;
         fade?.Kill();
         if (overlay != null)
         {

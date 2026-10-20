@@ -344,7 +344,8 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (travelling) return;
         if (!UnityEngine.Application.CanStreamedLevelBeLoaded("Menu")) { Say("Add the Menu scene to the build profile."); return; }
         Save(false);
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        travelling = true;
+        CaseZeroSceneLoading.Load("Menu", null, null, view.documentTitle.font);
     }
     public void VisitBar() { if (view.backgroundMap) TravelTo("Bar"); else CloseDocument(); }
 
@@ -374,11 +375,12 @@ public sealed class CaseZeroGame : MonoBehaviour
             yield break;
         }
         travelling = true;
+        if (!restore) CaseZeroSoundFeedback.Current?.PlayTransition();
         bool reopen = restore && state.documentOpen;
         string page = state.page;
         view.travelCurtain.gameObject.SetActive(true);
         view.travelCurtain.blocksRaycasts = true;
-        yield return DOTween.To(() => view.travelCurtain.alpha, a => view.travelCurtain.alpha = a, 1f, 0.18f).SetUpdate(true).WaitForCompletion();
+        yield return DOTween.To(() => view.travelCurtain.alpha, a => view.travelCurtain.alpha = a, 1f, 0.28f).SetEase(Ease.InOutSine).SetUpdate(true).WaitForCompletion();
         if (destination != "Mapa" && destination != loadedLocation)
             yield return SceneManager.LoadSceneAsync(destination, LoadSceneMode.Additive);
         if (!string.IsNullOrEmpty(loadedLocation) && loadedLocation != destination)
@@ -396,7 +398,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         Say(view.mapInDocument ? "" : destination == "Mapa" ? "Choose a location on the map. Tab opens the investigation."
             : destination == "Bar" ? "Investigate the bar. Use the Map to leave."
             : CaseZeroView.DisplayName(destination) + " • Use the Map to return to town.");
-        yield return DOTween.To(() => view.travelCurtain.alpha, a => view.travelCurtain.alpha = a, 0f, 0.18f).SetUpdate(true).WaitForCompletion();
+        yield return DOTween.To(() => view.travelCurtain.alpha, a => view.travelCurtain.alpha = a, 0f, 0.35f).SetEase(Ease.InOutSine).SetUpdate(true).WaitForCompletion();
         view.travelCurtain.blocksRaycasts = false;
         view.travelCurtain.gameObject.SetActive(false);
         travelling = false;
