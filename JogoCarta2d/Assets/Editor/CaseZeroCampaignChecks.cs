@@ -90,7 +90,19 @@ public static class CaseZeroCampaignChecks
                 Check(intro.body.text.Contains("CENTRAL"), "Sintonia estável libera a central");
                 for (int i = 0; i < 10 && game.Presenting; i++) intro.Advance();
             }
-            else intro.Advance();
+            else
+            {
+                Check(intro.GetComponent<CaseZeroRadioTutorial>() != null, "Próximos casos também apresentam conversa no rádio");
+                Check(intro.GetComponentInChildren<UnityEngine.UI.Slider>(true) == null, "Casos 2 e 3 não repetem a sintonia do tutorial");
+                Check(intro.primary.interactable && intro.body.text.StartsWith("CENTRAL"), "Central reconecta diretamente no novo caso");
+                intro.Advance();
+                Check(game.Presenting && !State(game).introductionSeen, "Uma fala não encerra todo o briefing do caso");
+                for (int i = 0; i < 12 && game.Presenting; i++)
+                {
+                    Check(!intro.body.text.Contains("Tab") && !intro.body.text.Contains("três tentativas"), "Briefing posterior apresenta história sem repetir instruções");
+                    intro.Advance();
+                }
+            }
             while (game.Presenting || UnityEngine.SceneManagement.SceneManager.GetSceneByName("ApresentacaoCaso").isLoaded) yield return null;
             Check(State(game).introductionSeen, "Apresentação concluída sem repetir tutorial nos outros casos");
         }

@@ -3,7 +3,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-// First-case introduction. Runtime controls are deliberately plain placeholders for future art.
+// Radio conversations for each case. Tuning and gameplay instructions belong only to the first case.
 public sealed class CaseZeroRadioTutorial : MonoBehaviour
 {
     CaseZeroPresentation view;
@@ -16,7 +16,9 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     Tween textFade;
     float nextTuningSound;
     Image detectivePortrait, centralPortrait;
-    readonly string[] lines = {
+    string[] lines;
+    int caseIndex;
+    static readonly string[] TutorialLines = {
         "CENTRAL\nDetetive, está na escuta? Recebemos um chamado de uma morte em um bar. Precisamos de você no local.",
         "DETETIVE\nEstou ouvindo. É meu primeiro plantão com esse sistema. Como acesso o material da investigação?",
         "CENTRAL\nEstou encaminhando o resumo do plantão para o seu celular. Em Documentos você pode consultar a ocorrência e as instruções. Abra a pasta de investigação com Tab ou pelo botão na tela; use o Mapa para escolher um local.",
@@ -25,12 +27,39 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         "CENTRAL\nAbra o celular e envie as provas para análise. Enquanto a perícia trabalha, continue investigando. Quando a ligação chegar, atenda, leia o retorno e registre o laudo. Se ficar sem saber como avançar, pode pedir orientação pelo celular.",
         "CENTRAL\nCom as provas, os depoimentos e o laudo registrados, use Dedução para apresentar sua conclusão. Confira antes de confirmar: uma acusação errada gasta uma das três tentativas. O progresso é salvo automaticamente. Vamos começar pela observação do local."
     };
+    static string[] BriefingLines(int index)
+    {
+        var data = CaseZeroCases.All[index];
+        if (index == 1)
+            return new[] {
+                "CENTRAL\nDetetive, quanto tempo! Pensei que tivesse esquecido esta frequência. Bom trabalho no bar. Temos uma nova ocorrência para você.",
+                "DETETIVE\nCentral, bom ouvir sua voz de novo. O que aconteceu desta vez?",
+                "CENTRAL\n" + data.introduction,
+                "DETETIVE\nEntendido. Vou apurar o desaparecimento do pendrive. Já sabemos quem esteve no apartamento?",
+                "CENTRAL\nQuatro pessoas precisam ser ouvidas: Marina, amiga de Helena; Lucas, o vizinho; Carlos, o síndico; e André, o técnico que consertou o notebook.",
+                "CENTRAL\nA ocorrência é no Apartamento 302. Precisamos descobrir quem levou o pendrive, o que foi retirado e onde aconteceu o roubo. Ainda não temos uma conclusão sobre a autoria do ataque contra Helena.",
+                "DETETIVE\nRecebido. Estou a caminho do apartamento. Vamos descobrir o que aconteceu."
+            };
+        return new[] {
+            "CENTRAL\nDetetive, está na escuta? O caso de Helena ainda não acabou. A investigação do pendrive abriu uma nova frente.",
+            "DETETIVE\nEstou ouvindo. Carlos admitiu o roubo, mas alguém deu a ordem. O que temos sobre essa ligação?",
+            "CENTRAL\nHelena acordou e confirmou que o pendrive guardava provas contra a Vértice. Agora precisamos seguir o rastro dos pagamentos no escritório da empresa.",
+            "CENTRAL\n" + data.introduction,
+            "DETETIVE\nQuem pode esclarecer a movimentação no escritório?",
+            "CENTRAL\nBeatriz, a contadora; Augusto, o diretor; Renato, o segurança; e Fábio, o técnico. Existem registros financeiros, acessos ao sistema e ordens que precisam ser comparados com o que eles dizem.",
+            "CENTRAL\nSeu destino é o escritório. A ocorrência agora é identificar quem comandava o esquema, qual era o crime e qual empresa era usada como fachada. Não tome um nome na planilha como prova de culpa.",
+            "DETETIVE\nEntendido. Vou ao escritório seguir essas pistas e esclarecer a ligação com Helena."
+        };
+    }
+
     const float Target = 104.5f;
 
     public void Initialize(CaseZeroPresentation presentation, CaseZeroGame investigation)
     {
         view = presentation;
         game = investigation;
+        caseIndex = game.CampaignState.CaseIndex;
+        lines = caseIndex == 0 ? TutorialLines : BriefingLines(caseIndex);
         view.back.gameObject.SetActive(false);
         view.title.text = "EM CASA • UM CHAMADO NO RÁDIO";
         view.stepLabel.text = "PRIMEIRO PLANTÃO";
@@ -42,6 +71,16 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         centralPortrait = Portrait("Central", 1480, art != null ? art.radioCentral : null);
         view.body.rectTransform.anchoredPosition = new Vector2(140, -640);
         view.body.rectTransform.sizeDelta = new Vector2(1640, 245);
+        if (caseIndex > 0)
+        {
+            // A familiar frequency reconnects immediately; no repeated tuning or tutorial.
+            dialogue = 0;
+            view.primary.interactable = true;
+            CaseZeroSoundFeedback.Current?.PlayTransmission();
+            ShowDialogue();
+            view.primary.Select();
+            return;
+        }
         controls = new GameObject("Sintonia do rádio", typeof(RectTransform));
         controls.transform.SetParent(view.body.transform.parent, false);
         var root = controls.GetComponent<RectTransform>();
@@ -154,10 +193,13 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         textFade?.Kill();
         view.body.alpha = 0;
         view.title.text = "CENTRAL ↔ DETETIVE";
-        view.stepLabel.text = "RÁDIO • CONEXÃO ESTABELECIDA";
-        view.primaryLabel.text = dialogue == lines.Length - 1 ? "Ir ao local" : "Continuar conversa";
+        view.stepLabel.text = caseIndex == 0 ? "RÁDIO • CONEXÃO ESTABELECIDA"
+            : $"CASO {caseIndex + 1} • {game.CampaignState.Definition.title.ToUpperInvariant()}";
+        view.primaryLabel.text = dialogue == lines.Length - 1
+            ? caseIndex == 1 ? "Ir ao apartamento" : caseIndex == 2 ? "Ir ao escritório" : "Ir ao local"
+            : "Continuar conversa";
         view.body.text = lines[dialogue];
-        bool detectiveSpeaking = dialogue == 1 || dialogue == 4;
+        bool detectiveSpeaking = lines[dialogue].StartsWith("DETETIVE\n", System.StringComparison.Ordinal);
         detectivePortrait.color = detectiveSpeaking ? Color.white : new Color(0.7f, 0.7f, 0.7f);
         centralPortrait.color = detectiveSpeaking ? new Color(0.7f, 0.7f, 0.7f) : Color.white;
         textFade = DOTween.To(() => view.body.alpha, value => view.body.alpha = value, 1, 0.35f).SetUpdate(true);

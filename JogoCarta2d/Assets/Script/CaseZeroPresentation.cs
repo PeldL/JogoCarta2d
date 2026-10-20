@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Presentation controls live in the scene; the first-case radio adds its tuning slider at runtime.
+// Case introductions use the radio; only the first case includes tuning and tutorial instructions.
 public sealed class CaseZeroPresentation : MonoBehaviour
 {
     public bool finale;
@@ -27,7 +27,7 @@ public sealed class CaseZeroPresentation : MonoBehaviour
             return;
         }
         step = game.CampaignState.CaseIndex == 0 ? 0 : 3;
-        if (!finale && game.CampaignState.CaseIndex == 0)
+        if (!finale)
         {
             radio = gameObject.AddComponent<CaseZeroRadioTutorial>();
             radio.Initialize(this, game);
