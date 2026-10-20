@@ -36,6 +36,8 @@ public static class CaseZeroCampaignChecks
 
     [MenuItem("Tools/Caso Zero/Previsualizar Caso 2 (save temporario)")]
     public static void PreviewSecond() => Preview(1);
+    [MenuItem("Tools/Caso Zero/Previsualizar radio (save temporario)")]
+    public static void PreviewRadio() => Preview(-1);
     [MenuItem("Tools/Caso Zero/Previsualizar Caso 3 (save temporario)")]
     public static void PreviewThird() => Preview(2);
     static void Preview(int index)
@@ -55,7 +57,7 @@ public static class CaseZeroCampaignChecks
             passed.Clear(); routines.Clear(); deadline = EditorApplication.timeSinceStartup + 120;
             int preview = SessionState.GetInt("CaseZero.PreviewCase", 0);
             SessionState.SetInt("CaseZero.PreviewCase", 0);
-            routines.Push(preview > 0 ? PreviewRoutine(preview) : Exercise());
+            routines.Push(preview != 0 ? PreviewRoutine(preview) : Exercise());
         }
         if (change == PlayModeStateChange.EnteredEditMode) { routines.Clear(); CaseZeroSave.ValidationDirectory = null; }
     }
@@ -71,10 +73,38 @@ public static class CaseZeroCampaignChecks
     {
         yield return null;
         while (Field<bool>(game, "travelling")) yield return null;
+        if (game.Presenting && !State(game).Finished)
+        {
+            CaseZeroPresentation intro;
+            while ((intro = UnityEngine.Object.FindFirstObjectByType<CaseZeroPresentation>()) == null) yield return null;
+            yield return null; // Allow the presentation to initialize its controls.
+            if (State(game).CaseIndex == 0)
+            {
+                var slider = intro.GetComponentInChildren<UnityEngine.UI.Slider>();
+                Check(slider != null && !intro.primary.interactable, "Rádio exige sintonia antes do diálogo");
+                slider.value = 90;
+                intro.Advance();
+                Check(!State(game).introductionSeen, "Frequência incorreta não pula o tutorial");
+                slider.value = 104.5f;
+                while (!intro.primary.interactable) yield return null;
+                Check(intro.body.text.Contains("CENTRAL"), "Sintonia estável libera a central");
+                for (int i = 0; i < 10 && game.Presenting; i++) intro.Advance();
+            }
+            else intro.Advance();
+            while (game.Presenting || UnityEngine.SceneManagement.SceneManager.GetSceneByName("ApresentacaoCaso").isLoaded) yield return null;
+            Check(State(game).introductionSeen, "Apresentação concluída sem repetir tutorial nos outros casos");
+        }
     }
     static IEnumerator PreviewRoutine(int index)
     {
         yield return null;
+        if (index < 0)
+        {
+            var tutorialGame = UnityEngine.Object.FindFirstObjectByType<CaseZeroGame>();
+            tutorialGame.SelectSlot(1);
+            tutorialGame.StartNewGame();
+            yield break;
+        }
         var data = CaseZeroCases.All[index];
         var state = new CaseZeroState { caseId = data.id, location = data.location, completedCases = index };
         Check(CaseZeroSave.Write(state, out _, 1), "Save de prévia isolado");
@@ -98,6 +128,8 @@ public static class CaseZeroCampaignChecks
             Check(!state.CanConclude, "Dedução bloqueada antes das pistas");
             for (int i = 0; i < 4; i++) { view.evidenceMarkers[i].onClick.Invoke(); yield return null; }
             Check(state.evidence.Count == 4, "Quatro pistas coletadas por botões nativos");
+            yield return Analyze(game, view);
+            state = State(game);
             game.OpenInterview();
             if (caseIndex == 0) game.SelectInterviewChoice(2);
             else
@@ -123,6 +155,8 @@ public static class CaseZeroCampaignChecks
                 state = State(game);
                 Check(state.CaseIndex == 1 && state.completedCases == 1 && state.errors == 0 && state.evidence.Count == 0, "Repetir preserva Caso 1 e limpa somente Caso 2");
                 for (int i = 0; i < 4; i++) view.evidenceMarkers[i].onClick.Invoke();
+                yield return Analyze(game, view);
+                state = State(game);
                 for (int i = 0; i < 4; i++) { view.interviewSuspectButtons[i].onClick.Invoke(); game.SelectInterviewChoice(0); }
                 game.OpenDeduction(); game.SelectSuspect(state.Definition.culprit);
             }
@@ -138,10 +172,39 @@ public static class CaseZeroCampaignChecks
         game.SaveGame(); game.LoadGame(); yield return Travel(game);
         Check(State(game).solved && State(game).CaseIndex == 2, "Campanha concluída restaura resultado final");
         view.nextCaseButton.onClick.Invoke(); yield return null; yield return null;
+        CaseZeroPresentation ending;
+        while ((ending = UnityEngine.Object.FindFirstObjectByType<CaseZeroPresentation>()) == null) yield return null;
+        yield return null;
+        Check(ending.finale && State(game).results.Count == 3, "Final da campanha mantém os três resultados");
+        ending.Advance();
+        while (UnityEngine.Object.FindFirstObjectByType<CaseZeroMenu>() == null) yield return null;
+        yield return null;
         var menu = UnityEngine.Object.FindFirstObjectByType<CaseZeroMenu>();
         Check(menu != null && menu.creditsPanel.activeSelf, "Fim da campanha abre os créditos no menu");
         File.WriteAllText(report, string.Join("\n", passed) + "\nPASS: " + passed.Count);
         Debug.Log("[Caso Zero] Campanha validada: " + passed.Count + " verificações. Saves reais preservados.");
+    }
+    static IEnumerator Analyze(CaseZeroGame game, CaseZeroView view)
+    {
+        var state = State(game);
+        Check(state.CanRequestAnalysis && !state.CanConclude, "Provas prontas; conclusão exige laudo");
+        game.OpenPhone();
+        game.OpenCaseDocuments();
+        Check(view.phoneState.text.Contains("DOCUMENTOS"), "Celular permite consultar documentos");
+        Check(view.sendAnalysisButton != null && view.sendAnalysisButton.interactable, "Botão de envio disponível com provas completas");
+        view.sendAnalysisButton.onClick.Invoke();
+        Check(state.callDelay >= 0, "Jogador envia provas pelo celular");
+        game.SaveGame(); game.LoadGame(); yield return Travel(game);
+        state = State(game);
+        Check(state.callDelay >= 0 || state.callPending, "Save preserva análise solicitada");
+        while (!state.callPending) yield return null;
+        game.OpenPhone(); game.AnswerPhone();
+        while (view.phonePresentation.IsRevealing) yield return null;
+        game.EndPhone();
+        Check(state.callRead, "Atender e registrar guarda o laudo");
+        game.OpenAnalysisReport();
+        Check(view.phoneState.text.Contains("LAUDO"), "Laudo pode ser consultado novamente");
+        game.CloseDocument();
     }
     static void Tick()
     {

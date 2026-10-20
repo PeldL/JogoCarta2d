@@ -335,6 +335,7 @@ GameObject:
   - component: {fileID: 4000000022}
   - component: {fileID: 4000000023}
   - component: {fileID: 4000000024}
+  - component: {fileID: 4000000168}
   m_Layer: 5
   m_Name: "Fundo"
   m_TagString: Untagged
@@ -1590,6 +1591,34 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4000000168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4000000021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 465248b50e9142189d5c4cfe1f1211a3, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  library: {fileID: 11400000, guid: 125038ab386f4986ae70295c941a4633, type: 2}
+  artName: "Bar"
+  spriteOverride: {fileID: 0}
+  preserveAspect: 0
+  draftObjects:
+  - {fileID: 4000000025}
+  - {fileID: 4000000029}
+  - {fileID: 4000000033}
+  - {fileID: 4000000037}
+  - {fileID: 4000000041}
+  - {fileID: 4000000045}
+  - {fileID: 4000000049}
+  - {fileID: 4000000053}
+  - {fileID: 4000000057}
+  - {fileID: 4000000061}
+  - {fileID: 4000000065}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

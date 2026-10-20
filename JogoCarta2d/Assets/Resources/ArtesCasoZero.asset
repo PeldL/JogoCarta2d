@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77adbf1ae7e6476e9e71c3cec0362193, type: 3}
+  m_Name: ArtesCasoZero
+  m_EditorClassIdentifier:
+  personagens:
+  - name: "Padeiro"
+    sprite: {fileID: 0}
+  - name: "Zelador"
+    sprite: {fileID: 0}
+  - name: "Policial"
+    sprite: {fileID: 0}
+  - name: "Pessoa 1"
+    sprite: {fileID: 0}
+  - name: "Vítima 1 - Mulher no bar"
+    sprite: {fileID: 0}
+  - name: "Vítima 2"
+    sprite: {fileID: 0}
+  - name: "Vítima 3"
+    sprite: {fileID: 0}
+  - name: "Legista"
+    sprite: {fileID: 0}
+  - name: "Barista"
+    sprite: {fileID: 0}
+  - name: "Segurança das câmeras"
+    sprite: {fileID: 0}
+  - name: "Enfermeiro"
+    sprite: {fileID: 0}
+  cenarios:
+  - name: "Bar"
+    sprite: {fileID: 0}
+  - name: "Delegacia"
+    sprite: {fileID: 0}
+  - name: "Laboratório de perícia"
+    sprite: {fileID: 0}
+  - name: "Padaria"
+    sprite: {fileID: 0}
+  - name: "Rua"
+    sprite: {fileID: 0}
+  - name: "Estacionamento"
+    sprite: {fileID: 0}
+  - name: "Hospital"
+    sprite: {fileID: 0}
+  - name: "Escritório"
+    sprite: {fileID: 0}
+  - name: "Apartamento"
+    sprite: {fileID: 0}
+  retratos:
+  - name: "Homem do balcão"
+    caseId: ultima-testemunha
+    suspectIndex: 0
+    artName:
+    sprite: {fileID: 0}
+  - name: "Funcionário do bar"
+    caseId: ultima-testemunha
+    suspectIndex: 1
+    artName:
+    sprite: {fileID: 0}
+  - name: "Cliente desconhecido"
+    caseId: ultima-testemunha
+    suspectIndex: 2
+    artName:
+    sprite: {fileID: 0}
+  - name: "Marina • amiga"
+    caseId: apartamento-302
+    suspectIndex: 0
+    artName:
+    sprite: {fileID: 0}
+  - name: "Lucas • vizinho"
+    caseId: apartamento-302
+    suspectIndex: 1
+    artName:
+    sprite: {fileID: 0}
+  - name: "Carlos • síndico"
+    caseId: apartamento-302
+    suspectIndex: 2
+    artName:
+    sprite: {fileID: 0}
+  - name: "André • técnico"
+    caseId: apartamento-302
+    suspectIndex: 3
+    artName:
+    sprite: {fileID: 0}
+  - name: "Beatriz • contadora"
+    caseId: arquivo-vertice
+    suspectIndex: 0
+    artName:
+    sprite: {fileID: 0}
+  - name: "Augusto • diretor"
+    caseId: arquivo-vertice
+    suspectIndex: 1
+    artName:
+    sprite: {fileID: 0}
+  - name: "Renato • segurança"
+    caseId: arquivo-vertice
+    suspectIndex: 2
+    artName:
+    sprite: {fileID: 0}
+  - name: "Fábio • técnico"
+    caseId: arquivo-vertice
+    suspectIndex: 3
+    artName:
+    sprite: {fileID: 0}
+  cursorLupa: {fileID: 0}
+  cursorInteracao: {fileID: 0}
+  cursorEscrita: {fileID: 0}
+  hotspotLupa: {x: 0, y: 0}
+  hotspotInteracao: {x: 0, y: 0}
+  hotspotEscrita: {x: 0, y: 0}

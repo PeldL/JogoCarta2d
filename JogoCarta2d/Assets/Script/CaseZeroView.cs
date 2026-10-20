@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,6 +52,45 @@ public sealed class CaseZeroView : MonoBehaviour
 
     [Header("Interrogatório")]
     public TMP_Text interviewMessage;
+    [Header("Retratos • arraste as artes na biblioteca")]
+    public CaseZeroArtLibrary artLibrary;
+    public Image interviewPortrait;
+    public TMP_Text interviewPortraitName;
+    public Image[] deductionPortraits = new Image[0];
+    Tween portraitFade;
+    string portraitIdentity;
+
+    public void ShowPortraits(CaseZeroCase data, int selected)
+    {
+        if (artLibrary == null) return;
+        if (deductionPortraits.Length > 0 && deductionPortraits[0] != null)
+        {
+            var content = deductionPortraits[0].transform.parent.parent as RectTransform;
+            if (content != null) content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, data.suspects.Length * 162);
+        }
+        for (int i = 0; i < deductionPortraits.Length; i++)
+            if (deductionPortraits[i] != null)
+            {
+                deductionPortraits[i].sprite = artLibrary.FindPortrait(data.id, i);
+                deductionPortraits[i].preserveAspect = true;
+            }
+        if (interviewPortraitName != null)
+            interviewPortraitName.text = selected >= 0 && selected < data.suspects.Length ? data.suspects[selected] : "";
+        if (interviewPortrait == null) return;
+        var sprite = artLibrary.FindPortrait(data.id, selected);
+        string identity = data.id + ":" + selected;
+        bool changed = identity != portraitIdentity || interviewPortrait.sprite != sprite;
+        portraitIdentity = identity;
+        interviewPortrait.sprite = sprite;
+        interviewPortrait.preserveAspect = true;
+        if (changed)
+        {
+            portraitFade?.Kill();
+            var color = interviewPortrait.color; color.a = 0; interviewPortrait.color = color;
+            portraitFade = interviewPortrait.DOFade(1, 0.25f).SetUpdate(true);
+        }
+    }
+    void OnDestroy() => portraitFade?.Kill();
     public Button[] interviewChoices;
     public TMP_Text[] interviewChoiceLabels;
 
@@ -58,6 +98,7 @@ public sealed class CaseZeroView : MonoBehaviour
     public TMP_Text phoneState;
     public TMP_Text phoneMessage;
     public Button answerPhoneButton;
+    public Button sendAnalysisButton;
     public Button endPhoneButton;
     public CaseZeroPhonePresentation phonePresentation;
 

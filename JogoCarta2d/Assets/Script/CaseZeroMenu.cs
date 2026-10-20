@@ -20,9 +20,16 @@ public sealed class CaseZeroMenu : MonoBehaviour
     Sequence entrance;
     readonly System.Collections.Generic.Dictionary<RectTransform, Vector2> entrancePositions = new System.Collections.Generic.Dictionary<RectTransform, Vector2>();
 
+    void Awake()
+    {
+        // Hide before the first rendered frame; Start prepares the individual controls.
+        if (canvasGroup != null) canvasGroup.alpha = 0;
+    }
+
     void PlayEntrance()
     {
         entrance = DOTween.Sequence().SetUpdate(true);
+        entrance.Insert(0, canvasGroup.DOFade(1, 0.7f).SetEase(Ease.InOutSine));
         int order = 0;
         foreach (Transform child in canvasGroup.transform)
         {

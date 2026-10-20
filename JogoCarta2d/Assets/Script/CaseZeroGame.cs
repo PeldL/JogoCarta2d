@@ -128,6 +128,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         var data = CurrentCase;
         view.investigationLocation = data.location;
+        view.ShowPortraits(data, state.interviewSuspect);
         for (int i = 0; i < view.suspectLabels.Length; i++)
         {
             bool exists = i < data.suspects.Length;
@@ -417,6 +418,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         Save(false);
         var scene = SceneManager.GetSceneByName("ApresentacaoCaso");
         if (scene.isLoaded) SceneManager.UnloadSceneAsync(scene);
+        TutorialHint(1, "Comece clicando em um objeto identificado no cenário para examiná-lo.");
     }
 
     void OpenPage(string page)
@@ -450,6 +452,10 @@ public sealed class CaseZeroGame : MonoBehaviour
                 view.closeDocumentButton.interactable = false;
                 break;
         }
+        if (page == "Evidências") TutorialHint(4, "Leia as pistas registradas. Depois, ouça os envolvidos em Interrogatório e compare as informações.");
+        else if (page == "Interrogatório") TutorialHint(8, "Escolha uma pergunta. Algumas perguntas só ficam disponíveis depois de encontrar provas.");
+        else if (page == "Dedução") TutorialHint(16, "Escolha a combinação sustentada pelas provas. Confirmar uma acusação errada gasta uma tentativa; cancelar não. Você tem três tentativas.");
+        else if (page == "Ligações") TutorialHint(32, "Atenda quando houver uma chamada e leia a informação da central.");
     }
 
     public void ToggleCamera()
@@ -486,11 +492,12 @@ public sealed class CaseZeroGame : MonoBehaviour
         CaseZeroSoundFeedback.Current?.PlayEvidence();
         evidenceManager.CollectEvidence(catalog[id]);
         state.idleTime = 0;
-        if (state.Has("pistola") && state.Has("capsula") && state.callDelay < 0 && !state.callPending && !state.callRead)
-            state.callDelay = 30;
         Say("");
         Save(false);
         RefreshProgress();
+        TutorialHint(2, "Pista registrada. Abra o documento com Tab ou pelo botão de investigação e consulte Evidências.");
+        if (state.CanRequestAnalysis && state.callDelay < 0 && !state.callRead && !state.callPending)
+            Say("Provas reunidas. Abra o celular e escolha Enviar para análise. Enquanto a perícia trabalha, você pode interrogar os envolvidos.");
     }
 
     public void SelectEvidence(string id)
@@ -544,7 +551,8 @@ public sealed class CaseZeroGame : MonoBehaviour
     void RenderInterview(InterrogationNode node)
     {
         if (node == null) return;
-        view.interviewMessage.text = suspectAsset.suspectName + "\n\n" + node.message;
+        view.ShowPortraits(CurrentCase, state.interviewSuspect);
+        view.interviewMessage.text = view.interviewPortraitName != null ? node.message : suspectAsset.suspectName + "\n\n" + node.message;
         for (int i = 0; i < view.interviewChoices.Length; i++)
         {
             bool exists = i < node.choices.Count;
@@ -575,6 +583,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     void RefreshPhone()
     {
         bool active = phone.CurrentCall != null;
+        if (view.sendAnalysisButton != null) view.sendAnalysisButton.interactable = !state.Finished && state.CanRequestAnalysis && !active && !state.callRead && !state.callPending && state.callDelay < 0;
         view.answerPhoneButton.gameObject.SetActive(state.callPending && !state.callRead && !active);
         view.endPhoneButton.gameObject.SetActive(active);
         if (state.callRead || active)
@@ -592,9 +601,46 @@ public sealed class CaseZeroGame : MonoBehaviour
         {
             view.phoneState.text = "SEM CHAMADAS PENDENTES";
             view.phonePresentation.ShowImmediate(state.callDelay >= 0
-                ? "A central está verificando as provas. A ligação chega aproximadamente 30 segundos após a coleta."
-                : state.CaseIndex == 0 ? "Recolha a pistola e a cápsula no bar para solicitar a análise." : "Examine as pistas do local para avançar a investigação.");
+                ? "Provas enviadas. A perícia está preparando o retorno. Você pode continuar investigando; o celular avisará quando chegar a ligação."
+                : state.CanRequestAnalysis ? "As provas estão prontas para envio. Toque em Enviar para análise. O laudo registrado será necessário para encerrar o caso."
+                : "CENTRAL DISPONÍVEL\nConsulte os documentos ou peça orientação. Reúna as quatro pistas do local para habilitar o envio à perícia.");
         }
+    }
+
+    public void SendForAnalysis()
+    {
+        if (state == null || state.Finished || !state.CanRequestAnalysis || state.callRead || state.callPending || state.callDelay >= 0) return;
+        state.callDelay = 8;
+        state.idleTime = 0;
+        Save(false);
+        RefreshPhone();
+        Say("Provas enviadas à perícia. Continue investigando e atenda quando o celular avisar.");
+    }
+    bool CanConsultPhone()
+    {
+        if (state == null || state.Finished) return false;
+        if (phone.CurrentCall == null) return true;
+        Say("Registre o laudo e encerre a chamada antes de consultar outro documento.");
+        return false;
+    }
+    public void AskCentral()
+    {
+        if (!CanConsultPhone()) return;
+        view.phoneState.text = "CENTRAL • ORIENTAÇÃO";
+        view.phonePresentation.PlayMessage("Central: " + state.Objective + "\n\nLeia o que cada prova confirma e compare com os depoimentos. Uma suspeita só deve virar acusação quando as informações combinarem.");
+    }
+    public void OpenCaseDocuments()
+    {
+        if (!CanConsultPhone()) return;
+        view.phoneState.text = "DOCUMENTOS DO PLANTÃO";
+        view.phonePresentation.ShowImmediate((state.CaseIndex == 0 ? "Ocorrência inicial: uma mulher foi encontrada morta em um bar. As circunstâncias precisam ser investigadas." : CurrentCase.introduction)
+            + "\n\nLocal de referência: " + CurrentCase.location + ".\n\nAbra o documento de investigação por Tab ou pelo botão na tela. Mapa: visitar locais. Evidências: consultar registros coletados. Interrogatório: ouvir e comparar relatos. Dedução: apresentar a conclusão após registrar o laudo.");
+    }
+    public void OpenAnalysisReport()
+    {
+        if (!CanConsultPhone()) return;
+        if (state.callRead) { view.phoneState.text = "LAUDO REGISTRADO"; view.phonePresentation.ShowImmediate(forensicCall.nodes[0].message); }
+        else RefreshPhone();
     }
 
     public void AnswerPhone() { if (state != null && !paused) phone.AnswerPendingCall(); }
@@ -631,6 +677,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         view.concludeButton.interactable = state.CanConclude && !state.Finished;
         view.deductionHint.text = state.Finished ? "Caso já encerrado. Consulte o resultado ou reinicie em Opções."
             : state.CanConclude ? $"Evidências suficientes. Restam {state.AttemptsRemaining} tentativa(s) de acusação."
+            : state.CanRequestAnalysis && state.Has("depoimento") && state.AllInterviewed && !state.callRead ? "Falta o laudo: envie as provas pelo celular, atenda e registre o retorno."
             : state.CaseIndex == 0 ? "Reúna arma, cápsula, escala, vestígios e depoimento confrontado." : "Recolha as quatro pistas, ouça os quatro suspeitos e confronte as contradições.";
     }
 
@@ -793,6 +840,13 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (forensicCall != null) Destroy(forensicCall);
         if (suspectAsset != null && !caseSuspects.Contains(suspectAsset)) Destroy(suspectAsset);
         foreach (var asset in caseSuspects) Destroy(asset);
+    }
+    void TutorialHint(int flag, string message)
+    {
+        if (state == null || state.CaseIndex != 0 || state.Finished || !state.introductionSeen || (state.tutorialHints & flag) != 0) return;
+        state.tutorialHints |= flag;
+        Say("Central: " + message);
+        Save(false);
     }
     void Say(string message) { if (view != null) view.status.text = message; }
     static string TimeText(float time) => $"{(int)time / 60:00}:{(int)time % 60:00}";

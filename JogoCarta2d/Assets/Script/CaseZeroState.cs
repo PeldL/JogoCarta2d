@@ -31,6 +31,7 @@ public sealed class CaseZeroState
     public int interviewedMask;
     public int completedCases;
     public bool introductionSeen;
+    public int tutorialHints;
     public List<CaseZeroResult> results = new List<CaseZeroResult>();
     public int CaseIndex => CaseZeroCases.Index(caseId);
     public CaseZeroCase Definition => CaseZeroCases.Get(caseId);
@@ -61,6 +62,7 @@ public sealed class CaseZeroState
                     return "Examine as quatro pistas em " + (CaseIndex == 1 ? "Apartamento 302." : "Escritório.");
                 if (!AllInterviewed) return "Ouça os quatro suspeitos na aba Interrogatório.";
                 if (!Has("depoimento")) return "Compare as provas e confronte os depoimentos.";
+                if (!callRead) return callDelay >= 0 ? "A perícia está analisando. Revise os depoimentos enquanto aguarda a ligação." : "Envie as provas para análise pelo celular.";
                 return "Abra Dedução e confirme a combinação sustentada pelas provas.";
             }
             if (callPending && !callRead) return "Atenda a ligação da perícia pelo telefone.";
@@ -68,11 +70,12 @@ public sealed class CaseZeroState
                 return location == "Bar" ? "Examine os objetos do bar e recolha as pistas." : "Vá ao bar pelo mapa e examine os objetos.";
             if (!Has("sangue")) return "No bar, examine os vestígios junto ao balcão.";
             if (!Has("depoimento")) return "No interrogatório, confronte o depoimento com as provas.";
-            if (!callRead) return "Aguarde o laudo da perícia; revise as evidências enquanto isso.";
+            if (!callRead) return callDelay >= 0 ? "A perícia está analisando. Revise as evidências enquanto aguarda a ligação." : "Envie as provas para análise pelo celular.";
             return "Abra Dedução e compare culpado, arma e local com as provas.";
         }
     }
-    public bool CanConclude => Has("pistola") && Has("capsula") && Has("registro") && Has("depoimento") && Has("sangue") && AllInterviewed;
+    public bool CanRequestAnalysis => Has("pistola") && Has("capsula") && Has("registro") && Has("sangue");
+    public bool CanConclude => CanRequestAnalysis && Has("depoimento") && AllInterviewed && callRead;
 
     public bool Accuse()
     {

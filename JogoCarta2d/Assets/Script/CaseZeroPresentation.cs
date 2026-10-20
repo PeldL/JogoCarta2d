@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// All controls are authored in ApresentacaoCaso / FinalCampanha, editable in the scene.
+// Presentation controls live in the scene; the first-case radio adds its tuning slider at runtime.
 public sealed class CaseZeroPresentation : MonoBehaviour
 {
     public bool finale;
@@ -12,6 +12,7 @@ public sealed class CaseZeroPresentation : MonoBehaviour
     public Button primary, back;
     CaseZeroGame game;
     int step;
+    CaseZeroRadioTutorial radio;
     public int Step => step;
 
     void Start()
@@ -26,12 +27,19 @@ public sealed class CaseZeroPresentation : MonoBehaviour
             return;
         }
         step = game.CampaignState.CaseIndex == 0 ? 0 : 3;
+        if (!finale && game.CampaignState.CaseIndex == 0)
+        {
+            radio = gameObject.AddComponent<CaseZeroRadioTutorial>();
+            radio.Initialize(this, game);
+            return;
+        }
         Refresh();
     }
 
     public void Advance()
     {
         if (game == null) return;
+        if (radio != null) { radio.Advance(); return; }
         if (finale) { game.OpenCredits(); return; }
         if (step < 3) { step++; Refresh(); }
         else { primary.interactable = false; game.FinishIntroduction(); }
@@ -39,6 +47,7 @@ public sealed class CaseZeroPresentation : MonoBehaviour
     public void Back()
     {
         if (game == null) return;
+        if (radio != null) return;
         if (finale) { game.ReturnToMenu(); return; }
         if (step > 0 && game.CampaignState.CaseIndex == 0) { step--; Refresh(); }
     }
