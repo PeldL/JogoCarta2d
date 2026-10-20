@@ -24,7 +24,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         "CENTRAL\nEstou encaminhando o resumo do plantão para o seu celular. Em Documentos você pode consultar a ocorrência e as instruções. Abra a pasta de investigação com Tab ou pelo botão na tela; use o Mapa para escolher um local.",
         "CENTRAL\nNo cenário, examine os objetos identificados. Cada descoberta fica em Evidências. Consulte os registros e ouça os envolvidos no Interrogatório. Algumas perguntas só aparecem quando você encontra uma prova que permite fazê-las.",
         "DETETIVE\nE quando eu reunir o material?",
-        "CENTRAL\nAbra o celular e envie as provas para análise. Enquanto a perícia trabalha, continue investigando. Quando a ligação chegar, atenda, leia o retorno e registre o laudo. Se ficar sem saber como avançar, pode pedir orientação pelo celular.",
+        "CENTRAL\nAbra o celular e solicite os exames do material que encontrar. Um envio à perícia não encerra a busca por pistas. Enquanto ela trabalha, continue investigando. Quando a ligação chegar, atenda, leia o retorno e registre o laudo. Se ficar sem saber como avançar, pode pedir orientação pelo celular.",
         "CENTRAL\nCom as provas, os depoimentos e o laudo registrados, use Dedução para apresentar sua conclusão. Confira antes de confirmar: uma acusação errada gasta uma das três tentativas. O progresso é salvo automaticamente. Vamos começar pela observação do local."
     };
     static string[] BriefingLines(int index)

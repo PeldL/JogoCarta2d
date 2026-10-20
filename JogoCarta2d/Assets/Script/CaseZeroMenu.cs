@@ -65,7 +65,7 @@ public sealed class CaseZeroMenu : MonoBehaviour
             var saved = CaseZeroSave.Read(out _, slot);
             any |= saved != null;
             string summary = saved == null ? (CaseZeroSave.ExistsInSlot(slot) ? "Indisponível" : "Vazio")
-                : saved.solved ? "Caso resolvido" : saved.failed ? "Caso encerrado • derrota" : $"{saved.evidence.Count}/5 provas";
+                : saved.solved ? "Caso resolvido" : saved.failed ? "Caso encerrado • derrota" : "Em investigação";
             slotLabels[slot - 1].text = $"{(selectedSlot == slot ? "• " : "")}SLOT {slot}\n{(saved != null ? "Caso " + (saved.CaseIndex + 1) + " • " : "")}{summary}";
         }
         continueButton.interactable = any;

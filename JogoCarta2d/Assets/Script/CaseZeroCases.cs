@@ -77,7 +77,7 @@ public static class CaseZeroCases
             objects = new[] { "Desvio de dinheiro", "Roubo de equipamentos", "Falsificação de produtos" },
             places = new[] { "Vértice Serviços", "Horizonte", "Atlas" },
             objectQuestion = "QUAL ERA O CRIME?", placeQuestion = "QUAL EMPRESA DE FACHADA?",
-            call = "A análise confirmou as assinaturas digitais e a origem das mensagens. A conta da Vértice é controlada pelo diretor. O relatório também liga a ordem de intimidação ao ataque contra Helena. Cruze essas provas com os depoimentos.",
+            call = "A perícia confirmou a autenticidade da planilha e dos registros da Vértice. Há pagamentos sem serviço correspondente. Compare as autorizações com os depoimentos e preserve os demais registros do escritório para esclarecer a ligação com Helena.",
             ending = "Augusto comandava o desvio de dinheiro usando a Vértice Serviços. Os documentos também ligam suas ordens ao ataque contra Helena.\n\nCarlos responde pelo roubo; o executor identificado no relatório, pelo ataque. Helena entrega a cópia das provas. Os três casos estão concluídos."
         }
     };

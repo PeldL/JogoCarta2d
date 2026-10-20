@@ -201,7 +201,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         for (int slot = 1; slot <= CaseZeroSave.SlotCount; slot++)
         {
             var saved = CaseZeroSave.Read(out _, slot);
-            string summary = saved != null ? (saved.solved ? "Caso resolvido" : saved.failed ? "Caso encerrado • derrota" : $"{saved.evidence.Count}/5 provas • {TimeText(saved.elapsed)}")
+            string summary = saved != null ? (saved.solved ? "Caso resolvido" : saved.failed ? "Caso encerrado • derrota" : $"Em investigação • {TimeText(saved.elapsed)}")
                 : CaseZeroSave.ExistsInSlot(slot) ? "Save indisponível" : "Vazio";
             string label = $"{(slot == selectedSlot ? "• " : "")}SLOT {slot}\n{(saved != null ? "Caso " + (saved.CaseIndex + 1) + " • " : "")}{summary}";
             for (int i = slot - 1; i < view.slotLabels.Length; i += CaseZeroSave.SlotCount) view.slotLabels[i].text = label;
@@ -306,7 +306,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (view.incomingCallPulse != null) view.incomingCallPulse.enabled = ringing;
         view.Feedback?.SetPhoneRinging(ringing);
         view.phoneNotification.text = !state.Finished && state.callPending && !state.callRead ? "CHAMADA RECEBIDA • abra o telefone" : "";
-        view.progress.text = $"CASO {state.CaseIndex + 1}  •  PROVAS {state.evidence.Count}/5";
+        view.progress.text = $"CASO {state.CaseIndex + 1} • {CurrentCase.title.ToUpperInvariant()}";
     }
 
     public void ToggleDocument()
@@ -499,8 +499,6 @@ public sealed class CaseZeroGame : MonoBehaviour
         Save(false);
         RefreshProgress();
         TutorialHint(2, "Pista registrada. Abra o documento com Tab ou pelo botão de investigação e consulte Evidências.");
-        if (state.CanRequestAnalysis && state.callDelay < 0 && !state.callRead && !state.callPending)
-            Say("Provas reunidas. Abra o celular e escolha Enviar para análise. Enquanto a perícia trabalha, você pode interrogar os envolvidos.");
     }
 
     public void SelectEvidence(string id)
@@ -563,7 +561,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             if (!exists) continue;
             var choice = node.choices[i];
             bool available = interrogation.IsChoiceAvailable(choice) && (choice.nextNodeId != "confronto" || CanConfront());
-            view.interviewChoiceLabels[i].text = available ? choice.choiceText : state.CaseIndex == 0 ? "Confrontar • requer escala e pistola" : "Comparar • recolha as quatro pistas";
+            view.interviewChoiceLabels[i].text = available ? choice.choiceText : state.CaseIndex == 0 ? "Confrontar • procure evidências que contradigam o relato" : "Comparar • investigue os registros e as contradições";
             view.interviewChoices[i].interactable = available;
         }
     }
@@ -605,8 +603,10 @@ public sealed class CaseZeroGame : MonoBehaviour
             view.phoneState.text = "SEM CHAMADAS PENDENTES";
             view.phonePresentation.ShowImmediate(state.callDelay >= 0
                 ? "Provas enviadas. A perícia está preparando o retorno. Você pode continuar investigando; o celular avisará quando chegar a ligação."
-                : state.CanRequestAnalysis ? "As provas estão prontas para envio. Toque em Enviar para análise. O laudo registrado será necessário para encerrar o caso."
-                : "CENTRAL DISPONÍVEL\nConsulte os documentos ou peça orientação. Reúna as quatro pistas do local para habilitar o envio à perícia.");
+                : state.CanRequestAnalysis ? "Você pode solicitar o exame do material disponível. Isso não significa que a investigação esteja completa: continue buscando pistas e comparando relatos."
+                : (state.CaseIndex == 0
+                    ? "CENTRAL DISPONÍVEL\nConsulte os documentos ou peça orientação. Para um confronto balístico, preserve a arma e o material do disparo."
+                    : "CENTRAL DISPONÍVEL\nConsulte os documentos ou peça orientação. Preserve os registros e os vestígios do local para solicitar uma análise."));
         }
     }
 
@@ -681,9 +681,9 @@ public sealed class CaseZeroGame : MonoBehaviour
         view.ShowSelection(view.placeChecks, state.place);
         view.concludeButton.interactable = state.CanConclude && !state.Finished;
         view.deductionHint.text = state.Finished ? "Caso já encerrado. Consulte o resultado ou reinicie em Opções."
-            : state.CanConclude ? $"Evidências suficientes. Restam {state.AttemptsRemaining} tentativa(s) de acusação."
-            : state.CanRequestAnalysis && state.Has("depoimento") && state.AllInterviewed && !state.callRead ? "Falta o laudo: envie as provas pelo celular, atenda e registre o retorno."
-            : state.CaseIndex == 0 ? "Reúna arma, cápsula, escala, vestígios e depoimento confrontado." : "Recolha as quatro pistas, ouça os quatro suspeitos e confronte as contradições.";
+            : state.CanConclude ? $"Revise sua hipótese antes de confirmar. Restam {state.AttemptsRemaining} tentativa(s) de acusação."
+            : state.HasSceneEvidence && state.Has("depoimento") && state.AllInterviewed && !state.callRead ? "Falta o laudo: envie as provas pelo celular, atenda e registre o retorno."
+            : state.CaseIndex == 0 ? "Investigue o local, compare os depoimentos e consulte a perícia." : "Examine os registros, ouça os envolvidos e confronte as contradições.";
     }
 
     public void ConcludeCase()
@@ -796,7 +796,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             selectedEvidence = null;
             view.incomingCallPulse.enabled = false;
             view.Feedback?.ResetFeedback();
-            view.progress.text = "PROVAS 0/5     TEMPO 00:00     ERROS 0";
+            view.progress.text = "NENHUMA INVESTIGAÇÃO ATIVA";
             view.phoneNotification.text = "Inicie ou carregue uma investigação.";
         }
         CancelRestart();

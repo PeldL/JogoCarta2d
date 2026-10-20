@@ -138,10 +138,16 @@ public static class CaseZeroCampaignChecks
             var state = State(game);
             Check(state.CaseIndex == caseIndex && state.location == state.Definition.location, "Local correto do Caso " + (caseIndex + 1));
             Check(!state.CanConclude, "Dedução bloqueada antes das pistas");
-            for (int i = 0; i < 4; i++) { view.evidenceMarkers[i].onClick.Invoke(); yield return null; }
-            Check(state.evidence.Count == 4, "Quatro pistas coletadas por botões nativos");
+            int[] examinationMaterial = caseIndex == 0 ? new[] { 1, 2 } : new[] { 0, 1 };
+            foreach (int marker in examinationMaterial) { view.evidenceMarkers[marker].onClick.Invoke(); yield return null; }
+            Check(state.CanRequestAnalysis && !state.HasSceneEvidence, "Perícia pode ser solicitada antes de encerrar a busca no local");
+            Check(!view.progress.text.Contains("/5") && !view.progress.text.Contains("PROVAS"), "HUD não revela contagem de evidências");
             yield return Analyze(game, view);
             state = State(game);
+            Check(state.callRead && !state.CanConclude, "Laudo antecipado não libera acusação sem as demais provas");
+            for (int i = 0; i < 4; i++)
+                if (System.Array.IndexOf(examinationMaterial, i) < 0) { view.evidenceMarkers[i].onClick.Invoke(); yield return null; }
+            Check(state.evidence.Count == 4, "Investigação continua após a análise inicial");
             game.OpenInterview();
             if (caseIndex == 0) game.SelectInterviewChoice(2);
             else
@@ -203,7 +209,7 @@ public static class CaseZeroCampaignChecks
         game.OpenPhone();
         game.OpenCaseDocuments();
         Check(view.phoneState.text.Contains("DOCUMENTOS"), "Celular permite consultar documentos");
-        Check(view.sendAnalysisButton != null && view.sendAnalysisButton.interactable, "Botão de envio disponível com provas completas");
+        Check(view.sendAnalysisButton != null && view.sendAnalysisButton.interactable, "Botão de envio disponível com material apropriado para exame");
         view.sendAnalysisButton.onClick.Invoke();
         Check(state.callDelay >= 0, "Jogador envia provas pelo celular");
         game.SaveGame(); game.LoadGame(); yield return Travel(game);

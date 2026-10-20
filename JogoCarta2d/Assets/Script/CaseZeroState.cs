@@ -58,8 +58,8 @@ public sealed class CaseZeroState
             if (CaseIndex > 0)
             {
                 if (callPending && !callRead) return "Atenda a ligação da central pelo telefone.";
-                if (!Has("registro") || !Has("pistola") || !Has("capsula") || !Has("sangue"))
-                    return "Examine as quatro pistas em " + (CaseIndex == 1 ? "Apartamento 302." : "Escritório.");
+                if (!HasSceneEvidence)
+                    return "Investigue os registros e vestígios em " + (CaseIndex == 1 ? "Apartamento 302." : "Escritório.");
                 if (!AllInterviewed) return "Ouça os quatro suspeitos na aba Interrogatório.";
                 if (!Has("depoimento")) return "Compare as provas e confronte os depoimentos.";
                 if (!callRead) return callDelay >= 0 ? "A perícia está analisando. Revise os depoimentos enquanto aguarda a ligação." : "Envie as provas para análise pelo celular.";
@@ -68,14 +68,16 @@ public sealed class CaseZeroState
             if (callPending && !callRead) return "Atenda a ligação da perícia pelo telefone.";
             if (!Has("registro") || !Has("pistola") || !Has("capsula"))
                 return location == "Bar" ? "Examine os objetos do bar e recolha as pistas." : "Vá ao bar pelo mapa e examine os objetos.";
-            if (!Has("sangue")) return "No bar, examine os vestígios junto ao balcão.";
+            if (!Has("sangue")) return "Examine os vestígios do local e compare com os depoimentos.";
             if (!Has("depoimento")) return "No interrogatório, confronte o depoimento com as provas.";
             if (!callRead) return callDelay >= 0 ? "A perícia está analisando. Revise as evidências enquanto aguarda a ligação." : "Envie as provas para análise pelo celular.";
             return "Abra Dedução e compare culpado, arma e local com as provas.";
         }
     }
-    public bool CanRequestAnalysis => Has("pistola") && Has("capsula") && Has("registro") && Has("sangue");
-    public bool CanConclude => CanRequestAnalysis && Has("depoimento") && AllInterviewed && callRead;
+    public bool HasSceneEvidence => Has("pistola") && Has("capsula") && Has("registro") && Has("sangue");
+    // The lab can examine suitable material while the detective keeps investigating.
+    public bool CanRequestAnalysis => CaseIndex == 0 ? Has("pistola") && Has("capsula") : Has("registro") && Has("pistola");
+    public bool CanConclude => HasSceneEvidence && Has("depoimento") && AllInterviewed && callRead;
 
     public bool Accuse()
     {
