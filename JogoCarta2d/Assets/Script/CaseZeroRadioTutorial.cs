@@ -14,6 +14,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     float stableTime;
     int dialogue = -1;
     Tween textFade;
+    float nextTuningSound;
     Image detectivePortrait, centralPortrait;
     readonly string[] lines = {
         "CENTRAL\nDetetive, está na escuta? Recebemos um chamado de uma morte em um bar. Precisamos de você no local.",
@@ -111,6 +112,11 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
 
     void UpdateSignal(float value)
     {
+        if (Time.unscaledTime >= nextTuningSound)
+        {
+            CaseZeroSoundFeedback.Current?.PlayRadioTick();
+            nextTuningSound = Time.unscaledTime + 0.16f;
+        }
         stableTime = 0;
         float distance = Mathf.Abs(value - Target);
         frequency.text = $"{value:0.0} MHz • " + (distance <= 0.6f ? "SINAL LIMPO — mantenha aqui" : distance < 2.5f ? "Sinal próximo" : "Sinal fraco");
@@ -123,6 +129,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         stableTime += Time.unscaledDeltaTime;
         if (stableTime < 0.7f) return;
         dialogue = 0;
+        CaseZeroSoundFeedback.Current?.PlayTransmission();
         tuning.gameObject.SetActive(false);
         frequency.text = "104,5 MHz\nCONEXÃO ESTABELECIDA";
         view.primary.interactable = true;
@@ -133,6 +140,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     public void Advance()
     {
         if (dialogue < 0) return;
+        CaseZeroSoundFeedback.Current?.PlayClick();
         if (++dialogue < lines.Length) ShowDialogue();
         else
         {

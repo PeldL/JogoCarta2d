@@ -611,6 +611,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         if (state == null || state.Finished || !state.CanRequestAnalysis || state.callRead || state.callPending || state.callDelay >= 0) return;
         state.callDelay = 8;
+        CaseZeroSoundFeedback.Current?.PlayTransmission();
         state.idleTime = 0;
         Save(false);
         RefreshPhone();

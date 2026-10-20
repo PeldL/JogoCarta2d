@@ -23,6 +23,8 @@ public sealed class CaseZeroSoundFeedback : MonoBehaviour
     public void PlayClick() => Play(click, 0.45f);
     public void PlayEvidence() => Play(evidence, 0.65f);
     public void PlayNotification() => Play(notification, 0.75f);
+    public void PlayRadioTick() => Play(click, 0.12f);
+    public void PlayTransmission() => Play(notification, 0.4f);
     void Play(AudioClip clip, float gain)
     {
         if (source != null && clip != null) source.PlayOneShot(clip, gain);
