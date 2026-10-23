@@ -22,7 +22,7 @@ MonoBehaviour:
   - name: "Pessoa 1"
     sprite: {fileID: 0}
   - name: "Vítima 1 - Mulher no bar"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: a20dfad0dd7a8d6489463b130c329bc6, type: 3}
   - name: "Vítima 2"
     sprite: {fileID: 0}
   - name: "Vítima 3"
@@ -30,7 +30,7 @@ MonoBehaviour:
   - name: "Legista"
     sprite: {fileID: 0}
   - name: "Barista"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: b58dc27a9a38d3048ac9270494793680, type: 3}
   - name: "Segurança das câmeras"
     sprite: {fileID: 0}
   - name: "Enfermeiro"
@@ -58,8 +58,8 @@ MonoBehaviour:
   - name: "Homem do balcão"
     caseId: ultima-testemunha
     suspectIndex: 0
-    artName:
-    sprite: {fileID: 0}
+    artName: Barista
+    sprite: {fileID: 21300000, guid: b58dc27a9a38d3048ac9270494793680, type: 3}
   - name: "Funcionário do bar"
     caseId: ultima-testemunha
     suspectIndex: 1

@@ -81,6 +81,7 @@ public sealed class CaseZeroView : MonoBehaviour
     [Header("Retratos • arraste as artes na biblioteca")]
     public CaseZeroArtLibrary artLibrary;
     public Image interviewPortrait;
+    public GameObject firstCaseVictim;
     public TMP_Text interviewPortraitName;
     public Image[] deductionPortraits = new Image[0];
     Tween portraitFade;
@@ -88,6 +89,7 @@ public sealed class CaseZeroView : MonoBehaviour
 
     public void ShowPortraits(CaseZeroCase data, int selected)
     {
+        if (firstCaseVictim != null) firstCaseVictim.SetActive(data.id == "ultima-testemunha");
         if (artLibrary == null) return;
         if (deductionPortraits.Length > 0 && deductionPortraits[0] != null)
         {
