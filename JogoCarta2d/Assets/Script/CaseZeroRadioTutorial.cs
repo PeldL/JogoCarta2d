@@ -69,8 +69,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         var art = Resources.Load<CaseZeroArtLibrary>("ArtesCasoZero");
         detectivePortrait = Portrait("Detective", 140, art != null ? art.radioDetetive : null);
         centralPortrait = Portrait("Dispatch", 1480, art != null ? art.radioCentral : null);
-        view.body.rectTransform.anchoredPosition = new Vector2(140, -640);
-        view.body.rectTransform.sizeDelta = new Vector2(1640, 245);
+        // Dialogue size, padding and artwork are authored in ApresentacaoCaso.unity.
         if (caseIndex > 0)
         {
             // A familiar frequency reconnects immediately; no repeated tuning or tutorial.
