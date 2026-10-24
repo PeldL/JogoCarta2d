@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 12bef062588c98648915917f04994720
+guid: dc034177278756b4187e06d94e5502c7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5669622657743817891
-    second: Vitima 1_0
+      213: -5072229259896282280
+    second: Padeiro _0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Vitima 1_0
+      name: Padeiro _0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1254
-        height: 1254
+        width: 1145
+        height: 935
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3ac835da4cb8eae40800000000000000
-      internalID: 5669622657743817891
+      spriteID: 8532a88ac52db99b0800000000000000
+      internalID: -5072229259896282280
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Vitima 1_0: 5669622657743817891
+      Padeiro _0: -5072229259896282280
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

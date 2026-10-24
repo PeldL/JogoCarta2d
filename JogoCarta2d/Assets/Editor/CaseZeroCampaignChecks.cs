@@ -85,7 +85,10 @@ public static class CaseZeroCampaignChecks
                 slider.value = 90;
                 intro.Advance();
                 Check(!State(game).introductionSeen, "Frequência incorreta não pula o tutorial");
-                slider.value = 104.5f;
+                var radio = intro.GetComponent<CaseZeroRadioTutorial>();
+                float target = (float)typeof(CaseZeroRadioTutorial).GetField("Target", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(radio);
+                Check(target >= 92 && target <= 106, "Frequência sorteada dentro da faixa sintonizável");
+                slider.value = target;
                 while (!intro.primary.interactable) yield return null;
                 Check(intro.body.text.Contains("DISPATCH"), "Sintonia estável libera a central");
                 for (int i = 0; i < 10 && game.Presenting; i++) intro.Advance();
@@ -122,6 +125,7 @@ public static class CaseZeroCampaignChecks
         Check(CaseZeroSave.Write(state, out _, 1), "Save de prévia isolado");
         var game = UnityEngine.Object.FindFirstObjectByType<CaseZeroGame>();
         game.SelectSlot(1); game.LoadGame(); yield return Travel(game);
+        game.OpenMap();
     }
     static IEnumerator Exercise()
     {
@@ -132,6 +136,23 @@ public static class CaseZeroCampaignChecks
         Check(view.interviewSuspectButtons.Length == 4 && view.suspectChecks.Length == 4, "Quatro botões e seleções serializados");
         game.SelectSlot(1); game.StartNewGame(); yield return Travel(game);
         Check(State(game).CaseIndex == 0, "Novo jogo começa no Caso 1");
+        foreach (string destination in new[] { "Bar", "Delegacia", "Laboratorio", "Padaria", "Rua", "Estacionamento", "Hospital", "Escritorio", "Apartamento" })
+        {
+            game.OpenMap();
+            var buttons = UnityEngine.Object.FindObjectsByType<UnityEngine.UI.Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var button = Array.Find(buttons, b => b.gameObject.name == "Map_" + destination);
+            Check(button != null && button.gameObject.activeInHierarchy, "Destino visível no mapa: " + destination);
+            button.onClick.Invoke(); yield return Travel(game);
+            Check(State(game).location == destination && UnityEngine.SceneManagement.SceneManager.GetSceneByName(destination).isLoaded, "Mapa abre cena: " + destination);
+        }
+        game.TravelTo("Bar"); yield return Travel(game);
+        view.NotifyEvidence("Crime scene traces");
+        double noticeDeadline = EditorApplication.timeSinceStartup + 1;
+        while (EditorApplication.timeSinceStartup < noticeDeadline) yield return null;
+        Check(view.evidenceNotice.GetComponents<CaseZeroPanelMotion>().Length == 1, "Aviso tem apenas uma animação");
+        Check(view.evidenceNoticeText.text.Contains("Crime scene traces") && view.evidenceNoticeText.canvasRenderer.GetInheritedAlpha() > 0.9f, "Texto da pista permanece visível após animação");
+        view.ClearNotice();
+
         game.NextCase(); Check(State(game).CaseIndex == 0, "Avanço bloqueado sem vitória");
         for (int caseIndex = 0; caseIndex < 3; caseIndex++)
         {
@@ -241,3 +262,4 @@ public static class CaseZeroCampaignChecks
         }
     }
 }
+

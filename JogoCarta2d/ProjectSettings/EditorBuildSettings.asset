@@ -21,12 +21,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Delegacia.unity
     guid: a0e2fa3a33b9ff34b94c15e9d4677366
   - enabled: 1
-    path: Assets/Scenes/Joalheria.unity
-    guid: 699af721f1fc5ae4b0e92aad299d9786
-  - enabled: 1
-    path: Assets/Scenes/Mercadinho.unity
-    guid: d4527721ae5ee1682fbefe1b4de8711e
-  - enabled: 1
     path: Assets/Scenes/Apartamento.unity
     guid: 39625d3e95df2a425d085bcd7e58f0d0
   - enabled: 1
@@ -38,6 +32,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FinalCampanha.unity
     guid: 2c3798f9b4f6db2b9e6c510bf53bcec4
+  - enabled: 1
+    path: Assets/Scenes/Padaria.unity
+    guid: 50569566657241edab5b08a1e884452b
+  - enabled: 1
+    path: Assets/Scenes/Laboratorio.unity
+    guid: a3e6f1e72f804a0e9359dfa5946a8033
+  - enabled: 1
+    path: Assets/Scenes/Rua.unity
+    guid: 825d237071764cc0a6335ccee98f30e9
+  - enabled: 1
+    path: Assets/Scenes/Estacionamento.unity
+    guid: c7bd63d5828247fa853bf4f741a67e9d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -10,7 +10,7 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
     [SerializeField, Min(0)] float shakeStrength = 10;
     [SerializeField, Min(0.1f)] float shakeDuration = 0.42f;
     [SerializeField, Min(1)] float ringInterval = 3.2f;
-    [SerializeField, Range(0, 12)] float phoneTilt = 7;
+    [SerializeField, Range(0, 12)] float phoneTilt = 3;
     CaseZeroView view;
     GameObject overlayRoot;
     Canvas overlayCanvas;
@@ -84,11 +84,13 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
             if (ringSource != null) ringSource.Play();
             nextRing = ringInterval;
         }
-        // Short vibration bursts rather than continuous rotation. Position and scale remain owned by UI motion.
+        // A gentle wave with eased start/end and a pause between calls.
         float burst = Mathf.Repeat(ringTime, ringInterval);
-        float angle = burst < 0.8f ? Mathf.Sin(burst * 65) * phoneTilt : 0;
+        float phase = Mathf.Clamp01(burst / 1.6f);
+        float envelope = Mathf.Sin(phase * Mathf.PI);
+        float angle = Mathf.Sin(phase * Mathf.PI * 4) * envelope * Mathf.Min(phoneTilt, 3f);
         if (phoneButton != null) phoneButton.localRotation = buttonRotation * Quaternion.Euler(0, 0, angle);
-        if (phonePanel != null) phonePanel.localRotation = panelRotation * Quaternion.Euler(0, 0, angle * 0.35f);
+        if (phonePanel != null) phonePanel.localRotation = panelRotation * Quaternion.Euler(0, 0, angle * 0.12f);
     }
 
     void RestorePhone()

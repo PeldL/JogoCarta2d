@@ -52,13 +52,15 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         };
     }
 
-    const float Target = 104.5f;
+    float Target;
+    readonly Image[] signalBars = new Image[7];
 
     public void Initialize(CaseZeroPresentation presentation, CaseZeroGame investigation)
     {
         view = presentation;
         game = investigation;
         caseIndex = game.CampaignState.CaseIndex;
+        Target = Random.Range(920, 1061) / 10f;
         lines = caseIndex == 0 ? TutorialLines : BriefingLines(caseIndex);
         view.back.gameObject.SetActive(false);
         view.title.text = "AT HOME • A CALL ON THE RADIO";
@@ -114,6 +116,16 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         tuning.minValue = 88;
         tuning.maxValue = 108;
         tuning.value = 90;
+        for (int i = 0; i < signalBars.Length; i++)
+        {
+            var bar = Graphic("Signal bar " + (i + 1), root, Color.black);
+            bar.raycastTarget = false;
+            bar.rectTransform.anchorMin = bar.rectTransform.anchorMax = new Vector2(0.5f, 0);
+            bar.rectTransform.pivot = new Vector2(0.5f, 0);
+            bar.rectTransform.anchoredPosition = new Vector2((i - 3) * 30, -50);
+            bar.rectTransform.sizeDelta = new Vector2(20, 12 + i * 7);
+            signalBars[i] = bar;
+        }
         tuning.onValueChanged.AddListener(UpdateSignal);
         UpdateSignal(tuning.value);
         tuning.Select();
@@ -157,6 +169,9 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         }
         stableTime = 0;
         float distance = Mathf.Abs(value - Target);
+        int lit = distance <= 0.6f ? signalBars.Length : Mathf.Clamp(Mathf.FloorToInt((1 - distance / 10f) * 6), 0, 6);
+        for (int i = 0; i < signalBars.Length; i++)
+            signalBars[i].color = i < lit ? Color.black : new Color(0, 0, 0, 0.15f);
         frequency.text = $"{value:0.0} MHz • " + (distance <= 0.6f ? "CLEAR SIGNAL — hold here" : distance < 2.5f ? "Signal nearby" : "Weak signal");
     }
 
@@ -169,7 +184,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         dialogue = 0;
         CaseZeroSoundFeedback.Current?.PlayTransmission();
         tuning.gameObject.SetActive(false);
-        frequency.text = "104.5 MHz\nCONNECTION ESTABLISHED";
+        frequency.text = $"{tuning.value:0.0} MHz\nCONNECTION ESTABLISHED";
         view.primary.interactable = true;
         view.primary.Select();
         ShowDialogue();

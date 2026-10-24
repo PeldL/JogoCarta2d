@@ -16,7 +16,7 @@ public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
     RectTransform rect;
     Vector2 restingPosition;
     bool folderTab, pageSelected;
-    const float TabLift = 24f;
+    const float TabLift = 3f;
     Camera pointerCamera;
 
     public bool IsFolderTab => folderTab;

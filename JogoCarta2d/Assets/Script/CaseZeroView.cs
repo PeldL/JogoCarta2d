@@ -25,8 +25,10 @@ public sealed class CaseZeroView : MonoBehaviour
             case "Apartamento": return "Apartment 302";
             case "Escritorio": return "Office";
             case "Delegacia": return "Police station";
-            case "Joalheria": return "Jewelry store";
-            case "Mercadinho": return "Convenience store";
+            case "Laboratorio": return "Forensics laboratory";
+            case "Rua": return "Street";
+            case "Estacionamento": return "Parking lot";
+            case "Padaria": return "Bakery";
             default: return key;
         }
     }

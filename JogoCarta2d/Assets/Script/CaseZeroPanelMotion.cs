@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 // Owns only its own tweens; disabling always restores the authored layout.
 [RequireComponent(typeof(CanvasGroup))]
+[DisallowMultipleComponent]
 public sealed class CaseZeroPanelMotion : MonoBehaviour
 {
     [SerializeField, Min(0.01f)] float duration = 0.42f;
     [SerializeField, Range(0.9f, 1f)] float initialScale = 0.96f;
+    [SerializeField, Min(0)] float childTravel = 22f;
     CanvasGroup group;
     Vector3 restingScale;
     Sequence motion;
@@ -33,7 +35,7 @@ public sealed class CaseZeroPanelMotion : MonoBehaviour
         Restore();
         Canvas.ForceUpdateCanvases();
         group.alpha = 0;
-        transform.localScale = restingScale * Mathf.Min(initialScale, 0.96f);
+        transform.localScale = restingScale * Mathf.Clamp(initialScale, 0.9f, 1f);
         float time = Mathf.Max(duration, 0.38f);
         motion = DOTween.Sequence().SetUpdate(true)
             .Join(group.DOFade(1f, time))
@@ -50,7 +52,7 @@ public sealed class CaseZeroPanelMotion : MonoBehaviour
                 (child.GetComponent<Selectable>() == null && child.GetComponent<TMPro.TMP_Text>() == null)) continue;
             Vector2 origin = rect.anchoredPosition;
             children.Add(rect); positions.Add(origin);
-            rect.anchoredPosition = origin + Vector2.down * 22f;
+            rect.anchoredPosition = origin + Vector2.down * childTravel;
             float delay = 0.06f + Mathf.Min(order++, 6) * 0.045f;
             motion.Insert(delay, rect.DOAnchorPos(origin, time).SetEase(Ease.OutCubic));
             var childGroup = child.GetComponent<CanvasGroup>();

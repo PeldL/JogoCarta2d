@@ -145,7 +145,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (view.suspectsSummary != null) view.suspectsSummary.text = state.CaseIndex == 0
             ? "Man behind the counter: claims he worked at the bar.\nEmployee: check the schedule.\nUnknown customer: compare this possibility with the evidence."
             : string.Join("\n\n", System.Array.ConvertAll(data.suspects, n => n)) + "\n\nInterview everyone in the Interviews tab and compare their accounts with the evidence.";
-        for (int i = 0; i < view.caseMapButtons.Length; i++) view.caseMapButtons[i].gameObject.SetActive(i == state.CaseIndex);
+        for (int i = 0; i < view.caseMapButtons.Length; i++) view.caseMapButtons[i].gameObject.SetActive(true);
         for (int i = 0; i < view.interviewSuspectButtons.Length; i++)
         {
             view.interviewSuspectButtons[i].gameObject.SetActive(state.CaseIndex > 0);
@@ -233,6 +233,13 @@ public sealed class CaseZeroGame : MonoBehaviour
         state = next;
         // Existing saves with progress predate the introductory scenes.
         if (state.evidence.Count > 0 || state.elapsed > 0 || state.Finished) state.introductionSeen = true;
+        // Cover before rebuilding the next case UI, not after its first visible frame.
+        if (!state.Finished && !state.introductionSeen && view.travelCurtain != null)
+        {
+            view.travelCurtain.gameObject.SetActive(true);
+            view.travelCurtain.alpha = 1;
+            view.travelCurtain.blocksRaycasts = true;
+        }
         CreateContent();
         ConfigureCaseView();
         state.cameraMode = false; // Legacy saves can contain an active camera mode.
@@ -353,7 +360,9 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         switch (location)
         {
-            case "Bar": case "Hospital": case "Delegacia": case "Joalheria": case "Mercadinho": case "Apartamento": case "Escritorio": return location;
+            case "Bar": case "Hospital": case "Delegacia": case "Padaria": case "Laboratorio": case "Rua": case "Estacionamento": case "Apartamento": case "Escritorio": return location;
+            case "Joalheria": return "Laboratorio";
+            case "Mercadinho": return "Padaria";
             default: return "Mapa";
         }
     }
@@ -362,7 +371,6 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         if (state == null || travelling || confirming || !view.backgroundMap) return;
         if (state.Finished) return;
-        if ((location == "Apartamento" || location == "Escritorio" || location == "Bar") && location != CurrentCase.location) { UnavailableLocation(); return; }
         StartCoroutine(ChangeLocation(NormalizeLocation(location), false));
     }
 
@@ -398,11 +406,18 @@ public sealed class CaseZeroGame : MonoBehaviour
         Say(view.mapInDocument ? "" : destination == "Mapa" ? "Choose a location on the map. Tab opens the investigation."
             : destination == "Bar" ? "Investigate the bar. Use the Map to leave."
             : CaseZeroView.DisplayName(destination) + " • Use the Map to return to town.");
+        // Prepare the briefing while the location is still covered.
+        if (!state.Finished && !state.introductionSeen)
+        {
+            yield return ShowPresentation("ApresentacaoCaso");
+            yield return null; // Presentation.Start builds the radio before revealing it.
+            Canvas.ForceUpdateCanvases();
+        }
         yield return DOTween.To(() => view.travelCurtain.alpha, a => view.travelCurtain.alpha = a, 0f, 0.35f).SetEase(Ease.InOutSine).SetUpdate(true).WaitForCompletion();
         view.travelCurtain.blocksRaycasts = false;
         view.travelCurtain.gameObject.SetActive(false);
         travelling = false;
-        if (!state.Finished && !state.introductionSeen) yield return ShowPresentation("ApresentacaoCaso");
+
     }
 
     IEnumerator ShowPresentation(string scene)

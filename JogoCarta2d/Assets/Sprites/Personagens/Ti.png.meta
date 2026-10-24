@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: dc034177278756b4187e06d94e5502c7
+guid: 70138c58e8d99b446aa38c2a2bbce58a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5072229259896282280
-    second: Padeiro _0
+      213: -727495335115509047
+    second: Ti_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Padeiro _0
+      name: Ti_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1145
-        height: 935
+        width: 1088
+        height: 1445
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8532a88ac52db99b0800000000000000
-      internalID: -5072229259896282280
+      spriteID: 9c2bfaed8da67e5f0800000000000000
+      internalID: -727495335115509047
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Padeiro _0: -5072229259896282280
+      Ti_0: -727495335115509047
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
