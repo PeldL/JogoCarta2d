@@ -59,7 +59,7 @@ public sealed class CaseZeroState
             {
                 if (callPending && !callRead) return "Answer the call from dispatch on your phone.";
                 if (!HasSceneEvidence)
-                    return "Investigate the records and traces at " + (CaseIndex == 1 ? "Apartment 302." : "the office.");
+                    return CaseIndex == 1 ? "Investigate the apartment and trace the murder back to the closed bar." : "Investigate the bar where the body was found and trace the poisoning back to the bakery.";
                 if (!AllInterviewed) return "Interview the four suspects in the Interviews tab.";
                 if (!Has("depoimento")) return "Compare the evidence and challenge the statements.";
                 if (!callRead) return callDelay >= 0 ? "Forensics is analyzing the material. Review the statements while awaiting the call." : "Submit material for analysis through your phone.";
