@@ -70,46 +70,46 @@ MonoBehaviour:
     suspectIndex: 2
     artName: Zelador
     sprite: {fileID: 21300000, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
-  - name: "Marina • amiga"
+  - name: "Zelador do prédio"
     caseId: apartamento-302
     suspectIndex: 0
-    artName: "Vítima 1 - Mulher no bar"
-    sprite: {fileID: 21300000, guid: a20dfad0dd7a8d6489463b130c329bc6, type: 3}
-  - name: "Lucas • vizinho"
+    artName: Zelador
+    sprite: {fileID: 21300000, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
+  - name: "Segurança"
     caseId: apartamento-302
     suspectIndex: 1
+    artName: "Segurança das câmeras"
+    sprite: {fileID: 21300000, guid: d0b59135122360b4d937ffc9518da516, type: 3}
+  - name: "Entregador noturno"
+    caseId: apartamento-302
+    suspectIndex: 2
+    artName: Padeiro
+    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
+  - name: "Policial de ronda"
+    caseId: apartamento-302
+    suspectIndex: 3
     artName: Policial
     sprite: {fileID: 21300000, guid: 39be66199a1ab3d4bb6d8b9ee3bc3952, type: 3}
-  - name: "Carlos • síndico"
-    caseId: apartamento-302
+  - name: "Padeiro"
+    caseId: arquivo-vertice
+    suspectIndex: 0
+    artName: Padeiro
+    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
+  - name: "Enfermeiro"
+    caseId: arquivo-vertice
+    suspectIndex: 1
+    artName: Enfermeiro
+    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
+  - name: "Zelador"
+    caseId: arquivo-vertice
     suspectIndex: 2
     artName: Zelador
     sprite: {fileID: 21300000, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
-  - name: "André • técnico"
-    caseId: apartamento-302
-    suspectIndex: 3
-    artName: "Segurança das câmeras"
-    sprite: {fileID: 21300000, guid: d0b59135122360b4d937ffc9518da516, type: 3}
-  - name: "Beatriz • contadora"
-    caseId: arquivo-vertice
-    suspectIndex: 0
-    artName: Enfermeiro
-    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
-  - name: "Augusto • diretor"
-    caseId: arquivo-vertice
-    suspectIndex: 1
-    artName: Legista
-    sprite: {fileID: 21300000, guid: 5245eff8a0984674cb91ce8cb8f5c959, type: 3}
-  - name: "Renato • segurança"
-    caseId: arquivo-vertice
-    suspectIndex: 2
-    artName: "Segurança das câmeras"
-    sprite: {fileID: 21300000, guid: d0b59135122360b4d937ffc9518da516, type: 3}
-  - name: "Fábio • técnico"
+  - name: "Policial"
     caseId: arquivo-vertice
     suspectIndex: 3
-    artName: Padeiro
-    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
+    artName: Policial
+    sprite: {fileID: 21300000, guid: 39be66199a1ab3d4bb6d8b9ee3bc3952, type: 3}
   cursorLupa: {fileID: 0}
   cursorInteracao: {fileID: 0}
   cursorEscrita: {fileID: 0}
