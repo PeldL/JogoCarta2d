@@ -14,27 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   personagens:
   - name: "Padeiro"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
   - name: "Zelador"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
   - name: "Policial"
-    sprite: {fileID: 0}
-  - name: "Pessoa 1"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 39be66199a1ab3d4bb6d8b9ee3bc3952, type: 3}
   - name: "Vítima 1 - Mulher no bar"
     sprite: {fileID: 21300000, guid: a20dfad0dd7a8d6489463b130c329bc6, type: 3}
   - name: "Vítima 2"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 67b566b17301396418ee3c0187297a54, type: 3}
   - name: "Vítima 3"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 511c48f657a54b44c81b572d9d8af5a1, type: 3}
   - name: "Legista"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 5245eff8a0984674cb91ce8cb8f5c959, type: 3}
   - name: "Barista"
     sprite: {fileID: 21300000, guid: b58dc27a9a38d3048ac9270494793680, type: 3}
   - name: "Segurança das câmeras"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: d0b59135122360b4d937ffc9518da516, type: 3}
   - name: "Enfermeiro"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
+  - name: "Carinha do rádio"
+    sprite: {fileID: 21300000, guid: 118e3dbf479c63944a57e27ddeaf63ff, type: 3}
   cenarios:
   - name: "Bar"
     sprite: {fileID: 0}
@@ -53,7 +53,7 @@ MonoBehaviour:
   - name: "Escritório"
     sprite: {fileID: 0}
   - name: "Apartamento"
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: d1b1b60764877034aa2809cac6870c62, type: 3}
   retratos:
   - name: "Homem do balcão"
     caseId: ultima-testemunha
@@ -116,3 +116,5 @@ MonoBehaviour:
   hotspotLupa: {x: 0, y: 0}
   hotspotInteracao: {x: 0, y: 0}
   hotspotEscrita: {x: 0, y: 0}
+  radioDetetive: {fileID: 0}
+  radioCentral: {fileID: 0}
