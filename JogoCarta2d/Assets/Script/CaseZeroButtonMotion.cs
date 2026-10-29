@@ -7,16 +7,16 @@ using UnityEngine.UI;
 public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
     IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, ISelectHandler, IDeselectHandler
 {
-    [SerializeField, Range(1f, 1.1f)] float hoverScale = 1.025f;
-    [SerializeField, Range(0.9f, 1f)] float pressedScale = 0.97f;
-    [SerializeField, Min(0.01f)] float duration = 0.13f;
+    [SerializeField, Range(1f, 1.1f)] float hoverScale = 1.045f;
+    [SerializeField, Range(0.9f, 1f)] float pressedScale = 0.945f;
+    [SerializeField, Min(0.01f)] float duration = 0.17f;
     Button button;
     Vector3 restingScale;
     Tween motion, liftMotion;
     RectTransform rect;
     Vector2 restingPosition;
     bool folderTab, pageSelected;
-    const float TabLift = 3f;
+    const float TabLift = 8f;
     Camera pointerCamera;
 
     public bool IsFolderTab => folderTab;
@@ -43,8 +43,8 @@ public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
         {
             liftMotion?.Kill();
             bool raised = button.IsInteractable() && (hovered || selected || pageSelected);
-            liftMotion = rect.DOAnchorPos(restingPosition + Vector2.up * (raised ? TabLift : 0), 0.22f)
-                .SetEase(Ease.OutCubic).SetUpdate(true);
+            liftMotion = rect.DOAnchorPos(restingPosition + Vector2.up * (raised ? TabLift : 0), 0.28f)
+                .SetEase(Ease.OutBack).SetUpdate(true);
         }
         motion = transform.DOScale(restingScale * scale, duration).SetEase(pressed ? Ease.OutQuad : Ease.OutBack).SetUpdate(true);
     }
