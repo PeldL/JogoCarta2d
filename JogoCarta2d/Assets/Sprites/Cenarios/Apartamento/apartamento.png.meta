@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ba4ee0ec2bb81c24e953cf9bdb046108
+guid: d1b1b60764877034aa2809cac6870c62
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4585592838154230165
-    second: vitima_0
+      213: -4425607677432371717
+    second: apartamento_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: vitima_0
+      name: apartamento_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1145
-        height: 1374
+        width: 1168
+        height: 784
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 59912ca046c43af30800000000000000
-      internalID: 4585592838154230165
+      spriteID: bf5e667e3451592c0800000000000000
+      internalID: -4425607677432371717
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      vitima_0: 4585592838154230165
+      apartamento_0: -4425607677432371717
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

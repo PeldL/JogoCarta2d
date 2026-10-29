@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 70138c58e8d99b446aa38c2a2bbce58a
+guid: 511c48f657a54b44c81b572d9d8af5a1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -727495335115509047
-    second: Ti_0
+      213: 4585592838154230165
+    second: vitima_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ti_0
+      name: vitima_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1088
-        height: 1445
+        width: 1145
+        height: 1374
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9c2bfaed8da67e5f0800000000000000
-      internalID: -727495335115509047
+      spriteID: 59912ca046c43af30800000000000000
+      internalID: 4585592838154230165
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Ti_0: -727495335115509047
+      vitima_0: 4585592838154230165
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
