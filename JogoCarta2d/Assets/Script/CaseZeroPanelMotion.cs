@@ -8,9 +8,9 @@ using UnityEngine.UI;
 [DisallowMultipleComponent]
 public sealed class CaseZeroPanelMotion : MonoBehaviour
 {
-    [SerializeField, Min(0.01f)] float duration = 0.42f;
-    [SerializeField, Range(0.9f, 1f)] float initialScale = 0.96f;
-    [SerializeField, Min(0)] float childTravel = 22f;
+    [SerializeField, Min(0.01f)] float duration = 0.5f;
+    [SerializeField, Range(0.9f, 1f)] float initialScale = 0.93f;
+    [SerializeField, Min(0)] float childTravel = 30f;
     CanvasGroup group;
     Vector3 restingScale;
     Sequence motion;
