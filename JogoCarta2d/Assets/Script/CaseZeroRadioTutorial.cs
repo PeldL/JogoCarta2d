@@ -64,6 +64,8 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         view.back.gameObject.SetActive(false);
         view.title.text = "AT HOME • A CALL ON THE RADIO";
         view.stepLabel.text = "FIRST SHIFT";
+        ConfigureSingleLine(view.title, 18f, view.title.fontSize);
+        ConfigureSingleLine(view.stepLabel, 22f, view.stepLabel.fontSize);
         view.body.text = "— — DISPATCH... Detective, do you copy? — —\n\nThe signal is weak. Adjust the frequency until you find dispatch. The clearer the signal, the closer you are. Hold the frequency steady for a moment.";
         var radioFx = view.body.GetComponent<CaseZeroDialogueFX>();
         if (radioFx == null) radioFx = view.body.gameObject.AddComponent<CaseZeroDialogueFX>();
@@ -99,6 +101,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         labelRect.anchoredPosition = new Vector2(0, 237);
         labelRect.sizeDelta = new Vector2(798.9585f, 354.3582f);
         labelRect.localScale = Vector3.one * 0.69067f;
+        ConfigureSingleLine(frequency, 16f, 36f);
         frequency.alignment = TextAlignmentOptions.Center;
         frequency.alpha = 1;
 
@@ -153,7 +156,25 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         caption.rectTransform.anchoredPosition = new Vector2(name == "Dispatch" ? 640.1f : -670f, -226f);
         caption.rectTransform.sizeDelta = new Vector2(374.89f, 98.9149f);
         caption.rectTransform.localScale = Vector3.one * 0.65529f;
+        ConfigureSingleLine(caption, 16f, 36f);
         return portrait;
+    }
+
+    static void ConfigureSingleLine(TMP_Text text, float minFontSize, float maxFontSize)
+    {
+        if (text == null) return;
+
+        // Runtime-cloned labels must stay left-to-right and on one horizontal line.
+        text.isRightToLeftText = false;
+        text.enableWordWrapping = false;
+        text.textWrappingMode = TextWrappingModes.NoWrap;
+        text.overflowMode = TextOverflowModes.Overflow;
+        text.enableAutoSizing = true;
+        text.fontSizeMin = minFontSize;
+        text.fontSizeMax = maxFontSize;
+        text.alignment = TextAlignmentOptions.Center;
+        text.rectTransform.localRotation = Quaternion.identity;
+        text.ForceMeshUpdate();
     }
 
     static Image Graphic(string name, Transform parent, Color color)
