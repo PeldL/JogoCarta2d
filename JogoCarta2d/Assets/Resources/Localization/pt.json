@@ -1,0 +1,16 @@
+{
+  "entries": [
+    {
+      "key": "welcome_message",
+      "value": "Bem-vindo ao jogo!"
+    },
+    {
+      "key": "play_button",
+      "value": "Jogar"
+    },
+    {
+      "key": "ask_guidance",
+      "value": "Pedir Orientação"
+    }
+  ]
+}
