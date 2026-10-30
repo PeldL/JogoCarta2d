@@ -53,7 +53,7 @@ public sealed class CaseZeroPhonePresentation : MonoBehaviour
         reveal = DOTween.Sequence().SetUpdate(true)
             .AppendInterval(thinkingDuration)
             .AppendCallback(() => { StopDots(); message.text = pendingMessage; message.alpha = 0; })
-            .Append(DOTween.To(() => message.alpha, value => message.alpha = value, 1f, 0.18f))
+            .Append(DOTween.To(() => message.alpha, value => message.alpha = value, 1f, 0.28f).SetEase(Ease.OutSine))
             .OnComplete(() => { IsRevealing = false; confirmButton.interactable = true; });
     }
 

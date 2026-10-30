@@ -22,8 +22,8 @@ public sealed class CaseZeroGame : MonoBehaviour
     CaseZeroCase CurrentCase => state == null ? CaseZeroCases.All[0] : state.Definition;
     bool restartCurrentCase;
     readonly Dictionary<string, EvidenceData> catalog = new Dictionary<string, EvidenceData>();
-    readonly string[] evidenceIds = { "registro", "pistola", "capsula", "sangue", "depoimento" };
-    readonly string[] markerNames = { "Employee schedule", "Pistol under the counter", "Cartridge case on the floor", "Examine traces" };
+    const int EvidenceCardsPerPage = 5;
+    int evidencePage;
     float saveTimer;
     bool paused;
     bool restoring;
@@ -56,6 +56,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             enabled = false;
             return;
         }
+        WireDynamicButtons();
         CreateContent();
         phone.OnCallScreenUpdated += CallUpdated;
         phone.OnCallEnded += CallEnded;
@@ -77,17 +78,16 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (suspectAsset != null && !caseSuspects.Contains(suspectAsset)) Destroy(suspectAsset);
         foreach (var asset in caseSuspects) Destroy(asset);
         caseSuspects.Clear();
-        if (state != null && state.CaseIndex > 0) { CreateLaterCase(); return; }
-        AddEvidence("pistola", "Pistol under the counter", "A pistol was found hidden under the counter. Preserve it for ballistic comparison.");
-        AddEvidence("capsula", "Cartridge case on the floor", "A cartridge case was found near the body in the bar service area. It indicates a shot was fired here.");
-        AddEvidence("registro", "Employee records", "The schedule identifies the actual employee: he left before the crime. The man seen behind the counter does not work here.");
-        AddEvidence("sangue", "Crime scene traces", "Bloodstains by the counter. Their position is consistent with the account of the victim's arrival.");
-        AddEvidence("depoimento", "Challenged testimony", "Confronted with the schedule and the pistol, the man admits he was robbing the bar. The victim entered during the robbery.");
+        var data = CurrentCase;
+        for (int i = 0; i < data.evidenceKeys.Length; i++)
+            AddEvidence(data.evidenceKeys[i], data.evidenceNames[i], data.evidenceDescriptions[i]);
+        AddEvidence("depoimento", data.testimonyEvidenceName, data.testimonyEvidenceDescription);
         forensicCall = ScriptableObject.CreateInstance<PhoneCallAsset>();
         forensicCall.callerName = "Forensics laboratory";
         forensicCall.nodes = new List<PhoneDialogueNode> {
             new PhoneDialogueNode { nodeId = "start", message = "The ballistic comparison is a match: the cartridge case recovered in the bar was fired by the pistol found under the counter. Compare this finding with the employee records and the testimony.", choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Record report and end call" } } }
         };
+        if (state != null && state.CaseIndex > 0) { CreateLaterCase(); return; }
         suspectAsset = ScriptableObject.CreateInstance<SuspectAsset>();
         suspectAsset.suspectName = "Man behind the counter";
         suspectAsset.nodes = new List<InterrogationNode> {
@@ -106,28 +106,111 @@ public sealed class CaseZeroGame : MonoBehaviour
     void CreateLaterCase()
     {
         var data = CurrentCase;
-        for (int i = 0; i < evidenceIds.Length; i++) AddEvidence(evidenceIds[i], data.evidenceNames[i], data.evidenceDescriptions[i]);
-        forensicCall = ScriptableObject.CreateInstance<PhoneCallAsset>();
-        forensicCall.callerName = "Investigation dispatch";
-        forensicCall.nodes = new List<PhoneDialogueNode> { new PhoneDialogueNode { nodeId = "start", message = data.call,
-            choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Record and end call" } } } };
-        for (int i = 0; i < data.suspects.Length; i++)
+        bool hasPendingReport = state.callPending && state.pendingAnalysisStage >= 0 && state.pendingAnalysisStage < data.analysisMessages.Length;
+        forensicCall.nodes[0].message = hasPendingReport
+            ? data.analysisMessages[state.pendingAnalysisStage]
+            : "No report is pending. Submit a collected item through the phone to request a forensic result.";
+        for (int i = 0; i < data.interviewNames.Length; i++)
         {
             var asset = ScriptableObject.CreateInstance<SuspectAsset>();
-            asset.suspectName = data.suspects[i];
-            asset.nodes = new List<InterrogationNode> {
-                Node("start", data.statements[i], Choice("Compare testimony with evidence", "confronto", catalog["registro"]), Choice("End conversation", "")),
-                Node("confronto", data.explanations[i], Choice("Back to testimony", "start"), Choice("End conversation", ""))
-            };
+            asset.suspectName = data.interviewNames[i];
+            asset.nodes = BuildInterviewNodes(i, data);
             caseSuspects.Add(asset);
         }
         suspectAsset = caseSuspects[state.interviewSuspect];
+    }
+
+    List<InterrogationNode> BuildInterviewNodes(int index, CaseZeroCase data)
+    {
+        var nodes = new List<InterrogationNode>();
+        if (data.id == "apartamento-302")
+        {
+            if (index == 0)
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about the camera outage", "camera", catalog["c2_bar_terminal"]),
+                    Choice("Ask about the button", "button", catalog["c2_bar_botao"]),
+                    Choice("Challenge the timeline", "confronto")));
+                nodes.Add(Node("camera", "You said the cameras failed, but the terminal records a manual shutdown under your account. Why?", Choice("Back to questions", "start")));
+                nodes.Add(Node("button", "That is a company uniform button. I do not know how it ended up at the bar.", Choice("Back to questions", "start")));
+                nodes.Add(Node("confronto", data.explanations[index], Choice("End interview", "")));
+            }
+            else if (index == 1)
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about the spare key", "key", catalog["c2_apt_chaveiro"]),
+                    Choice("Ask about the appointment at the bar", "appointment", catalog["c2_apt_agenda"]),
+                    Choice("End conversation", "")));
+                nodes.Add(Node("key", "I used the key for an earlier repair. I must have dropped the key ring then. It does not mean I entered the apartment that night.", Choice("Back to questions", "start")));
+                nodes.Add(Node("appointment", "I knew the bar was closed, but I did not meet the victim there. Check the evidence from the bar before deciding who had access.", Choice("Back to questions", "start")));
+            }
+            else if (index == 2)
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about the closed bar", "bar", catalog["c2_bar_sangue"]),
+                    Choice("Ask about the security company", "security", catalog["c2_bar_botao"]),
+                    Choice("End conversation", "")));
+                nodes.Add(Node("bar", "The bar has been closed since the first case. I did not see who went inside that night.", Choice("Back to questions", "start")));
+                nodes.Add(Node("security", "The button belongs to the security company. The guard wore that uniform, but the forensic comparison will tell us more.", Choice("Back to questions", "start")));
+            }
+            else
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask what happened in the corridor", "corridor", catalog["c2_apt_tapete"]),
+                    Choice("Ask when the body was found", "discovery", catalog["c2_apt_agenda"]),
+                    Choice("End conversation", "")));
+                nodes.Add(Node("corridor", "I noticed movement after the victim had already been found. I could not identify the person, but the body was inside the apartment when help arrived.", Choice("Back to questions", "start")));
+                nodes.Add(Node("discovery", "The apartment door was intact. I cannot say whether the victim was attacked there or brought there afterward.", Choice("Back to questions", "start")));
+            }
+        }
+        else
+        {
+            if (index == 0)
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about the fabric in the kitchen", "fabric", catalog["c3_padaria_retalho"]),
+                    Choice("Ask about the dismissal", "motive", catalog["c3_police_carta"]),
+                    Choice("Challenge the denial", "confronto")));
+                nodes.Add(Node("fabric", "That could have come from an old work jacket. I said I never entered the kitchen that morning.", Choice("Back to questions", "start")));
+                nodes.Add(Node("motive", "The victim blamed me for an accident that was not my fault. I was angry, but that does not prove I poisoned anyone.", Choice("Back to questions", "start")));
+                nodes.Add(Node("confronto", data.explanations[index], Choice("End interview", "")));
+            }
+            else if (index == 1)
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about the victim's cup", "cup", catalog["c3_padaria_xicara"]),
+                    Choice("Ask about the collapse", "footage", catalog["c3_padaria_camera"]),
+                    Choice("End conversation", "")));
+                nodes.Add(Node("cup", "The victim always used that cup. I prepared the coffee, but I drank from the same pot and was fine.", Choice("Back to questions", "start")));
+                nodes.Add(Node("footage", "The recording shows the victim drinking and collapsing. It does not show who handled the cup before that.", Choice("Back to questions", "start")));
+            }
+            else if (index == 2)
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about the victim's routine", "routine", catalog["c3_bar_recibo"]),
+                    Choice("Ask what the recording shows", "collapse", catalog["c3_padaria_camera"]),
+                    Choice("End conversation", "")));
+                nodes.Add(Node("routine", "The victim visited the bakery before opening and always used the same cup. I saw them alive there that morning.", Choice("Back to questions", "start")));
+                nodes.Add(Node("collapse", "They drank coffee, became ill, and collapsed. I tried to help, but I cannot identify who touched the cup.", Choice("Back to questions", "start")));
+            }
+            else
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about moving the body", "body", catalog["c3_bar_manutencao"]),
+                    Choice("Ask about the toxicology report", "report", catalog["c3_police_tox"]),
+                    Choice("End conversation", "")));
+                nodes.Add(Node("body", "The bar was locked when we arrived. The maintenance log shows who had access, but access alone does not prove who killed the victim.", Choice("Back to questions", "start")));
+                nodes.Add(Node("report", "The victim's cup was poisoned, while the coffee pot was clean. We still need to identify who used the victim's routine against them.", Choice("Back to questions", "start")));
+            }
+        }
+        return nodes;
     }
 
     void ConfigureCaseView()
     {
         var data = CurrentCase;
         view.investigationLocation = data.location;
+        view.SetAvailableLocations(data.locations);
         view.ShowPortraits(data, state.interviewSuspect);
         for (int i = 0; i < view.suspectLabels.Length; i++)
         {
@@ -137,19 +220,18 @@ public sealed class CaseZeroGame : MonoBehaviour
         }
         for (int i = 0; i < view.objectLabels.Length; i++) view.objectLabels[i].text = data.objects[i];
         for (int i = 0; i < view.placeLabels.Length; i++) view.placeLabels[i].text = data.places[i];
-        for (int i = 0; i < view.evidenceCardLabels.Length; i++) view.evidenceCardLabels[i].text = catalog[evidenceIds[i]].evidenceName;
         if (view.objectQuestion != null) view.objectQuestion.text = data.objectQuestion;
         if (view.placeQuestion != null) view.placeQuestion.text = data.placeQuestion;
-        if (view.worldInterviewLabel != null) view.worldInterviewLabel.text = state.CaseIndex == 0 ? "Man behind the counter" : "Talk to suspects";
+        if (view.worldInterviewLabel != null) view.worldInterviewLabel.text = state.CaseIndex == 0 ? "Man behind the counter" : "Talk to people";
         if (view.caseBriefing != null) view.caseBriefing.text = $"CASE {state.CaseIndex + 1} • {data.title}\n{data.introduction}";
         if (view.suspectsSummary != null) view.suspectsSummary.text = state.CaseIndex == 0
             ? "Man behind the counter: claims he worked at the bar.\nEmployee: check the schedule.\nUnknown customer: compare this possibility with the evidence."
-            : string.Join("\n\n", System.Array.ConvertAll(data.suspects, n => n)) + "\n\nInterview everyone in the Interviews tab and compare their accounts with the evidence.";
-        for (int i = 0; i < view.caseMapButtons.Length; i++) view.caseMapButtons[i].gameObject.SetActive(true);
+            : "People to interview:\n" + string.Join("\n", System.Array.ConvertAll(data.interviewNames, n => "• " + n)) + "\n\nCompare their accounts with the evidence.";
         for (int i = 0; i < view.interviewSuspectButtons.Length; i++)
         {
-            view.interviewSuspectButtons[i].gameObject.SetActive(state.CaseIndex > 0);
-            if (state.CaseIndex > 0) view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = data.suspects[i];
+            bool exists = state.CaseIndex > 0 && i < data.interviewNames.Length;
+            view.interviewSuspectButtons[i].gameObject.SetActive(exists);
+            if (exists) view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = data.interviewNames[i];
         }
     }
 
@@ -231,6 +313,22 @@ public sealed class CaseZeroGame : MonoBehaviour
         phone.ResetCalls();
         interrogation.EndInterrogation();
         state = next;
+        evidencePage = 0;
+        if (state.CaseIndex > 0)
+        {
+            bool hasNewCaseClue = false;
+            foreach (var key in state.Definition.evidenceKeys) hasNewCaseClue |= state.Has(key);
+            bool hasLegacyProgress = state.evidence.Count > 0 || state.callRead || state.callPending || state.interviewedMask != 0 || state.solved || state.failed;
+            if (!hasNewCaseClue && hasLegacyProgress)
+                state = state.RestartCase(); // Old saves used a different story and different clue keys.
+        }
+        var caseDefinition = state.Definition;
+        bool savedLocationIsValid = false;
+        foreach (var allowedLocation in caseDefinition.locations)
+            savedLocationIsValid |= allowedLocation == NormalizeLocation(state.location);
+        if (!savedLocationIsValid) state.location = caseDefinition.location;
+        if (state.interviewSuspect < 0 || state.interviewSuspect >= caseDefinition.interviewNames.Length)
+            state.interviewSuspect = 0;
         // Existing saves with progress predate the introductory scenes.
         if (state.evidence.Count > 0 || state.elapsed > 0 || state.Finished) state.introductionSeen = true;
         // Cover before rebuilding the next case UI, not after its first visible frame.
@@ -280,6 +378,7 @@ public sealed class CaseZeroGame : MonoBehaviour
                 else OpenPage("Opções");
             }
         }
+        BrowseEvidenceWithMouseWheel();
         if (paused || state.Finished) return;
         state.elapsed += Time.unscaledDeltaTime;
         state.idleTime += Time.unscaledDeltaTime;
@@ -400,6 +499,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         state.location = destination;
         CloseDocument();
         view.SetLocation(destination);
+        RefreshWorld();
         if (restore && state.Finished) OpenPage("Resultado");
         else if (reopen && (view.mapInDocument || page != "Mapa") && page != "Local") OpenPage(NormalizePage(page));
         Save(false);
@@ -486,18 +586,36 @@ public sealed class CaseZeroGame : MonoBehaviour
 
     void RefreshWorld()
     {
+        if (state == null) return;
+        var keys = CurrentCase.EvidenceAt(state.location, state.analysisStage);
         for (int i = 0; i < view.evidenceMarkers.Length; i++)
         {
-            bool found = state.Has(evidenceIds[i]);
-            view.evidenceMarkerLabels[i].text = (state.CaseIndex == 0 ? markerNames[i] : CurrentCase.evidenceNames[i]) + (found ? " • recorded" : "");
-            view.evidenceMarkers[i].interactable = !state.Finished || found;
+            bool exists = i < keys.Length;
+            var marker = view.evidenceMarkers[i];
+            marker.gameObject.SetActive(exists);
+            if (!exists) continue;
+            string id = keys[i];
+            bool found = state.Has(id);
+            view.evidenceMarkerLabels[i].text = catalog[id].evidenceName + (found ? " • recorded" : "");
+            marker.interactable = !state.Finished || found;
         }
+    }
+
+    public void ExamineMarker(int markerIndex)
+    {
+        if (state == null || markerIndex < 0 || markerIndex >= view.evidenceMarkers.Length) return;
+        var keys = CurrentCase.EvidenceAt(state.location, state.analysisStage);
+        if (markerIndex >= keys.Length) return;
+        ExamineEvidence(keys[markerIndex]);
     }
 
     public void ExamineEvidence(string id)
     {
         if (state == null || paused || travelling || !catalog.ContainsKey(id)) return;
-        if (view.backgroundMap && state.location != CurrentCase.location) return;
+        if (CurrentCase.EvidenceIndex(id) >= 0 && CurrentCase.evidenceLocations[CurrentCase.EvidenceIndex(id)] != state.location) return;
+        int clueIndex = CurrentCase.EvidenceIndex(id);
+        if (clueIndex >= 0 && CurrentCase.evidenceUnlockStages != null && clueIndex < CurrentCase.evidenceUnlockStages.Length
+            && state.analysisStage < CurrentCase.evidenceUnlockStages[clueIndex]) return;
         if (state.Has(id)) { SelectEvidence(id); return; }
         if (state.Finished) return;
         Collect(id);
@@ -522,22 +640,93 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         if (state == null || !state.Has(id)) return;
         selectedEvidence = id;
+        var collected = CollectedEvidenceKeys();
+        int index = collected.IndexOf(id);
+        if (index >= 0) evidencePage = index / EvidenceCardsPerPage;
         OpenPage("Evidências");
     }
 
     void RefreshBoard()
     {
+        var collected = new List<string>();
+        foreach (var id in CurrentCase.evidenceKeys) if (state.Has(id)) collected.Add(id);
+        if (state.Has("depoimento")) collected.Add("depoimento");
+        int pageCount = Mathf.Max(1, Mathf.CeilToInt(collected.Count / (float)EvidenceCardsPerPage));
+        evidencePage = Mathf.Clamp(evidencePage, 0, pageCount - 1);
+        int start = evidencePage * EvidenceCardsPerPage;
         for (int i = 0; i < view.evidenceCards.Length; i++)
-            view.evidenceCards[i].gameObject.SetActive(state.Has(evidenceIds[i]));
-        bool hasEvidence = state.evidence.Count > 0;
+        {
+            int recordIndex = start + i;
+            bool exists = recordIndex < collected.Count;
+            view.evidenceCards[i].gameObject.SetActive(exists);
+            if (!exists) continue;
+            string id = collected[recordIndex];
+            view.evidenceCardLabels[i].text = catalog[id].evidenceName;
+        }
+        bool hasEvidence = collected.Count > 0;
         view.emptyEvidenceNotice.SetActive(!hasEvidence);
         view.evidenceDetails.SetActive(hasEvidence);
         if (!hasEvidence) return;
-        if (selectedEvidence == null || !state.Has(selectedEvidence)) selectedEvidence = state.evidence[0];
+        int selectedIndex = collected.IndexOf(selectedEvidence);
+        if (selectedIndex < 0 || selectedIndex < start || selectedIndex >= start + EvidenceCardsPerPage)
+        {
+            selectedIndex = start;
+            selectedEvidence = collected[selectedIndex];
+        }
         var data = catalog[selectedEvidence];
         view.evidenceName.text = data.evidenceName;
         view.evidenceDescription.text = data.description;
-        view.evidenceType.text = "EVIDENCE • CASE 01";
+        view.evidenceType.text = pageCount > 1
+            ? $"EVIDENCE • CASE {state.CaseIndex + 1:00} • SCROLL THE LIST TO BROWSE"
+            : $"EVIDENCE • CASE {state.CaseIndex + 1:00}";
+    }
+
+    List<string> CollectedEvidenceKeys()
+    {
+        var collected = new List<string>();
+        foreach (var id in CurrentCase.evidenceKeys) if (state.Has(id)) collected.Add(id);
+        if (state.Has("depoimento")) collected.Add("depoimento");
+        return collected;
+    }
+
+    void SelectEvidenceCard(int slot)
+    {
+        if (state == null || slot < 0 || slot >= EvidenceCardsPerPage) return;
+        var collected = CollectedEvidenceKeys();
+        int index = evidencePage * EvidenceCardsPerPage + slot;
+        if (index < 0 || index >= collected.Count) return;
+        selectedEvidence = collected[index];
+        var data = catalog[selectedEvidence];
+        view.evidenceName.text = data.evidenceName;
+        view.evidenceDescription.text = data.description;
+        view.evidenceType.text = $"EVIDENCE • CASE {state.CaseIndex + 1:00}";
+    }
+
+    void BrowseEvidenceWithMouseWheel()
+    {
+        if (state == null || !view.documentRoot.activeSelf || state.page != "Evidências" || Mouse.current == null) return;
+        float wheel = Mouse.current.scroll.ReadValue().y;
+        if (Mathf.Abs(wheel) < 0.01f || view.evidenceCards.Length == 0) return;
+        var listRect = view.evidenceCards[0].transform.parent as RectTransform;
+        if (listRect == null || !RectTransformUtility.ScreenPointToLocalPointInRectangle(listRect, Mouse.current.position.ReadValue(), null, out var local)) return;
+        // The evidence list occupies the left-hand half of the open case file.
+        if (local.x > listRect.rect.xMin + listRect.rect.width * 0.48f) return;
+        var collected = CollectedEvidenceKeys();
+        int pageCount = Mathf.Max(1, Mathf.CeilToInt(collected.Count / (float)EvidenceCardsPerPage));
+        if (pageCount <= 1) return;
+        int direction = wheel < 0 ? 1 : -1;
+        evidencePage = Mathf.Clamp(evidencePage + direction, 0, pageCount - 1);
+        RefreshBoard();
+        CaseZeroSoundFeedback.Current?.PlayClick();
+    }
+
+    void WireDynamicButtons()
+    {
+        for (int i = 0; i < view.evidenceCards.Length; i++)
+        {
+            int slot = i;
+            view.evidenceCards[i].onClick.AddListener(() => SelectEvidenceCard(slot));
+        }
     }
 
     void ShowInterview()
@@ -546,7 +735,8 @@ public sealed class CaseZeroGame : MonoBehaviour
         for (int i = 0; i < view.interviewSuspectButtons.Length; i++)
         {
             view.interviewSuspectButtons[i].interactable = i != state.interviewSuspect;
-            if (state.CaseIndex > 0) view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = CurrentCase.suspects[i] + ((state.interviewedMask & (1 << i)) != 0 ? " • interviewed" : "");
+            if (state.CaseIndex > 0 && i < CurrentCase.interviewNames.Length)
+                view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = CurrentCase.interviewNames[i] + ((state.interviewedMask & (1 << i)) != 0 ? " • interviewed" : "");
         }
         if (interrogation.CurrentSuspect != suspectAsset)
         {
@@ -571,6 +761,9 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (node == null) return;
         view.ShowPortraits(CurrentCase, state.interviewSuspect);
         view.interviewMessage.text = view.interviewPortraitName != null ? node.message : suspectAsset.suspectName + "\n\n" + node.message;
+        var dialogueFx = view.interviewMessage.GetComponent<CaseZeroDialogueFX>();
+        if (dialogueFx == null) dialogueFx = view.interviewMessage.gameObject.AddComponent<CaseZeroDialogueFX>();
+        dialogueFx.RevealInterview();
         for (int i = 0; i < view.interviewChoices.Length; i++)
         {
             bool exists = i < node.choices.Count;
@@ -601,7 +794,8 @@ public sealed class CaseZeroGame : MonoBehaviour
     void RefreshPhone()
     {
         bool active = phone.CurrentCall != null;
-        if (view.sendAnalysisButton != null) view.sendAnalysisButton.interactable = !state.Finished && state.CanRequestAnalysis && !active && !state.callRead && !state.callPending && state.callDelay < 0;
+        bool canRequest = state.CanRequestAnalysis && (state.CaseIndex > 0 || !state.callRead);
+        if (view.sendAnalysisButton != null) view.sendAnalysisButton.interactable = !state.Finished && canRequest && !active && !state.callPending && state.callDelay < 0;
         view.answerPhoneButton.gameObject.SetActive(state.callPending && !state.callRead && !active);
         view.endPhoneButton.gameObject.SetActive(active);
         if (state.callRead || active)
@@ -620,7 +814,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             view.phoneState.text = "NO PENDING CALLS";
             view.phonePresentation.ShowImmediate(state.callDelay >= 0
                 ? "Material submitted. Forensics is preparing its response. Keep investigating; the phone will alert you when the call arrives."
-                : state.CanRequestAnalysis ? "You can request an examination of the available material. This does not mean the investigation is complete: keep looking for clues and comparing accounts."
+                : canRequest ? "You can request the next forensic examination. Results arrive by phone and are collected at the police station."
                 : (state.CaseIndex == 0
                     ? "DISPATCH AVAILABLE\nRead the documents or ask for guidance. For a ballistic comparison, preserve the weapon and the material from the shooting."
                     : "DISPATCH AVAILABLE\nRead the documents or ask for guidance. Preserve the records and traces at the scene to request an examination."));
@@ -629,7 +823,14 @@ public sealed class CaseZeroGame : MonoBehaviour
 
     public void SendForAnalysis()
     {
-        if (state == null || state.Finished || !state.CanRequestAnalysis || state.callRead || state.callPending || state.callDelay >= 0) return;
+        if (state == null || state.Finished || !state.CanRequestAnalysis || (state.CaseIndex == 0 && state.callRead) || state.callPending || state.callDelay >= 0 || phone.CurrentCall != null) return;
+        if (state.CaseIndex > 0)
+        {
+            state.pendingAnalysisStage = state.analysisStage;
+            forensicCall.nodes[0].message = CurrentCase.analysisMessages[state.analysisStage];
+            forensicCall.callerName = "Forensics laboratory";
+        }
+        state.callRead = false;
         state.callDelay = 8;
         CaseZeroSoundFeedback.Current?.PlayTransmission();
         state.idleTime = 0;
@@ -647,8 +848,8 @@ public sealed class CaseZeroGame : MonoBehaviour
     public void AskCentral()
     {
         if (!CanConsultPhone()) return;
-        view.phoneState.text = "DISPATCH • GUIDANCE";
-        view.phonePresentation.PlayMessage("Dispatch: " + state.Objective + "\n\nRead what each piece of evidence establishes and compare it with the statements. A suspicion should become an accusation only when the information fits.");
+        view.phoneState.text = "CONNECTED • CENTRAL DISPATCH";
+        view.phonePresentation.PlayMessage("Dispatch: Detective, do you read me?\n\nYour current objective is: " + state.Objective + "\n\nGo over the recorded evidence and compare it with each account. Look for details that support or contradict what you have been told. Call me again if you need another briefing.");
     }
     public void OpenCaseDocuments()
     {
@@ -680,13 +881,24 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state == null || restoring) return;
         state.callRead = true;
         state.callPending = false;
+        if (state.CaseIndex > 0)
+        {
+            state.analysisStage = Mathf.Max(state.analysisStage, state.pendingAnalysisStage + 1);
+            RefreshWorld();
+        }
         state.idleTime = 0;
         Save(false);
         RefreshProgress();
         if (state.page == "Ligações") RefreshPhone();
     }
 
-    bool CanConfront() => state.Has("pistola") && (state.CaseIndex == 0 || (state.Has("capsula") && state.Has("sangue")));
+    bool CanConfront()
+    {
+        if (state.CaseIndex == 0) return state.Has("pistola") && state.Has("registro");
+        if (state.CaseIndex == 1)
+            return state.Has("c2_bar_botao") && state.Has("c2_bar_terminal") && state.Has("c2_police_uniforme");
+        return state.Has("c3_padaria_retalho") && state.Has("c3_police_tox") && state.Has("c3_police_uniforme");
+    }
     public void SelectSuspect(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.suspects.Length) return; state.suspect = index; RefreshDeduction(); }
     public void SelectWeapon(int index) { if (state == null || index < 0 || index > 2) return; state.weapon = index; RefreshDeduction(); }
     public void SelectPlace(int index) { if (state == null || index < 0 || index > 2) return; state.place = index; RefreshDeduction(); }

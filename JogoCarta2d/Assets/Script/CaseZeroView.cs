@@ -84,6 +84,7 @@ public sealed class CaseZeroView : MonoBehaviour
     public CaseZeroArtLibrary artLibrary;
     public Image interviewPortrait;
     public GameObject firstCaseVictim;
+    public TMP_Text victimCaption;
     public TMP_Text interviewPortraitName;
     public Image[] deductionPortraits = new Image[0];
     Tween portraitFade;
@@ -91,8 +92,29 @@ public sealed class CaseZeroView : MonoBehaviour
 
     public void ShowPortraits(CaseZeroCase data, int selected)
     {
-        if (firstCaseVictim != null) firstCaseVictim.SetActive(data.id == "ultima-testemunha");
         if (artLibrary == null) return;
+        if (firstCaseVictim != null)
+        {
+            // Reuse the existing portrait slot for each campaign victim.
+            string victimArt = data.id == "ultima-testemunha" ? "Vítima 1 - Mulher no bar"
+                : data.id == "apartamento-302" ? "Vítima 2"
+                : data.id == "arquivo-vertice" ? "Vítima 3" : null;
+            Sprite victimSprite = string.IsNullOrEmpty(victimArt) ? null : artLibrary.Find(victimArt);
+            var victimImage = firstCaseVictim.GetComponent<Image>();
+            if (victimImage != null && victimSprite != null)
+            {
+                victimImage.sprite = victimSprite;
+                victimImage.preserveAspect = true;
+            }
+            firstCaseVictim.SetActive(victimSprite != null);
+            if (victimCaption != null)
+            {
+                int caseNumber = Mathf.Max(0, System.Array.IndexOf(CaseZeroCases.All, data) + 1);
+                string label = data.id == "ultima-testemunha" ? "Woman from the bar"
+                    : data.id == "apartamento-302" ? "Victim 2" : "Victim 3";
+                victimCaption.text = victimSprite != null ? $"VICTIM • CASE {caseNumber:00}\n{label}" : string.Empty;
+            }
+        }
         if (deductionPortraits.Length > 0 && deductionPortraits[0] != null)
         {
             var content = deductionPortraits[0].transform.parent.parent as RectTransform;
@@ -105,7 +127,7 @@ public sealed class CaseZeroView : MonoBehaviour
                 deductionPortraits[i].preserveAspect = true;
             }
         if (interviewPortraitName != null)
-            interviewPortraitName.text = selected >= 0 && selected < data.suspects.Length ? data.suspects[selected] : "";
+            interviewPortraitName.text = selected >= 0 && selected < data.interviewNames.Length ? data.interviewNames[selected] : "";
         if (interviewPortrait == null) return;
         var sprite = artLibrary.FindPortrait(data.id, selected);
         string identity = data.id + ":" + selected;
@@ -161,7 +183,9 @@ public sealed class CaseZeroView : MonoBehaviour
     System.Collections.IEnumerator HideNotice()
     {
         yield return new WaitForSecondsRealtime(3.5f);
-        evidenceNotice.SetActive(false);
+        var motion = evidenceNotice.GetComponent<CaseZeroPanelMotion>();
+        if (motion != null) motion.Hide();
+        else evidenceNotice.SetActive(false);
         noticeRoutine = null;
     }
     public void ClearNotice()
@@ -194,11 +218,29 @@ public sealed class CaseZeroView : MonoBehaviour
     public TMP_Text locationLabel;
     bool atMap = true;
 
+    string[] availableLocations = new string[0];
+
+    public void SetAvailableLocations(string[] locations)
+    {
+        availableLocations = locations ?? new string[0];
+        if (mapRoot == null) return;
+        foreach (var button in mapRoot.GetComponentsInChildren<Button>(true))
+        {
+            string objectName = button.gameObject.name;
+            if (!objectName.StartsWith("Map_", StringComparison.Ordinal)) continue;
+            string location = objectName.Substring(4);
+            bool available = Array.IndexOf(availableLocations, location) >= 0;
+            button.gameObject.SetActive(available);
+        }
+    }
+
     public void SetLocation(string location)
     {
         atMap = location == "Mapa";
-        mapRoot.SetActive(!mapInDocument && atMap);
-        foreach (var control in barControls) control.SetActive(location == investigationLocation);
+        if (mapRoot != null) mapRoot.SetActive(!mapInDocument && atMap);
+        bool isInvestigationLocation = Array.IndexOf(availableLocations, location) >= 0;
+        foreach (var control in barControls)
+            if (control != null) control.SetActive(isInvestigationLocation && !atMap);
         if (locationLabel != null) locationLabel.text = DisplayName(location);
         if (mapControls != null) mapControls.interactable = mapInDocument || !documentRoot.activeSelf;
     }
@@ -210,6 +252,15 @@ public sealed class CaseZeroView : MonoBehaviour
         foreach (var page in pages)
         {
             if (page.tab == null) continue;
+            if (page.panel != null)
+            {
+                var reveal = page.panel.GetComponent<CaseZeroPanelMotion>();
+                if (reveal == null) reveal = page.panel.AddComponent<CaseZeroPanelMotion>();
+                reveal.UsePageReveal();
+                // Older content containers also carried the paper entrance effect.
+                foreach (var nested in page.panel.GetComponentsInChildren<CaseZeroPanelMotion>(true))
+                    if (nested != reveal) nested.UsePageReveal();
+            }
             var motion = page.tab.GetComponent<CaseZeroButtonMotion>();
             if (motion == null) motion = page.tab.gameObject.AddComponent<CaseZeroButtonMotion>();
             motion.SetFolderTab(false);
@@ -248,8 +299,9 @@ public sealed class CaseZeroView : MonoBehaviour
                 if (selected && changedPage)
                 {
                     var motion = page.panel.GetComponent<CaseZeroPanelMotion>();
-                    if (motion == null) page.panel.AddComponent<CaseZeroPanelMotion>();
-                    else if (wasActive) motion.Play();
+                    if (motion == null) motion = page.panel.AddComponent<CaseZeroPanelMotion>();
+                    if (page.name == "Mapa") motion.UseMapReveal();
+                    else if (motion != null && wasActive) motion.Play();
                 }
             }
             if (page.tab != null)

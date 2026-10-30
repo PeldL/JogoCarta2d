@@ -216,6 +216,43 @@ namespace Pixit.TMProVisualFX
             Play();
         }
 
+        /// <summary>Sets a restrained, one-shot dialogue glitch preset before restarting the reveal.</summary>
+        public void PlayDialogueGlitch(float amount = 1.1f, float speed = 4f, float revealSpeed = 42f, int glitchCharacterCount = 0)
+        {
+            CacheTextComponent();
+            colorMode = ColorMode.Original;
+            motionMode = MotionMode.Glitch;
+            motionAmount = Mathf.Max(0f, amount);
+            motionSpeed = Mathf.Max(0.1f, speed);
+            characterDelay = 0.012f;
+            typeAnimationMode = TypeAnimationMode.PopIn;
+            typeCharactersPerSecond = Mathf.Max(1f, revealSpeed);
+            typeFadeDuration = 0.08f;
+            effectRanges.Clear();
+            if (glitchCharacterCount > 0)
+            {
+                effectRangeMode = EffectRangeMode.CustomRanges;
+                effectRanges.Add(new CharacterRange { startIndex = 0, endIndex = glitchCharacterCount - 1 });
+            }
+            else effectRangeMode = EffectRangeMode.AllText;
+            Play();
+        }
+
+        /// <summary>Clean character reveal for spoken dialogue that should not sound like radio static.</summary>
+        public void PlaySoftDialogue(float revealSpeed = 54f)
+        {
+            CacheTextComponent();
+            colorMode = ColorMode.Original;
+            motionMode = MotionMode.None;
+            motionAmount = 0f;
+            typeAnimationMode = TypeAnimationMode.FadeInWave;
+            typeCharactersPerSecond = Mathf.Max(1f, revealSpeed);
+            typeFadeDuration = 0.12f;
+            effectRangeMode = EffectRangeMode.AllText;
+            effectRanges.Clear();
+            Play();
+        }
+
         public void Stop(bool restoreOriginal = true)
         {
             isPlaying = false;

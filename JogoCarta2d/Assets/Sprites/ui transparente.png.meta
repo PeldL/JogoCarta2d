@@ -1,0 +1,737 @@
+fileFormatVersion: 2
+guid: 1d4daa30fc574e94a8d30a3cbe1575ec
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5890770142772129617
+    second: ui transparente_0
+  - first:
+      213: 5787355079163878381
+    second: ui transparente_1
+  - first:
+      213: 5358898824990402294
+    second: ui transparente_2
+  - first:
+      213: -1612557982524786441
+    second: ui transparente_3
+  - first:
+      213: 3890661782026644887
+    second: ui transparente_4
+  - first:
+      213: 6410943614811003152
+    second: ui transparente_5
+  - first:
+      213: -1199168440806757346
+    second: ui transparente_6
+  - first:
+      213: 2013256262650130123
+    second: ui transparente_7
+  - first:
+      213: 2444027021728964493
+    second: ui transparente_8
+  - first:
+      213: -2062961278461857837
+    second: ui transparente_9
+  - first:
+      213: 8615525353570018051
+    second: ui transparente_10
+  - first:
+      213: 6929296984465975602
+    second: ui transparente_11
+  - first:
+      213: -8733404771549329403
+    second: ui transparente_12
+  - first:
+      213: -2509264070210526204
+    second: ui transparente_13
+  - first:
+      213: -3630647685218452677
+    second: ui transparente_14
+  - first:
+      213: 8681919519219086849
+    second: ui transparente_15
+  - first:
+      213: 1408388597861386475
+    second: ui transparente_16
+  - first:
+      213: -5726604005171388643
+    second: ui transparente_17
+  - first:
+      213: 3035653784806916379
+    second: ui transparente_18
+  - first:
+      213: 547966395273778535
+    second: ui transparente_19
+  - first:
+      213: 312417631612912838
+    second: ui transparente_20
+  - first:
+      213: -119878185084625924
+    second: ui transparente_21
+  - first:
+      213: 8404899246861054042
+    second: ui transparente_22
+  - first:
+      213: -676415496036915002
+    second: ui transparente_23
+  - first:
+      213: -7379201243257084899
+    second: ui transparente_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ui transparente_2
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 1229
+        width: 339
+        height: 232
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f6afc2b612ae5a40800000000000000
+      internalID: 5358898824990402294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_3
+      rect:
+        serializedVersion: 2
+        x: 379
+        y: 1231
+        width: 198
+        height: 252
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f8b3effe0b0f99e0800000000000000
+      internalID: -1612557982524786441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_4
+      rect:
+        serializedVersion: 2
+        x: 586
+        y: 1225
+        width: 232
+        height: 252
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79de2e2f6486ef530800000000000000
+      internalID: 3890661782026644887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_5
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 1407
+        width: 158
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0195ed3404f38f850800000000000000
+      internalID: 6410943614811003152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_6
+      rect:
+        serializedVersion: 2
+        x: 821
+        y: 1329
+        width: 171
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1caad318a2bb5fe0800000000000000
+      internalID: -1199168440806757346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_7
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 1258
+        width: 160
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bce671977e580fb10800000000000000
+      internalID: 2013256262650130123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_8
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 927
+        width: 341
+        height: 289
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8f5c9390adeae120800000000000000
+      internalID: 2444027021728964493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_9
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 1207
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3df25e3b5a3ee53e0800000000000000
+      internalID: -2062961278461857837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_10
+      rect:
+        serializedVersion: 2
+        x: 831
+        y: 1171
+        width: 154
+        height: 65
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 303a9ec79ae709770800000000000000
+      internalID: 8615525353570018051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_11
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 931
+        width: 216
+        height: 267
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 239a746f4eec92060800000000000000
+      internalID: 6929296984465975602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_12
+      rect:
+        serializedVersion: 2
+        x: 618
+        y: 929
+        width: 200
+        height: 264
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 508c910c1a6bcc680800000000000000
+      internalID: -8733404771549329403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_13
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 1099
+        width: 160
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 404637f6f9d4d2dd0800000000000000
+      internalID: -2509264070210526204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_14
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 1022
+        width: 163
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3bb5f19a295d9dc0800000000000000
+      internalID: -3630647685218452677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_15
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 944
+        width: 162
+        height: 63
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 106759fcdcf5c7870800000000000000
+      internalID: 8681919519219086849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_16
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 602
+        width: 303
+        height: 303
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be80d31c7f99b8310800000000000000
+      internalID: 1408388597861386475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_17
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 605
+        width: 304
+        height: 294
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1f1e668ff30780b0800000000000000
+      internalID: -5726604005171388643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_18
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 615
+        width: 305
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b118c70a80fc02a20800000000000000
+      internalID: 3035653784806916379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_19
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 289
+        width: 457
+        height: 288
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76515238884ca9700800000000000000
+      internalID: 547966395273778535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_20
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 351
+        width: 242
+        height: 225
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c44bd14e2ee55400800000000000000
+      internalID: 312417631612912838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_21
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 351
+        width: 237
+        height: 224
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfb56b10d6b165ef0800000000000000
+      internalID: -119878185084625924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_22
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 63
+        width: 450
+        height: 210
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a50f91e755334a470800000000000000
+      internalID: 8404899246861054042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_23
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 70
+        width: 243
+        height: 266
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c8662ea0b3ec96f0800000000000000
+      internalID: -676415496036915002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui transparente_24
+      rect:
+        serializedVersion: 2
+        x: 761
+        y: 58
+        width: 231
+        height: 277
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d146a81e09fc79990800000000000000
+      internalID: -7379201243257084899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d30c571dd13177b47bbc944498957eaf
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ui transparente_0: -5890770142772129617
+      ui transparente_1: 5787355079163878381
+      ui transparente_10: 8615525353570018051
+      ui transparente_11: 6929296984465975602
+      ui transparente_12: -8733404771549329403
+      ui transparente_13: -2509264070210526204
+      ui transparente_14: -3630647685218452677
+      ui transparente_15: 8681919519219086849
+      ui transparente_16: 1408388597861386475
+      ui transparente_17: -5726604005171388643
+      ui transparente_18: 3035653784806916379
+      ui transparente_19: 547966395273778535
+      ui transparente_2: 5358898824990402294
+      ui transparente_20: 312417631612912838
+      ui transparente_21: -119878185084625924
+      ui transparente_22: 8404899246861054042
+      ui transparente_23: -676415496036915002
+      ui transparente_24: -7379201243257084899
+      ui transparente_25: -313918508
+      ui transparente_3: -1612557982524786441
+      ui transparente_4: 3890661782026644887
+      ui transparente_5: 6410943614811003152
+      ui transparente_6: -1199168440806757346
+      ui transparente_7: 2013256262650130123
+      ui transparente_8: 2444027021728964493
+      ui transparente_9: -2062961278461857837
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

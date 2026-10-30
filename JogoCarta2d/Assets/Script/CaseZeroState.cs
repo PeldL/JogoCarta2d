@@ -29,13 +29,22 @@ public sealed class CaseZeroState
     public string interviewNode = "start";
     public int interviewSuspect;
     public int interviewedMask;
+    public int analysisStage;
+    public int pendingAnalysisStage;
     public int completedCases;
     public bool introductionSeen;
     public int tutorialHints;
     public List<CaseZeroResult> results = new List<CaseZeroResult>();
     public int CaseIndex => CaseZeroCases.Index(caseId);
     public CaseZeroCase Definition => CaseZeroCases.Get(caseId);
-    public bool AllInterviewed => CaseIndex == 0 || (interviewedMask & 15) == 15;
+    public bool AllInterviewed
+    {
+        get
+        {
+            int required = (1 << Definition.interviewNames.Length) - 1;
+            return (interviewedMask & required) == required;
+        }
+    }
     public CaseZeroState RestartCase() => new CaseZeroState { caseId = caseId, location = Definition.location, completedCases = completedCases, results = PreviousResults() };
     List<CaseZeroResult> PreviousResults() => (results ?? new List<CaseZeroResult>()).FindAll(r => r != null && r.caseId != caseId);
     public CaseZeroState NextCase()
@@ -58,11 +67,12 @@ public sealed class CaseZeroState
             if (CaseIndex > 0)
             {
                 if (callPending && !callRead) return "Answer the call from dispatch on your phone.";
-                if (!HasSceneEvidence)
-                    return "Investigate the records and traces at " + (CaseIndex == 1 ? "Apartment 302." : "the office.");
-                if (!AllInterviewed) return "Interview the four suspects in the Interviews tab.";
-                if (!Has("depoimento")) return "Compare the evidence and challenge the statements.";
-                if (!callRead) return callDelay >= 0 ? "Forensics is analyzing the material. Review the statements while awaiting the call." : "Submit material for analysis through your phone.";
+                if (callDelay >= 0) return "Forensics is analyzing the requested material. Keep investigating while you wait.";
+                if (CanRequestAnalysis) return "Submit the requested material through your phone. Results will be available at the police station.";
+                if (!AllInterviewed) return "Interview the suspects and witness. New questions may appear when you find supporting evidence.";
+                if (!Has("depoimento")) return "Compare the statements with the collected clues and challenge the contradiction.";
+                if (analysisStage < Definition.analysisCount || !callRead) return "Continue the forensic requests and collect their results at the police station.";
+                if (!HasAllCaseEvidence) return "Examine the available objects at each case location and review the case file.";
                 return "Open Deduction and confirm the combination supported by the evidence.";
             }
             if (callPending && !callRead) return "Answer the call from forensics on your phone.";
@@ -74,15 +84,41 @@ public sealed class CaseZeroState
             return "Open Deduction and compare the culprit, weapon, and location.";
         }
     }
-    public bool HasSceneEvidence => Has("pistola") && Has("capsula") && Has("registro") && Has("sangue");
-    // The lab can examine suitable material while the detective keeps investigating.
-    public bool CanRequestAnalysis => CaseIndex == 0 ? Has("pistola") && Has("capsula") : Has("registro") && Has("pistola");
-    public bool CanConclude => HasSceneEvidence && Has("depoimento") && AllInterviewed && callRead;
+    public bool HasSceneEvidence
+    {
+        get
+        {
+            if (CaseIndex == 0) return Has("pistola") && Has("capsula") && Has("registro") && Has("sangue");
+            foreach (var key in Definition.evidenceKeys) if (!Has(key)) return false;
+            return true;
+        }
+    }
+    public bool HasAllCaseEvidence => HasSceneEvidence;
+    public bool CanRequestAnalysis
+    {
+        get
+        {
+            if (CaseIndex == 0) return Has("pistola") && Has("capsula");
+            if (analysisStage < 0 || analysisStage >= Definition.analysisPrerequisites.Length) return false;
+            foreach (var key in Definition.analysisPrerequisites[analysisStage])
+                if (!Has(key)) return false;
+            return true;
+        }
+    }
+    public bool CanConclude
+    {
+        get
+        {
+            if (!Has("depoimento") || !AllInterviewed || !callRead) return false;
+            if (CaseIndex == 0) return HasSceneEvidence;
+            return HasAllCaseEvidence && analysisStage >= Definition.analysisCount;
+        }
+    }
 
     public bool Accuse()
     {
         if (Finished || !CanConclude) return solved;
-        solved = suspect == Definition.culprit && weapon == 0 && place == 0;
+        solved = suspect == Definition.culprit && weapon == Definition.weaponSolution && place == Definition.placeSolution;
         if (solved) { completedCases = Math.Max(completedCases, CaseIndex + 1); RecordResult(); }
         if (!solved) { errors++; failed = errors >= 3; }
         return solved;
@@ -106,8 +142,11 @@ public sealed class CaseZeroState
             && !float.IsNaN(callDelay) && !float.IsInfinity(callDelay) && callDelay >= -1
             && !float.IsNaN(idleTime) && !float.IsInfinity(idleTime) && idleTime >= 0
             && suspect >= 0 && suspect < Definition.suspects.Length && weapon >= 0 && weapon < 3 && place >= 0 && place < 3
-            && interviewSuspect >= 0 && interviewSuspect < (CaseIndex == 0 ? 1 : 4)
-            && interviewedMask >= 0 && interviewedMask <= 15 && completedCases >= 0 && completedCases <= 3;
+            && interviewSuspect >= 0 && interviewSuspect < Definition.interviewNames.Length
+            && interviewedMask >= 0 && interviewedMask < (1 << Definition.interviewNames.Length)
+            && analysisStage >= 0 && analysisStage <= Definition.analysisCount
+            && pendingAnalysisStage >= 0 && pendingAnalysisStage < Math.Max(1, Definition.analysisCount)
+            && completedCases >= 0 && completedCases <= 3;
     }
 }
 

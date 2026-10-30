@@ -30,7 +30,7 @@ public static class CaseZeroCampaignChecks
             if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty)
                 throw new InvalidOperationException("Salve suas cenas antes de executar a validação.");
         SessionState.SetBool(Pending, true);
-        EditorSceneManager.OpenScene("Assets/Scenes/UI.unity");
+        EditorSceneManager.OpenScene("Assets/Scenes/Game.unity");
         EditorApplication.isPlaying = true;
     }
 

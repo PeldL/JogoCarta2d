@@ -4,19 +4,24 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
+[DisallowMultipleComponent]
 public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
     IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, ISelectHandler, IDeselectHandler
 {
     [SerializeField, Range(1f, 1.1f)] float hoverScale = 1.025f;
     [SerializeField, Range(0.9f, 1f)] float pressedScale = 0.97f;
     [SerializeField, Min(0.01f)] float duration = 0.13f;
+    [SerializeField] bool textOnly;
+    TMPro.TMP_Text label;
+    float restingSpacing;
+    Tween lettering;
     Button button;
     Vector3 restingScale;
     Tween motion, liftMotion;
     RectTransform rect;
     Vector2 restingPosition;
     bool folderTab, pageSelected;
-    const float TabLift = 3f;
+    const float TabLift = 8f;
     Camera pointerCamera;
 
     public bool IsFolderTab => folderTab;
@@ -32,6 +37,11 @@ public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
     {
         button = GetComponent<Button>();
         restingScale = transform.localScale;
+        if (textOnly)
+        {
+            label = GetComponentInChildren<TMPro.TMP_Text>();
+            if (label != null) restingSpacing = label.characterSpacing;
+        }
         rect = transform as RectTransform;
         if (rect != null) restingPosition = rect.anchoredPosition;
     }
@@ -46,7 +56,15 @@ public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
             liftMotion = rect.DOAnchorPos(restingPosition + Vector2.up * (raised ? TabLift : 0), 0.22f)
                 .SetEase(Ease.OutCubic).SetUpdate(true);
         }
-        motion = transform.DOScale(restingScale * scale, duration).SetEase(pressed ? Ease.OutQuad : Ease.OutBack).SetUpdate(true);
+        motion = transform.DOScale(restingScale * (textOnly ? 1f : scale), duration)
+            .SetEase(pressed ? Ease.OutQuad : Ease.OutSine).SetUpdate(true);
+        if (label != null)
+        {
+            lettering?.Kill();
+            float spacing = restingSpacing + (button.IsInteractable() && !pressed && (hovered || selected) ? 1.5f : 0);
+            lettering = DOTween.To(() => label.characterSpacing, value => label.characterSpacing = value, spacing, 0.16f)
+                .SetEase(Ease.OutSine).SetUpdate(true);
+        }
     }
     void OnEnable()
     {
@@ -84,6 +102,8 @@ public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
     {
         motion?.Kill();
         liftMotion?.Kill();
+        lettering?.Kill();
+        if (label != null) label.characterSpacing = restingSpacing;
         if (folderTab && rect != null) rect.anchoredPosition = restingPosition;
         hovered = selected = pressed = false;
         transform.localScale = restingScale;

@@ -34,7 +34,9 @@ MonoBehaviour:
   - name: "Enfermeiro"
     sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
   - name: "Carinha do rádio"
-    sprite: {fileID: 21300000, guid: 118e3dbf479c63944a57e27ddeaf63ff, type: 3}
+    sprite: {fileID: -6104331486087533166, guid: 118e3dbf479c63944a57e27ddeaf63ff, type: 3}
+  - name: "Detetive do rádio"
+    sprite: {fileID: 8976014178738555684, guid: c8766ca73a143e24e91e247383b67240, type: 3}
   cenarios:
   - name: "Bar"
     sprite: {fileID: 0}
@@ -43,7 +45,7 @@ MonoBehaviour:
   - name: "Laboratório de perícia"
     sprite: {fileID: 0}
   - name: "Padaria"
-    sprite: {fileID: 0}
+    sprite: {fileID: -2493657390549581402, guid: 9da273dd2a9c2304f92b6d709ceefd0f, type: 3}
   - name: "Rua"
     sprite: {fileID: 0}
   - name: "Estacionamento"
@@ -53,7 +55,7 @@ MonoBehaviour:
   - name: "Escritório"
     sprite: {fileID: 0}
   - name: "Apartamento"
-    sprite: {fileID: 21300000, guid: d1b1b60764877034aa2809cac6870c62, type: 3}
+    sprite: {fileID: 7552383343446757701, guid: 1c75ce84bdf88f64ca624303cb0ec7f3, type: 3}
   retratos:
   - name: "Homem do balcão"
     caseId: ultima-testemunha
@@ -70,45 +72,45 @@ MonoBehaviour:
     suspectIndex: 2
     artName:
     sprite: {fileID: 0}
-  - name: "Marina • amiga"
+  - name: "Segurança das câmeras"
     caseId: apartamento-302
     suspectIndex: 0
-    artName:
+    artName: "Segurança das câmeras"
     sprite: {fileID: 0}
-  - name: "Lucas • vizinho"
+  - name: "Zelador"
     caseId: apartamento-302
     suspectIndex: 1
-    artName:
+    artName: "Zelador"
     sprite: {fileID: 0}
-  - name: "Carlos • síndico"
+  - name: "Padeiro"
     caseId: apartamento-302
     suspectIndex: 2
-    artName:
+    artName: "Padeiro"
     sprite: {fileID: 0}
-  - name: "André • técnico"
+  - name: "Enfermeiro • testemunha"
     caseId: apartamento-302
     suspectIndex: 3
-    artName:
+    artName: "Enfermeiro"
     sprite: {fileID: 0}
-  - name: "Beatriz • contadora"
+  - name: "Zelador"
     caseId: arquivo-vertice
     suspectIndex: 0
-    artName:
+    artName: "Zelador"
     sprite: {fileID: 0}
-  - name: "Augusto • diretor"
+  - name: "Padeiro"
     caseId: arquivo-vertice
     suspectIndex: 1
-    artName:
+    artName: "Padeiro"
     sprite: {fileID: 0}
-  - name: "Renato • segurança"
+  - name: "Enfermeiro • testemunha"
     caseId: arquivo-vertice
     suspectIndex: 2
-    artName:
+    artName: "Enfermeiro"
     sprite: {fileID: 0}
-  - name: "Fábio • técnico"
+  - name: "Policial"
     caseId: arquivo-vertice
     suspectIndex: 3
-    artName:
+    artName: "Policial"
     sprite: {fileID: 0}
   cursorLupa: {fileID: 0}
   cursorInteracao: {fileID: 0}
@@ -116,5 +118,5 @@ MonoBehaviour:
   hotspotLupa: {x: 0, y: 0}
   hotspotInteracao: {x: 0, y: 0}
   hotspotEscrita: {x: 0, y: 0}
-  radioDetetive: {fileID: 0}
-  radioCentral: {fileID: 0}
+  radioDetetive: {fileID: 8976014178738555684, guid: c8766ca73a143e24e91e247383b67240, type: 3}
+  radioCentral: {fileID: -6104331486087533166, guid: 118e3dbf479c63944a57e27ddeaf63ff, type: 3}

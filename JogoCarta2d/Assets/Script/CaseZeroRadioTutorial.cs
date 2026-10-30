@@ -32,23 +32,22 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         var data = CaseZeroCases.All[index];
         if (index == 1)
             return new[] {
-                "DISPATCH\nDetective, it has been a while! I thought you had forgotten this frequency. Good work at the bar. We have a new incident for you.",
-                "DETECTIVE\nDispatch, good to hear your voice again. What happened this time?",
+                "DISPATCH\nDetective, we have a new call. A person was found dead in their apartment. The police officer is waiting at the scene.",
+                "DETECTIVE\nUnderstood. What do we know so far?",
                 "DISPATCH\n" + data.introduction,
-                "DETECTIVE\nUnderstood. I will investigate the missing USB drive. Do we know who visited the apartment?",
-                "DISPATCH\nWe need to hear from four people: Marina, Helena's friend; Lucas, the neighbor; Carlos, the building manager; and André, the technician who repaired the laptop.",
-                "DISPATCH\nThe incident took place in Apartment 302. We need to establish who took the USB drive, what was removed, and where the theft happened. Responsibility for the assault on Helena remains unresolved.",
-                "DETECTIVE\nCopy that. I am on my way to the apartment. Let us find out what happened."
+                "DETECTIVE\nI'll start with the scene and the people connected to it. How do I keep the evidence organized?",
+                "DISPATCH\nUse the map to move between locations. Examine each marked object, record it in Evidence, and compare what people say in Interviews. You can send useful material to forensics through your phone.",
+                "DISPATCH\nThe results will arrive as calls. Collect them at the police station, then use Deduction when the statements, physical evidence, and reports fit together. The map also lets you return to the apartment or visit the closed bar.",
+                "DETECTIVE\nCopy. I'll examine the apartment first and follow the evidence wherever it leads."
             };
         return new[] {
-            "DISPATCH\nDetective, do you copy? Helena's case is not over yet. The missing USB drive has opened a new line of inquiry.",
-            "DETECTIVE\nI hear you. Carlos admitted the theft, but someone gave the order. What do we know about that connection?",
-            "DISPATCH\nHelena is awake and confirmed that the USB drive held evidence against Vértice. We now need to follow the payments at the company office.",
+            "DISPATCH\nDetective, we need you at the closed bar. A person was found dead there before opening. An officer and a medical examiner are assisting.",
+            "DETECTIVE\nDo we know what happened?",
             "DISPATCH\n" + data.introduction,
-            "DETECTIVE\nWho can explain what was happening at the office?",
-            "DISPATCH\nBeatriz, the accountant; Augusto, the director; Renato, the security guard; and Fábio, the technician. Financial records, system access logs, and instructions need to be compared with their statements.",
-            "DISPATCH\nYour destination is the office. Establish who ran the scheme, what the crime was, and which company was used as a front. A name on a spreadsheet is not proof of guilt.",
-            "DETECTIVE\nUnderstood. I will follow those leads at the office and clarify the connection to Helena."
+            "DETECTIVE\nI'll examine the scene and the people connected to it. What should I do if the cause is unclear?",
+            "DISPATCH\nRecord the objects you find and compare the accounts. Use your phone to request an examination when you have relevant material; the result will come by call and be collected at the police station.",
+            "DISPATCH\nThe map lets you move between the bar, the bakery, and the station. Keep the body's discovery location separate from the place indicated by the evidence.",
+            "DETECTIVE\nUnderstood. I'll start at the bar and follow the evidence."
         };
     }
 
@@ -65,7 +64,10 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         view.back.gameObject.SetActive(false);
         view.title.text = "AT HOME • A CALL ON THE RADIO";
         view.stepLabel.text = "FIRST SHIFT";
-        view.body.text = "The radio breaks the silence at home. There is a voice on the other end, but the signal is weak.\n\nAdjust the frequency until you find dispatch. The clearer the signal, the closer you are. Hold the frequency steady for a moment.";
+        view.body.text = "— — DISPATCH... Detective, do you copy? — —\n\nThe signal is weak. Adjust the frequency until you find dispatch. The clearer the signal, the closer you are. Hold the frequency steady for a moment.";
+        var radioFx = view.body.GetComponent<CaseZeroDialogueFX>();
+        if (radioFx == null) radioFx = view.body.gameObject.AddComponent<CaseZeroDialogueFX>();
+        radioFx.RevealRadioTransmission();
         view.primaryLabel.text = "Waiting for signal…";
         view.primary.interactable = false;
         var art = Resources.Load<CaseZeroArtLibrary>("ArtesCasoZero");
@@ -210,9 +212,12 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         view.stepLabel.text = caseIndex == 0 ? "RADIO • CONNECTION ESTABLISHED"
             : $"CASE {caseIndex + 1} • {game.CampaignState.Definition.title.ToUpperInvariant()}";
         view.primaryLabel.text = dialogue == lines.Length - 1
-            ? caseIndex == 1 ? "Go to the apartment" : caseIndex == 2 ? "Go to the office" : "Go to the scene"
+            ? "Go to " + CaseZeroView.DisplayName(game.CampaignState.Definition.location)
             : "Continue conversation";
         view.body.text = lines[dialogue];
+        var dialogueFx = view.body.GetComponent<CaseZeroDialogueFX>();
+        if (dialogueFx == null) dialogueFx = view.body.gameObject.AddComponent<CaseZeroDialogueFX>();
+        dialogueFx.Reveal();
         bool detectiveSpeaking = lines[dialogue].StartsWith("DETECTIVE\n", System.StringComparison.Ordinal);
         detectivePortrait.color = detectiveSpeaking ? Color.white : new Color(0.7f, 0.7f, 0.7f);
         centralPortrait.color = detectiveSpeaking ? new Color(0.7f, 0.7f, 0.7f) : Color.white;

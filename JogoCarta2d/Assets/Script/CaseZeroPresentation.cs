@@ -82,6 +82,7 @@ public sealed class CaseZeroPresentation : MonoBehaviour
             body.text = Summary(state);
             primaryLabel.text = "View credits";
             back.gameObject.SetActive(true);
+            RevealBody();
             return;
         }
         back.gameObject.SetActive(state.CaseIndex == 0 && step > 0);
@@ -110,6 +111,14 @@ public sealed class CaseZeroPresentation : MonoBehaviour
                 : state.CaseIndex == 1 ? "Investigate the scene, interview those involved, and challenge their accounts. Find out who stole the item, what was taken, and where the theft happened."
                 : "Examine the records, interview the four people involved, and challenge their accounts. Identify the organizer, the crime, and the shell company.");
         }
+        RevealBody();
+    }
+
+    void RevealBody()
+    {
+        var fx = body.GetComponent<CaseZeroDialogueFX>();
+        if (fx == null) fx = body.gameObject.AddComponent<CaseZeroDialogueFX>();
+        fx.Reveal(0.55f, 56f);
     }
 
     public static string Summary(CaseZeroState state)
