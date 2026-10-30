@@ -6764,10 +6764,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4219016aabd82074a4fe7f3f8d1d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaseZeroButtonMotion
-  hoverScale: 1.025
-  pressedScale: 0.97
-  duration: 0.13
-  textOnly: 1
+  hoverScale: 1.035
+  pressedScale: 0.965
+  duration: 0.19
+  textOnly: 0
 --- !u!114 &3000001008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6780,10 +6780,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4219016aabd82074a4fe7f3f8d1d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaseZeroButtonMotion
-  hoverScale: 1.025
-  pressedScale: 0.97
-  duration: 0.13
-  textOnly: 1
+  hoverScale: 1.035
+  pressedScale: 0.965
+  duration: 0.19
+  textOnly: 0
 --- !u!114 &3000001009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6796,10 +6796,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4219016aabd82074a4fe7f3f8d1d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaseZeroButtonMotion
-  hoverScale: 1.025
-  pressedScale: 0.97
-  duration: 0.13
-  textOnly: 1
+  hoverScale: 1.035
+  pressedScale: 0.965
+  duration: 0.19
+  textOnly: 0
 --- !u!114 &3000001010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6812,10 +6812,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca4219016aabd82074a4fe7f3f8d1d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CaseZeroButtonMotion
-  hoverScale: 1.025
-  pressedScale: 0.97
-  duration: 0.13
-  textOnly: 1
+  hoverScale: 1.035
+  pressedScale: 0.965
+  duration: 0.19
+  textOnly: 0
 --- !u!114 &3000001011
 MonoBehaviour:
   m_ObjectHideFlags: 0

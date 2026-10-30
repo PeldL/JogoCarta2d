@@ -56,8 +56,18 @@ public sealed class CaseZeroButtonMotion : MonoBehaviour, IPointerEnterHandler,
             liftMotion = rect.DOAnchorPos(restingPosition + Vector2.up * (raised ? TabLift : 0), 0.22f)
                 .SetEase(Ease.OutCubic).SetUpdate(true);
         }
-        motion = transform.DOScale(restingScale * (textOnly ? 1f : scale), duration)
-            .SetEase(pressed ? Ease.OutQuad : Ease.OutSine).SetUpdate(true);
+        Vector3 targetScale = restingScale * (textOnly ? 1f : scale);
+        // A tiny horizontal spread and vertical squash make presses feel tactile
+        // without bending the illustrated button enough to blur its artwork.
+        if (pressed && !textOnly && button.IsInteractable())
+            targetScale = Vector3.Scale(targetScale, new Vector3(1.015f, 0.985f, 1f));
+
+        float tweenDuration = pressed ? Mathf.Min(duration, 0.11f) : duration;
+        Ease ease = pressed ? Ease.OutQuad
+            : hovered || selected ? Ease.OutBack
+            : Ease.OutSine;
+        motion = transform.DOScale(targetScale, tweenDuration)
+            .SetEase(ease, 0.45f).SetUpdate(true);
         if (label != null)
         {
             lettering?.Kill();
