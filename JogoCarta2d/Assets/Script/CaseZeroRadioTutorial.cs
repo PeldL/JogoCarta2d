@@ -94,10 +94,11 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         frequency = Instantiate(view.stepLabel, root);
         frequency.name = "Frequência e intensidade";
         var labelRect = frequency.rectTransform;
-        labelRect.anchorMin = labelRect.anchorMax = new Vector2(0.5f, 1);
-        labelRect.pivot = new Vector2(0.5f, 1);
-        labelRect.anchoredPosition = new Vector2(0, 36);
-        labelRect.sizeDelta = new Vector2(650, 90);
+        labelRect.anchorMin = labelRect.anchorMax = new Vector2(0.5f, 0.5f);
+        labelRect.pivot = new Vector2(0.5f, 0.5f);
+        labelRect.anchoredPosition = new Vector2(0, 237);
+        labelRect.sizeDelta = new Vector2(798.9585f, 354.3582f);
+        labelRect.localScale = Vector3.one * 0.69067f;
         frequency.alignment = TextAlignmentOptions.Center;
         frequency.alpha = 1;
 
@@ -147,10 +148,11 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         caption.name = "Nome • " + name;
         caption.text = name;
         caption.alignment = TextAlignmentOptions.Center;
-        caption.rectTransform.anchorMin = caption.rectTransform.anchorMax = new Vector2(0.5f, 0);
+        caption.rectTransform.anchorMin = caption.rectTransform.anchorMax = new Vector2(0.5f, 1);
         caption.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-        caption.rectTransform.anchoredPosition = new Vector2(0, -25.3f);
-        caption.rectTransform.sizeDelta = new Vector2(300, 45);
+        caption.rectTransform.anchoredPosition = new Vector2(name == "Dispatch" ? 640.1f : -670f, -226f);
+        caption.rectTransform.sizeDelta = new Vector2(374.89f, 98.9149f);
+        caption.rectTransform.localScale = Vector3.one * 0.65529f;
         return portrait;
     }
 
