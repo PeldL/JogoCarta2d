@@ -96,7 +96,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         var labelRect = frequency.rectTransform;
         labelRect.anchorMin = labelRect.anchorMax = new Vector2(0.5f, 1);
         labelRect.pivot = new Vector2(0.5f, 1);
-        labelRect.anchoredPosition = Vector2.zero;
+        labelRect.anchoredPosition = new Vector2(0, 36);
         labelRect.sizeDelta = new Vector2(650, 90);
         frequency.alignment = TextAlignmentOptions.Center;
         frequency.alpha = 1;
@@ -147,8 +147,9 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         caption.name = "Nome • " + name;
         caption.text = name;
         caption.alignment = TextAlignmentOptions.Center;
-        caption.rectTransform.anchorMin = caption.rectTransform.anchorMax = caption.rectTransform.pivot = new Vector2(0, 1);
-        caption.rectTransform.anchoredPosition = new Vector2(x, -570);
+        caption.rectTransform.anchorMin = caption.rectTransform.anchorMax = new Vector2(0.5f, 0);
+        caption.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        caption.rectTransform.anchoredPosition = new Vector2(0, -25.3f);
         caption.rectTransform.sizeDelta = new Vector2(300, 45);
         return portrait;
     }
