@@ -1,73 +1,21 @@
 using TMPro;
 using UnityEngine;
-
 [DisallowMultipleComponent]
 [RequireComponent(typeof(TMP_Text))]
 public sealed class LocalizedText : MonoBehaviour
 {
-    [SerializeField] private string key;
-
-    private TMP_Text label;
-    private LocalizationManager localizationManager;
-
-    private void Awake()
-    {
-        label = GetComponent<TMP_Text>();
+    [SerializeField] string key;
+    TMP_Text label;
+    LocalizationManager manager;
+    void Awake() => label = GetComponent<TMP_Text>();
+    void OnEnable() { Attach(); Refresh(); }
+    void OnDisable() { if (manager != null) manager.LanguageChanged -= Refresh; manager = null; }
+    void Attach() {
+        if (manager == LocalizationManager.Instance) return;
+        if (manager != null) manager.LanguageChanged -= Refresh;
+        manager = LocalizationManager.Instance;
+        if (manager != null) manager.LanguageChanged += Refresh;
     }
-
-    private void OnEnable()
-    {
-        localizationManager = LocalizationManager.Instance;
-
-        if (localizationManager == null)
-        {
-            Debug.LogWarning(
-                "LocalizationManager não encontrado. " +
-                "Adicione-o à primeira cena do jogo.",
-                this);
-            return;
-        }
-
-        localizationManager.LanguageChanged += Refresh;
-        Refresh();
-    }
-
-    private void OnDisable()
-    {
-        // O cancelamento da inscrição evita referências a objetos destruídos.
-        if (localizationManager != null)
-        {
-            localizationManager.LanguageChanged -= Refresh;
-            localizationManager = null;
-        }
-    }
-
-    public void SetKey(string newKey)
-    {
-        if (key == newKey)
-        {
-            return;
-        }
-
-        key = newKey;
-        Refresh();
-    }
-
-    private void Refresh()
-    {
-        if (localizationManager == null ||
-            label == null ||
-            string.IsNullOrEmpty(key))
-        {
-            return;
-        }
-
-        string localizedText = localizationManager.GetLocalizedText(key);
-
-        // Evita atualização desnecessária da malha do TextMeshPro.
-        if (label.text != localizedText)
-        {
-            label.text = localizedText;
-        }
-    }
+    public void SetKey(string value) { key = value; Attach(); Refresh(); }
+    void Refresh() { if (label == null || string.IsNullOrEmpty(key)) return; Attach(); if (manager != null) label.text = manager.LocalizeText(key); }
 }

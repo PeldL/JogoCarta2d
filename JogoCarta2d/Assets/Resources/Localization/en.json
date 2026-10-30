@@ -1,16 +1,204 @@
 {
   "entries": [
     {
-      "key": "welcome_message",
-      "value": "Welcome to the game!"
+      "key": "Continue",
+      "value": "Continue"
     },
     {
-      "key": "play_button",
+      "key": "Quit",
+      "value": "Quit"
+    },
+    {
+      "key": "Options",
+      "value": "Options"
+    },
+    {
+      "key": "Settings",
+      "value": "Settings"
+    },
+    {
+      "key": "New Game",
+      "value": "New Game"
+    },
+    {
+      "key": "Play",
       "value": "Play"
     },
     {
-      "key": "ask_guidance",
-      "value": "Ask for Guidance"
+      "key": "Back",
+      "value": "Back"
+    },
+    {
+      "key": "Confirm",
+      "value": "Confirm"
+    },
+    {
+      "key": "Cancel",
+      "value": "Cancel"
+    },
+    {
+      "key": "Resume",
+      "value": "Resume"
+    },
+    {
+      "key": "Choose a slot",
+      "value": "Choose a slot"
+    },
+    {
+      "key": "Choose Slot",
+      "value": "Choose Slot"
+    },
+    {
+      "key": "Slot 1",
+      "value": "Slot 1"
+    },
+    {
+      "key": "Slot 2",
+      "value": "Slot 2"
+    },
+    {
+      "key": "Slot 3",
+      "value": "Slot 3"
+    },
+    {
+      "key": "Fullscreen",
+      "value": "Fullscreen"
+    },
+    {
+      "key": "Music",
+      "value": "Music"
+    },
+    {
+      "key": "Sound effects",
+      "value": "Sound effects"
+    },
+    {
+      "key": "Language",
+      "value": "Language"
+    },
+    {
+      "key": "Suspects",
+      "value": "Suspects"
+    },
+    {
+      "key": "Evidence",
+      "value": "Evidence"
+    },
+    {
+      "key": "Interviews",
+      "value": "Interviews"
+    },
+    {
+      "key": "Deduction",
+      "value": "Deduction"
+    },
+    {
+      "key": "Map",
+      "value": "Map"
+    },
+    {
+      "key": "Phone",
+      "value": "Phone"
+    },
+    {
+      "key": "Introduction",
+      "value": "Introduction"
+    },
+    {
+      "key": "Results",
+      "value": "Results"
+    },
+    {
+      "key": "Case Zero",
+      "value": "Case Zero"
+    },
+    {
+      "key": "Confirm accusation",
+      "value": "Confirm accusation"
+    },
+    {
+      "key": "Delete permanently",
+      "value": "Delete permanently"
+    },
+    {
+      "key": "Dispatch",
+      "value": "Dispatch"
+    },
+    {
+      "key": "Apartment",
+      "value": "Apartment"
+    },
+    {
+      "key": "Apartment 302",
+      "value": "Apartment 302"
+    },
+    {
+      "key": "Police station",
+      "value": "Police station"
+    },
+    {
+      "key": "Forensics laboratory",
+      "value": "Forensics laboratory"
+    },
+    {
+      "key": "Bakery",
+      "value": "Bakery"
+    },
+    {
+      "key": "Street",
+      "value": "Street"
+    },
+    {
+      "key": "Parking lot",
+      "value": "Parking lot"
+    },
+    {
+      "key": "Crime scene",
+      "value": "Crime scene"
+    },
+    {
+      "key": "Unavailable",
+      "value": "Unavailable"
+    },
+    {
+      "key": "Empty",
+      "value": "Empty"
+    },
+    {
+      "key": "Case solved",
+      "value": "Case solved"
+    },
+    {
+      "key": "Under investigation",
+      "value": "Under investigation"
+    },
+    {
+      "key": "NO ACTIVE INVESTIGATION",
+      "value": "NO ACTIVE INVESTIGATION"
+    },
+    {
+      "key": "INCOMING CALL",
+      "value": "INCOMING CALL"
+    },
+    {
+      "key": "INFORMATION RECORDED",
+      "value": "INFORMATION RECORDED"
+    },
+    {
+      "key": "NO PENDING CALLS",
+      "value": "NO PENDING CALLS"
+    },
+    {
+      "key": "settings.language",
+      "value": "Language"
+    },
+    {
+      "key": "Confirm restart",
+      "value": "Confirm restart"
+    },
+    {
+      "key": "Office",
+      "value": "Office"
     }
   ]
 }

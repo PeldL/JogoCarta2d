@@ -1,221 +1,80 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [DisallowMultipleComponent]
-[DefaultExecutionOrder(-100)]
+[DefaultExecutionOrder(-1000)]
 public sealed class LocalizationManager : MonoBehaviour
 {
-    private const string LanguagePreferenceKey = "game_language";
-    private const string ResourceFolder = "Localization/";
-    private const int LanguageCount = 3;
-
+    const string PreferenceKey = "game_language";
     public static LocalizationManager Instance { get; private set; }
-
     public GameLanguage CurrentLanguage { get; private set; }
-
-    // Evento evita que cada texto precise verificar o idioma em Update().
     public event Action LanguageChanged;
+    [SerializeField] GameLanguage defaultLanguage = GameLanguage.Portuguese;
+    readonly Dictionary<GameLanguage, Dictionary<string,string>> translations = new();
+    readonly Dictionary<TMP_Text,string> sceneTexts = new();
 
-    [Header("Configuração")]
-    [SerializeField] private GameLanguage defaultLanguage = GameLanguage.Portuguese;
-
-    private readonly Dictionary<GameLanguage, Dictionary<string, string>> translations =
-        new Dictionary<GameLanguage, Dictionary<string, string>>();
-
-    private void Awake()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void Bootstrap() { if (Instance == null) new GameObject("[Localization Manager]").AddComponent<LocalizationManager>(); }
+    void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        CurrentLanguage = LoadSavedLanguage();
-
-        // O inglês é carregado desde o início para garantir o fallback.
-        LoadLanguage(GameLanguage.English);
-        LoadLanguage(CurrentLanguage);
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this; DontDestroyOnLoad(gameObject);
+        int saved = PlayerPrefs.GetInt(PreferenceKey, (int)defaultLanguage);
+        CurrentLanguage = Enum.IsDefined(typeof(GameLanguage), saved) ? (GameLanguage)saved : defaultLanguage;
+        foreach (GameLanguage language in Enum.GetValues(typeof(GameLanguage))) LoadLanguage(language);
+        SceneManager.sceneLoaded += SceneLoaded;
     }
-
-    private void OnDestroy()
+    void Start() => LocalizeScene();
+    void OnDestroy() { SceneManager.sceneLoaded -= SceneLoaded; if (Instance == this) Instance = null; }
+    void SceneLoaded(Scene scene, LoadSceneMode mode) => LocalizeScene();
+    void LocalizeScene()
     {
-        if (Instance == this)
+        sceneTexts.Clear();
+        foreach (TMP_Text label in FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            Instance = null;
+            if (label == null || string.IsNullOrWhiteSpace(label.text)) continue;
+            sceneTexts[label] = label.text;
+            label.text = LocalizeText(label.text);
         }
     }
-
+    void RefreshSceneTexts()
+    {
+        foreach (var pair in sceneTexts) if (pair.Key != null) pair.Key.text = LocalizeText(pair.Value);
+    }
     public void SetLanguage(GameLanguage language)
     {
-        if (CurrentLanguage == language)
-        {
-            return;
-        }
-
-        LoadLanguage(language);
-        CurrentLanguage = language;
-
-        PlayerPrefs.SetInt(LanguagePreferenceKey, (int)language);
-        PlayerPrefs.Save();
-
-        // Todos os LocalizedText registrados são atualizados uma única vez.
-        LanguageChanged?.Invoke();
+        if (!Enum.IsDefined(typeof(GameLanguage), language) || CurrentLanguage == language) return;
+        CurrentLanguage = language; PlayerPrefs.SetInt(PreferenceKey, (int)language); PlayerPrefs.Save();
+        RefreshSceneTexts(); LanguageChanged?.Invoke();
     }
-
-    // Sobrecarga útil para UnityEvents, botões e TMP_Dropdown.
-    public void SetLanguage(int languageIndex)
+    public void SetLanguage(int index) { if (Enum.IsDefined(typeof(GameLanguage), index)) SetLanguage((GameLanguage)index); }
+    public void CycleLanguage() => SetLanguage((GameLanguage)(((int)CurrentLanguage + 1) % 3));
+    public string GetLanguageDisplayName() => CurrentLanguage == GameLanguage.Portuguese ? "Português" : CurrentLanguage == GameLanguage.Spanish ? "Español" : "English";
+    public string GetLocalizedText(string key) => LocalizeText(key);
+    public string LocalizeText(string source)
     {
-        if (!Enum.IsDefined(typeof(GameLanguage), languageIndex))
-        {
-            Debug.LogWarning($"Índice de idioma inválido: {languageIndex}", this);
-            return;
-        }
-
-        SetLanguage((GameLanguage)languageIndex);
+        if (string.IsNullOrEmpty(source)) return string.Empty;
+        return translations.TryGetValue(CurrentLanguage, out var table) && table.TryGetValue(source, out string value) ? value : source;
     }
-
-    public void CycleLanguage()
+    void LoadLanguage(GameLanguage language)
     {
-        int nextLanguage = ((int)CurrentLanguage + 1) % LanguageCount;
-        SetLanguage((GameLanguage)nextLanguage);
+        string file = language == GameLanguage.Portuguese ? "pt" : language == GameLanguage.Spanish ? "es" : "en";
+        TextAsset asset = Resources.Load<TextAsset>("Localization/" + file);
+        var table = new Dictionary<string,string>(StringComparer.Ordinal);
+        if (asset != null)
+        {
+            try {
+                var data = JsonUtility.FromJson<LocalizationFile>(asset.text);
+                if (data != null && data.entries != null)
+                    foreach (var entry in data.entries) if (entry != null && !string.IsNullOrWhiteSpace(entry.key)) table[entry.key] = entry.value ?? entry.key;
+            } catch (Exception e) { Debug.LogError("Localization " + file + ": " + e.Message); }
+            Resources.UnloadAsset(asset);
+        } else Debug.LogError("Localization file missing: " + file);
+        translations[language] = table;
     }
-
-    public string GetLocalizedText(string key)
-    {
-        if (string.IsNullOrEmpty(key))
-        {
-            return string.Empty;
-        }
-
-        if (translations.TryGetValue(
-                CurrentLanguage,
-                out Dictionary<string, string> selectedLanguage) &&
-            selectedLanguage.TryGetValue(key, out string localizedText))
-        {
-            return localizedText;
-        }
-
-        // Fallback: usa inglês somente quando a chave falta no idioma atual.
-        if (CurrentLanguage != GameLanguage.English &&
-            translations.TryGetValue(
-                GameLanguage.English,
-                out Dictionary<string, string> englishLanguage) &&
-            englishLanguage.TryGetValue(key, out string englishText))
-        {
-            return englishText;
-        }
-
-        // Facilita localizar chaves ausentes durante o desenvolvimento.
-        return $"[{key}]";
-    }
-
-    private GameLanguage LoadSavedLanguage()
-    {
-        int savedValue = PlayerPrefs.GetInt(
-            LanguagePreferenceKey,
-            (int)defaultLanguage);
-
-        if (!Enum.IsDefined(typeof(GameLanguage), savedValue))
-        {
-            return defaultLanguage;
-        }
-
-        return (GameLanguage)savedValue;
-    }
-
-    private void LoadLanguage(GameLanguage language)
-    {
-        // Cada idioma é carregado no máximo uma vez.
-        if (translations.ContainsKey(language))
-        {
-            return;
-        }
-
-        string fileName = GetFileName(language);
-        TextAsset jsonAsset = Resources.Load<TextAsset>(ResourceFolder + fileName);
-
-        if (jsonAsset == null)
-        {
-            Debug.LogError(
-                $"Arquivo de localização não encontrado: {ResourceFolder}{fileName}.json",
-                this);
-
-            translations[language] = CreateEmptyTable();
-            return;
-        }
-
-        try
-        {
-            LocalizationFile file =
-                JsonUtility.FromJson<LocalizationFile>(jsonAsset.text);
-
-            Dictionary<string, string> table = CreateEmptyTable();
-
-            if (file?.entries != null)
-            {
-                foreach (LocalizationEntry entry in file.entries)
-                {
-                    if (entry == null || string.IsNullOrWhiteSpace(entry.key))
-                    {
-                        continue;
-                    }
-
-                    // Em caso de chave duplicada, a última entrada prevalece.
-                    table[entry.key] = entry.value ?? string.Empty;
-                }
-            }
-
-            translations[language] = table;
-        }
-        catch (Exception exception)
-        {
-            Debug.LogError(
-                $"Falha ao processar o idioma {language}: {exception.Message}",
-                this);
-
-            translations[language] = CreateEmptyTable();
-        }
-        finally
-        {
-            // O JSON já está convertido em dicionário; o TextAsset pode ser liberado.
-            Resources.UnloadAsset(jsonAsset);
-        }
-    }
-
-    private static Dictionary<string, string> CreateEmptyTable()
-    {
-        return new Dictionary<string, string>(StringComparer.Ordinal);
-    }
-
-    private static string GetFileName(GameLanguage language)
-    {
-        switch (language)
-        {
-            case GameLanguage.Portuguese:
-                return "pt";
-            case GameLanguage.Spanish:
-                return "es";
-            case GameLanguage.English:
-                return "en";
-            default:
-                return "en";
-        }
-    }
-
-    [Serializable]
-    private sealed class LocalizationFile
-    {
-        public LocalizationEntry[] entries;
-    }
-
-    [Serializable]
-    private sealed class LocalizationEntry
-    {
-        public string key;
-        public string value;
-    }
+    [Serializable] class LocalizationFile { public LocalizationEntry[] entries; }
+    [Serializable] class LocalizationEntry { public string key; public string value; }
 }

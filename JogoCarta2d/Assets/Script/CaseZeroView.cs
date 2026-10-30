@@ -9,28 +9,31 @@ public sealed class CaseZeroView : MonoBehaviour
 {
     public static string DisplayName(string key)
     {
+        string english;
         switch (key)
         {
-            case "Evidências": return "Evidence";
-            case "Interrogatório": return "Interviews";
-            case "Dedução": return "Deduction";
-            case "Opções": return "Settings";
-            case "Suspeitos": return "Suspects";
-            case "Introdução": return "Introduction";
-            case "Confirmar reinício": return "Confirm restart";
-            case "Resultado": return "Results";
-            case "Mapa": return "Map";
-            case "Ligações": case "Telefone": return "Phone";
-            case "Local": return "Crime scene";
-            case "Apartamento": return "Apartment 302";
-            case "Escritorio": return "Office";
-            case "Delegacia": return "Police station";
-            case "Laboratorio": return "Forensics laboratory";
-            case "Rua": return "Street";
-            case "Estacionamento": return "Parking lot";
-            case "Padaria": return "Bakery";
-            default: return key;
+            case "Evidências": english = "Evidence"; break;
+            case "Interrogatório": english = "Interviews"; break;
+            case "Dedução": english = "Deduction"; break;
+            case "Opções": english = "Settings"; break;
+            case "Suspeitos": english = "Suspects"; break;
+            case "Introdução": english = "Introduction"; break;
+            case "Confirmar reinício": english = "Confirm restart"; break;
+            case "Resultado": english = "Results"; break;
+            case "Mapa": english = "Map"; break;
+            case "Ligações": case "Telefone": english = "Phone"; break;
+            case "Local": english = "Crime scene"; break;
+            case "Apartamento": english = "Apartment 302"; break;
+            case "Escritorio": english = "Office"; break;
+            case "Delegacia": english = "Police station"; break;
+            case "Laboratorio": english = "Forensics laboratory"; break;
+            case "Rua": english = "Street"; break;
+            case "Estacionamento": english = "Parking lot"; break;
+            case "Padaria": english = "Bakery"; break;
+            default: english = key; break;
         }
+        return LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.LocalizeText(english) : english;
     }
 
     [Serializable]

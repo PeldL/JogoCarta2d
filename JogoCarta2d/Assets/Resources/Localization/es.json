@@ -1,16 +1,204 @@
 {
   "entries": [
     {
-      "key": "welcome_message",
-      "value": "¡Bienvenido al juego!"
+      "key": "Continue",
+      "value": "Continuar"
     },
     {
-      "key": "play_button",
+      "key": "Quit",
+      "value": "Salir"
+    },
+    {
+      "key": "Options",
+      "value": "Opciones"
+    },
+    {
+      "key": "Settings",
+      "value": "Configuración"
+    },
+    {
+      "key": "New Game",
+      "value": "Nueva partida"
+    },
+    {
+      "key": "Play",
       "value": "Jugar"
     },
     {
-      "key": "ask_guidance",
-      "value": "Pedir Orientación"
+      "key": "Back",
+      "value": "Volver"
+    },
+    {
+      "key": "Confirm",
+      "value": "Confirmar"
+    },
+    {
+      "key": "Cancel",
+      "value": "Cancelar"
+    },
+    {
+      "key": "Resume",
+      "value": "Continuar"
+    },
+    {
+      "key": "Choose a slot",
+      "value": "Elige una partida"
+    },
+    {
+      "key": "Choose Slot",
+      "value": "Elegir partida"
+    },
+    {
+      "key": "Slot 1",
+      "value": "Partida 1"
+    },
+    {
+      "key": "Slot 2",
+      "value": "Partida 2"
+    },
+    {
+      "key": "Slot 3",
+      "value": "Partida 3"
+    },
+    {
+      "key": "Fullscreen",
+      "value": "Pantalla completa"
+    },
+    {
+      "key": "Music",
+      "value": "Música"
+    },
+    {
+      "key": "Sound effects",
+      "value": "Efectos de sonido"
+    },
+    {
+      "key": "Language",
+      "value": "Idioma"
+    },
+    {
+      "key": "Suspects",
+      "value": "Sospechosos"
+    },
+    {
+      "key": "Evidence",
+      "value": "Pruebas"
+    },
+    {
+      "key": "Interviews",
+      "value": "Interrogatorios"
+    },
+    {
+      "key": "Deduction",
+      "value": "Deducción"
+    },
+    {
+      "key": "Map",
+      "value": "Mapa"
+    },
+    {
+      "key": "Phone",
+      "value": "Teléfono"
+    },
+    {
+      "key": "Introduction",
+      "value": "Introducción"
+    },
+    {
+      "key": "Results",
+      "value": "Resultados"
+    },
+    {
+      "key": "Case Zero",
+      "value": "Caso Zero"
+    },
+    {
+      "key": "Confirm accusation",
+      "value": "Confirmar acusación"
+    },
+    {
+      "key": "Delete permanently",
+      "value": "Eliminar permanentemente"
+    },
+    {
+      "key": "Dispatch",
+      "value": "Central"
+    },
+    {
+      "key": "Apartment",
+      "value": "Apartamento"
+    },
+    {
+      "key": "Apartment 302",
+      "value": "Apartamento 302"
+    },
+    {
+      "key": "Police station",
+      "value": "Comisaría"
+    },
+    {
+      "key": "Forensics laboratory",
+      "value": "Laboratorio forense"
+    },
+    {
+      "key": "Bakery",
+      "value": "Panadería"
+    },
+    {
+      "key": "Street",
+      "value": "Calle"
+    },
+    {
+      "key": "Parking lot",
+      "value": "Estacionamiento"
+    },
+    {
+      "key": "Crime scene",
+      "value": "Escena del crimen"
+    },
+    {
+      "key": "Unavailable",
+      "value": "No disponible"
+    },
+    {
+      "key": "Empty",
+      "value": "Vacío"
+    },
+    {
+      "key": "Case solved",
+      "value": "Caso resuelto"
+    },
+    {
+      "key": "Under investigation",
+      "value": "En investigación"
+    },
+    {
+      "key": "NO ACTIVE INVESTIGATION",
+      "value": "NO HAY INVESTIGACIÓN ACTIVA"
+    },
+    {
+      "key": "INCOMING CALL",
+      "value": "LLAMADA ENTRANTE"
+    },
+    {
+      "key": "INFORMATION RECORDED",
+      "value": "INFORMACIÓN REGISTRADA"
+    },
+    {
+      "key": "NO PENDING CALLS",
+      "value": "NO HAY LLAMADAS PENDIENTES"
+    },
+    {
+      "key": "settings.language",
+      "value": "Idioma"
+    },
+    {
+      "key": "Confirm restart",
+      "value": "Confirmar reinicio"
+    },
+    {
+      "key": "Office",
+      "value": "Oficina"
     }
   ]
 }

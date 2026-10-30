@@ -1,16 +1,204 @@
 {
   "entries": [
     {
-      "key": "welcome_message",
-      "value": "Bem-vindo ao jogo!"
+      "key": "Continue",
+      "value": "Continuar"
     },
     {
-      "key": "play_button",
+      "key": "Quit",
+      "value": "Sair"
+    },
+    {
+      "key": "Options",
+      "value": "Configurações"
+    },
+    {
+      "key": "Settings",
+      "value": "Configurações"
+    },
+    {
+      "key": "New Game",
+      "value": "Novo jogo"
+    },
+    {
+      "key": "Play",
       "value": "Jogar"
     },
     {
-      "key": "ask_guidance",
-      "value": "Pedir Orientação"
+      "key": "Back",
+      "value": "Voltar"
+    },
+    {
+      "key": "Confirm",
+      "value": "Confirmar"
+    },
+    {
+      "key": "Cancel",
+      "value": "Cancelar"
+    },
+    {
+      "key": "Resume",
+      "value": "Continuar"
+    },
+    {
+      "key": "Choose a slot",
+      "value": "Escolha um arquivo"
+    },
+    {
+      "key": "Choose Slot",
+      "value": "Escolha um arquivo"
+    },
+    {
+      "key": "Slot 1",
+      "value": "Arquivo 1"
+    },
+    {
+      "key": "Slot 2",
+      "value": "Arquivo 2"
+    },
+    {
+      "key": "Slot 3",
+      "value": "Arquivo 3"
+    },
+    {
+      "key": "Fullscreen",
+      "value": "Tela cheia"
+    },
+    {
+      "key": "Music",
+      "value": "Música"
+    },
+    {
+      "key": "Sound effects",
+      "value": "Efeitos sonoros"
+    },
+    {
+      "key": "Language",
+      "value": "Idioma"
+    },
+    {
+      "key": "Suspects",
+      "value": "Suspeitos"
+    },
+    {
+      "key": "Evidence",
+      "value": "Evidências"
+    },
+    {
+      "key": "Interviews",
+      "value": "Interrogatórios"
+    },
+    {
+      "key": "Deduction",
+      "value": "Dedução"
+    },
+    {
+      "key": "Map",
+      "value": "Mapa"
+    },
+    {
+      "key": "Phone",
+      "value": "Telefone"
+    },
+    {
+      "key": "Introduction",
+      "value": "Introdução"
+    },
+    {
+      "key": "Results",
+      "value": "Resultados"
+    },
+    {
+      "key": "Case Zero",
+      "value": "Caso Zero"
+    },
+    {
+      "key": "Confirm accusation",
+      "value": "Confirmar acusação"
+    },
+    {
+      "key": "Delete permanently",
+      "value": "Excluir permanentemente"
+    },
+    {
+      "key": "Dispatch",
+      "value": "Central"
+    },
+    {
+      "key": "Apartment",
+      "value": "Apartamento"
+    },
+    {
+      "key": "Apartment 302",
+      "value": "Apartamento 302"
+    },
+    {
+      "key": "Police station",
+      "value": "Delegacia"
+    },
+    {
+      "key": "Forensics laboratory",
+      "value": "Laboratório forense"
+    },
+    {
+      "key": "Bakery",
+      "value": "Padaria"
+    },
+    {
+      "key": "Street",
+      "value": "Rua"
+    },
+    {
+      "key": "Parking lot",
+      "value": "Estacionamento"
+    },
+    {
+      "key": "Crime scene",
+      "value": "Cena do crime"
+    },
+    {
+      "key": "Unavailable",
+      "value": "Indisponível"
+    },
+    {
+      "key": "Empty",
+      "value": "Vazio"
+    },
+    {
+      "key": "Case solved",
+      "value": "Caso resolvido"
+    },
+    {
+      "key": "Under investigation",
+      "value": "Em investigação"
+    },
+    {
+      "key": "NO ACTIVE INVESTIGATION",
+      "value": "NENHUMA INVESTIGAÇÃO ATIVA"
+    },
+    {
+      "key": "INCOMING CALL",
+      "value": "CHAMADA RECEBIDA"
+    },
+    {
+      "key": "INFORMATION RECORDED",
+      "value": "INFORMAÇÃO REGISTRADA"
+    },
+    {
+      "key": "NO PENDING CALLS",
+      "value": "NENHUMA CHAMADA PENDENTE"
+    },
+    {
+      "key": "settings.language",
+      "value": "Idioma"
+    },
+    {
+      "key": "Confirm restart",
+      "value": "Confirmar reinício"
+    },
+    {
+      "key": "Office",
+      "value": "Escritório"
     }
   ]
 }
