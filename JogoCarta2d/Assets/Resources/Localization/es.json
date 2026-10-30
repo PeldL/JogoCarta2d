@@ -367,6 +367,810 @@
     {
       "key": "CONTINUE • CHOOSE A SLOT",
       "value": "CONTINUAR • ELIGE UN ARCHIVO"
+    },
+    {
+      "key": "AT HOME • A CALL ON THE RADIO",
+      "value": "EN CASA • UNA LLAMADA POR RADIO"
+    },
+    {
+      "key": "FIRST SHIFT",
+      "value": "PRIMER TURNO"
+    },
+    {
+      "key": "Waiting for signal…",
+      "value": "Esperando señal…"
+    },
+    {
+      "key": "CLEAR SIGNAL — hold here",
+      "value": "SEÑAL CLARA — mantén aquí"
+    },
+    {
+      "key": "Signal nearby",
+      "value": "Señal cercana"
+    },
+    {
+      "key": "Weak signal",
+      "value": "Señal débil"
+    },
+    {
+      "key": "CONNECTION ESTABLISHED",
+      "value": "CONEXIÓN ESTABLECIDA"
+    },
+    {
+      "key": "DISPATCH ↔ DETECTIVE",
+      "value": "CENTRAL ↔ DETECTIVE"
+    },
+    {
+      "key": "RADIO • CONNECTION ESTABLISHED",
+      "value": "RADIO • CONEXIÓN ESTABLECIDA"
+    },
+    {
+      "key": "PRESENTATION PREVIEW",
+      "value": "VISTA PREVIA DE LA PRESENTACIÓN"
+    },
+    {
+      "key": "CAMPAIGN COMPLETE",
+      "value": "CAMPAÑA COMPLETADA"
+    },
+    {
+      "key": "3 CASES SOLVED",
+      "value": "3 CASOS RESUELTOS"
+    },
+    {
+      "key": "View credits",
+      "value": "Ver créditos"
+    },
+    {
+      "key": "Start investigation",
+      "value": "Iniciar investigación"
+    },
+    {
+      "key": "CASE BRIEFING",
+      "value": "RESUMEN DEL CASO"
+    },
+    {
+      "key": "OBSERVE AND GATHER CLUES",
+      "value": "OBSERVA Y REÚNE PISTAS"
+    },
+    {
+      "key": "COMPARE EVIDENCE AND TESTIMONY",
+      "value": "COMPARA PRUEBAS Y TESTIMONIOS"
+    },
+    {
+      "key": "CONCLUDE WITH CARE",
+      "value": "CONCLUYE CON CUIDADO"
+    },
+    {
+      "key": "Signal bar",
+      "value": "Barra de señal"
+    },
+    {
+      "key": "Victim",
+      "value": "Víctima"
+    },
+    {
+      "key": "Detective",
+      "value": "Detective"
+    },
+    {
+      "key": "— — DISPATCH... Detective, do you copy? — —\n\nThe signal is weak. Adjust the frequency until you find dispatch. The clearer the signal, the closer you are. Hold the frequency steady for a moment.",
+      "value": "— — DISPATCH... Detective, do you copy? — —\n\nThe signal is weak. Adjust the frequency until you find dispatch. The clearer the signal, the closer you are. Hold the frequency steady for a moment."
+    },
+    {
+      "key": "Go to ",
+      "value": "Go to "
+    },
+    {
+      "key": "Start a game from the Menu to test the full flow. The elements on this screen can be edited in the scene.",
+      "value": "Start a game from the Menu to test the full flow. The elements on this screen can be edited in the scene."
+    },
+    {
+      "key": "TUTORIAL • ",
+      "value": "TUTORIAL • "
+    },
+    {
+      "key": "You are the detective in charge of the investigation.\n\nClick marked objects in the scene to examine them and collect evidence. A notification confirms each discovery.\n\nClues are stored in the case file. You do not need to take photographs.",
+      "value": "You are the detective in charge of the investigation.\n\nClick marked objects in the scene to examine them and collect evidence. A notification confirms each discovery.\n\nClues are stored in the case file. You do not need to take photographs."
+    },
+    {
+      "key": "Open the investigation using the on-screen button or Tab.\n\nIn Evidence, read what you have found. In Interviews, listen to those involved and compare their accounts with the evidence.\n\nThe Map lets you visit other locations. The phone alerts you to new information: open it, answer, and record the message.",
+      "value": "Open the investigation using the on-screen button or Tab.\n\nIn Evidence, read what you have found. In Interviews, listen to those involved and compare their accounts with the evidence.\n\nThe Map lets you visit other locations. The phone alerts you to new information: open it, answer, and record the message."
+    },
+    {
+      "key": "When you have the necessary evidence, open Deduction and select the combination that explains the case.\n\nAn incorrect accusation costs one attempt. After three mistakes, you can restart the case. Canceling the confirmation does not use an attempt.\n\nProgress is saved automatically. Use Saves to save or load another slot; Settings contains fullscreen, music, and sound effects.",
+      "value": "When you have the necessary evidence, open Deduction and select the combination that explains the case.\n\nAn incorrect accusation costs one attempt. After three mistakes, you can restart the case. Canceling the confirmation does not use an attempt.\n\nProgress is saved automatically. Use Saves to save or load another slot; Settings contains fullscreen, music, and sound effects."
+    },
+    {
+      "key": "CASE ",
+      "value": "CASO "
+    },
+    {
+      "key": "You have completed every case in Detective: Case Zero!",
+      "value": "You have completed every case in Detective: Case Zero!"
+    },
+    {
+      "key": "A woman entered the bar and was shot dead. Gather evidence, question the man behind the counter, and establish the culprit, weapon, and crime scene.",
+      "value": "Una mujer entró en el bar y murió por un disparo. Reúne pruebas, interroga al hombre detrás del mostrador y descubre al culpable, el arma y la escena del crimen."
+    },
+    {
+      "key": "Employee records",
+      "value": "Registros de empleados"
+    },
+    {
+      "key": "Pistol under the counter",
+      "value": "Pistola debajo del mostrador"
+    },
+    {
+      "key": "Cartridge case on the floor",
+      "value": "Casquillo en el suelo"
+    },
+    {
+      "key": "Crime scene traces",
+      "value": "Rastros de la escena del crimen"
+    },
+    {
+      "key": "The schedule identifies the actual employee: he left before the crime. The man seen behind the counter does not work here.",
+      "value": "The schedule identifies the actual employee: he left before the crime. The man seen behind the counter does not work here."
+    },
+    {
+      "key": "A pistol was found hidden under the counter. Preserve it for ballistic comparison.",
+      "value": "A pistol was found hidden under the counter. Preserve it for ballistic comparison."
+    },
+    {
+      "key": "A cartridge case was found near the body in the bar service area. It indicates a shot was fired here.",
+      "value": "A cartridge case was found near the body in the bar service area. It indicates a shot was fired here."
+    },
+    {
+      "key": "Bloodstains by the counter. Their position is consistent with the account of the victim's arrival.",
+      "value": "Bloodstains by the counter. Their position is consistent with the account of the victim's arrival."
+    },
+    {
+      "key": "Challenged testimony",
+      "value": "Challenged testimony"
+    },
+    {
+      "key": "Confronted with the schedule and the pistol, the man admits he was robbing the bar. The victim entered during the robbery.",
+      "value": "Confronted with the schedule and the pistol, the man admits he was robbing the bar. The victim entered during the robbery."
+    },
+    {
+      "key": "I was behind the counter when that woman came in. I have nothing else to say.",
+      "value": "I was behind the counter when that woman came in. I have nothing else to say."
+    },
+    {
+      "key": "All right. I was not an employee. I was robbing the bar. She came in, saw my face... I shot her because I was afraid she would report me.",
+      "value": "All right. I was not an employee. I was robbing the bar. She came in, saw my face... I shot her because I was afraid she would report me."
+    },
+    {
+      "key": "The man behind the counter was a robber. He killed the woman with the pistol in the bar to stop her from reporting him.",
+      "value": "The man behind the counter was a robber. He killed the woman with the pistol in the bar to stop her from reporting him."
+    },
+    {
+      "key": "A person was found dead in their apartment. There are no signs of forced entry, and the building cameras were offline for part of the night. The body may not have been found where the murder happened.",
+      "value": "A person was found dead in their apartment. There are no signs of forced entry, and the building cameras were offline for part of the night. The body may not have been found where the murder happened."
+    },
+    {
+      "key": "Rug beneath the body",
+      "value": "Rug beneath the body"
+    },
+    {
+      "key": "Victim's appointment book",
+      "value": "Victim's appointment book"
+    },
+    {
+      "key": "Caretaker's key ring",
+      "value": "Caretaker's key ring"
+    },
+    {
+      "key": "Blood beneath the bench",
+      "value": "Blood beneath the bench"
+    },
+    {
+      "key": "Security uniform button",
+      "value": "Security uniform button"
+    },
+    {
+      "key": "Camera terminal",
+      "value": "Camera terminal"
+    },
+    {
+      "key": "Medical examiner's report",
+      "value": "Medical examiner's report"
+    },
+    {
+      "key": "Seized uniform",
+      "value": "Seized uniform"
+    },
+    {
+      "key": "Knife from the security locker",
+      "value": "Knife from the security locker"
+    },
+    {
+      "key": "There is surprisingly little blood beneath the body despite the severity of the wounds. The scene may have been moved after the attack.",
+      "value": "There is surprisingly little blood beneath the body despite the severity of the wounds. The scene may have been moved after the attack."
+    },
+    {
+      "key": "The victim noted a meeting at the closed bar after closing time. The appointment connects the victim to a second scene.",
+      "value": "The victim noted a meeting at the closed bar after closing time. The appointment connects the victim to a second scene."
+    },
+    {
+      "key": "A caretaker's key ring was left behind during an earlier repair. It explains access to the apartment, but does not place its owner there that night.",
+      "value": "A caretaker's key ring was left behind during an earlier repair. It explains access to the apartment, but does not place its owner there that night."
+    },
+    {
+      "key": "Blood beneath a bench matches the victim. The pattern is consistent with a violent attack in the closed bar.",
+      "value": "Blood beneath a bench matches the victim. The pattern is consistent with a violent attack in the closed bar."
+    },
+    {
+      "key": "A dark button bears the logo of the security company. It was found beside the bloodstain and may have come off during a struggle.",
+      "value": "A dark button bears the logo of the security company. It was found beside the bloodstain and may have come off during a struggle."
+    },
+    {
+      "key": "The terminal records a manual camera shutdown under the security guard's account, contradicting the claim that the system simply failed.",
+      "value": "The terminal records a manual camera shutdown under the security guard's account, contradicting the claim that the system simply failed."
+    },
+    {
+      "key": "The medical examiner confirms 28 stab wounds and finds signs that the body was moved after death. The estimated time matches the camera outage.",
+      "value": "El médico forense confirma 28 puñaladas y encuentra señales de que el cuerpo fue trasladado después de la muerte. La hora estimada coincide con la interrupción de las cámaras."
+    },
+    {
+      "key": "One button is missing from the security guard's uniform. Its design and remaining threads match the button from the bar.",
+      "value": "One button is missing from the security guard's uniform. Its design and remaining threads match the button from the bar."
+    },
+    {
+      "key": "A knife recovered from the security guard's locker carries the victim's blood on its blade.",
+      "value": "A knife recovered from the security guard's locker carries the victim's blood on its blade."
+    },
+    {
+      "key": "Security guard's revised statement",
+      "value": "Security guard's revised statement"
+    },
+    {
+      "key": "Confronted with the uniform button, the camera log, and the matching uniform, the security guard changes his story: he went to the bar, but claims the victim was alive when he left.",
+      "value": "Confronted with the uniform button, the camera log, and the matching uniform, the security guard changes his story: he went to the bar, but claims the victim was alive when he left."
+    },
+    {
+      "key": "The cameras had a problem. I stayed in the surveillance room all night.",
+      "value": "The cameras had a problem. I stayed in the surveillance room all night."
+    },
+    {
+      "key": "I went in earlier to make a repair. I have a spare key, but I did not enter that night.",
+      "value": "I went in earlier to make a repair. I have a spare key, but I did not enter that night."
+    },
+    {
+      "key": "I had no reason to visit the apartment or the closed bar. I have nothing to do with the camera system.",
+      "value": "I had no reason to visit the apartment or the closed bar. I have nothing to do with the camera system."
+    },
+    {
+      "key": "I live in the building. I noticed movement in the corridor after the victim was found, but I could not identify who was there.",
+      "value": "I live in the building. I noticed movement in the corridor after the victim was found, but I could not identify who was there."
+    },
+    {
+      "key": "All right. I went to the bar, but the victim was alive when I left.",
+      "value": "All right. I went to the bar, but the victim was alive when I left."
+    },
+    {
+      "key": "The key ring was left during the earlier repair. I did not kill the victim or move the body.",
+      "value": "The key ring was left during the earlier repair. I did not kill the victim or move the body."
+    },
+    {
+      "key": "I did not go to the closed bar that night. The evidence from the scene and the security room should be checked against the guard's account.",
+      "value": "I did not go to the closed bar that night. The evidence from the scene and the security room should be checked against the guard's account."
+    },
+    {
+      "key": "I saw someone moving through the corridor, but I could not identify them. I can confirm the body was in the apartment when it was discovered.",
+      "value": "I saw someone moving through the corridor, but I could not identify them. I can confirm the body was in the apartment when it was discovered."
+    },
+    {
+      "key": "The blood beneath the bar bench matches the victim, confirming the attack happened there, not in the apartment. The button matches the security uniform, and the camera terminal records a manual shutdown under the guard's account. The medical examiner's report and uniform comparison are ready at the police station.",
+      "value": "The blood beneath the bar bench matches the victim, confirming the attack happened there, not in the apartment. The button matches the security uniform, and the camera terminal records a manual shutdown under the guard's account. The medical examiner's report and uniform comparison are ready at the police station."
+    },
+    {
+      "key": "The search of the security locker found a knife. The lab identified the victim's blood on its blade. The seized knife and final report are ready at the police station.",
+      "value": "The search of the security locker found a knife. The lab identified the victim's blood on its blade. The seized knife and final report are ready at the police station."
+    },
+    {
+      "key": "The cameras went blind, but the traces remained. The button and uniform placed the security guard in the closed bar, while the terminal exposed the manual shutdown. The knife linked him to the 28 wounds. The body had been moved to the apartment to mislead the investigation.",
+      "value": "The cameras went blind, but the traces remained. The button and uniform placed the security guard in the closed bar, while the terminal exposed the manual shutdown. The knife linked him to the 28 wounds. The body had been moved to the apartment to mislead the investigation."
+    },
+    {
+      "key": "A person was found dead in the closed bar. A receipt and coffee-stained fabric suggest the body may have been brought from somewhere else. The cause of death is not yet known.",
+      "value": "A person was found dead in the closed bar. A receipt and coffee-stained fabric suggest the body may have been brought from somewhere else. The cause of death is not yet known."
+    },
+    {
+      "key": "Receipt in the victim's pocket",
+      "value": "Receipt in the victim's pocket"
+    },
+    {
+      "key": "Cloth caught on the victim",
+      "value": "Cloth caught on the victim"
+    },
+    {
+      "key": "Bar maintenance log",
+      "value": "Bar maintenance log"
+    },
+    {
+      "key": "Cup behind the bakery counter",
+      "value": "Cup behind the bakery counter"
+    },
+    {
+      "key": "Recovered bakery footage",
+      "value": "Recovered bakery footage"
+    },
+    {
+      "key": "Fabric snagged in the cup cabinet",
+      "value": "Fabric snagged in the cup cabinet"
+    },
+    {
+      "key": "Toxicology report",
+      "value": "Toxicology report"
+    },
+    {
+      "key": "Caretaker's uniform",
+      "value": "Caretaker's uniform"
+    },
+    {
+      "key": "Dismissal letter",
+      "value": "Dismissal letter"
+    },
+    {
+      "key": "The receipt records a delivery received at the bakery that morning. It points to the victim's last known appointment.",
+      "value": "The receipt records a delivery received at the bakery that morning. It points to the victim's last known appointment."
+    },
+    {
+      "key": "The cloth bears the bakery's name and coffee stains. It links the victim's clothing to a different location.",
+      "value": "The cloth bears the bakery's name and coffee stains. It links the victim's clothing to a different location."
+    },
+    {
+      "key": "The maintenance log shows that the caretaker had a key to the closed bar that day, providing a way to move the body.",
+      "value": "The maintenance log shows that the caretaker had a key to the closed bar that day, providing a way to move the body."
+    },
+    {
+      "key": "The victim's cup contains leftover coffee. It was found behind the counter beside a spill and can be submitted for toxicology.",
+      "value": "The victim's cup contains leftover coffee. It was found behind the counter beside a spill and can be submitted for toxicology."
+    },
+    {
+      "key": "Recovered footage shows the victim drinking coffee and collapsing behind the counter. The image does not show who handled the cup.",
+      "value": "Recovered footage shows the victim drinking coffee and collapsing behind the counter. The image does not show who handled the cup."
+    },
+    {
+      "key": "A piece of gray fabric with yellow stitching is caught on the cup-cabinet hinge. It can be compared with the caretaker's uniform.",
+      "value": "A piece of gray fabric with yellow stitching is caught on the cup-cabinet hinge. It can be compared with the caretaker's uniform."
+    },
+    {
+      "key": "Toxicology identifies poison in the victim's cup. The sample from the coffee pot is clean, showing that only one drink was contaminated.",
+      "value": "Toxicology identifies poison in the victim's cup. The sample from the coffee pot is clean, showing that only one drink was contaminated."
+    },
+    {
+      "key": "The tear and yellow seam in the caretaker's uniform match the fabric caught in the cup cabinet.",
+      "value": "The tear and yellow seam in the caretaker's uniform match the fabric caught in the cup cabinet."
+    },
+    {
+      "key": "The victim blamed the caretaker for a workplace accident. On the back is a handwritten note: 'You knew it wasn't my fault.'",
+      "value": "The victim blamed the caretaker for a workplace accident. On the back is a handwritten note: 'You knew it wasn't my fault.'"
+    },
+    {
+      "key": "Caretaker's changed statement",
+      "value": "Caretaker's changed statement"
+    },
+    {
+      "key": "Confronted with the fabric match, the caretaker admits entering the bakery's kitchen despite denying it. The admission and the victim-only poison result must be considered with the motive in the letter.",
+      "value": "Confronted with the fabric match, the caretaker admits entering the bakery's kitchen despite denying it. The admission and the victim-only poison result must be considered with the motive in the letter."
+    },
+    {
+      "key": "I only came back to collect my belongings. I never entered the kitchen.",
+      "value": "I only came back to collect my belongings. I never entered the kitchen."
+    },
+    {
+      "key": "I prepared the coffee as usual and drank from the same pot. I had argued with the victim about delayed wages, but I did not touch their cup.",
+      "value": "I prepared the coffee as usual and drank from the same pot. I had argued with the victim about delayed wages, but I did not touch their cup."
+    },
+    {
+      "key": "I saw the victim at the bakery that morning. They drank coffee and became ill shortly afterward. I tried to help.",
+      "value": "I saw the victim at the bakery that morning. They drank coffee and became ill shortly afterward. I tried to help."
+    },
+    {
+      "key": "The body was found in the closed bar. We will collect the items you identify and compare them with the witness accounts.",
+      "value": "The body was found in the closed bar. We will collect the items you identify and compare them with the witness accounts."
+    },
+    {
+      "key": "I... did enter the bakery kitchen, just for a moment. I only wanted to retrieve something. I did not poison the coffee.",
+      "value": "I... did enter the bakery kitchen, just for a moment. I only wanted to retrieve something. I did not poison the coffee."
+    },
+    {
+      "key": "The victim always used that cup. Anyone who worked there knew where it was kept, but I did not poison it.",
+      "value": "The victim always used that cup. Anyone who worked there knew where it was kept, but I did not poison it."
+    },
+    {
+      "key": "I saw the victim take a few sips and collapse. I cannot say who prepared or handled that cup.",
+      "value": "I saw the victim take a few sips and collapse. I cannot say who prepared or handled that cup."
+    },
+    {
+      "key": "The evidence shows where the victim collapsed and how the body was moved. The lab reports and witness accounts should be compared before making an accusation.",
+      "value": "The evidence shows where the victim collapsed and how the body was moved. The lab reports and witness accounts should be compared before making an accusation."
+    },
+    {
+      "key": "Toxicology found a poisonous substance in the victim's cup. The coffee-pot sample is clean. The toxicology report and the victim's personnel records are ready at the police station.",
+      "value": "Toxicology found a poisonous substance in the victim's cup. The coffee-pot sample is clean. The toxicology report and the victim's personnel records are ready at the police station."
+    },
+    {
+      "key": "The yellow seam and tear on the caretaker's uniform match the fabric caught in the cup cabinet. The comparison report is ready at the police station.",
+      "value": "The yellow seam and tear on the caretaker's uniform match the fabric caught in the cup cabinet. The comparison report is ready at the police station."
+    },
+    {
+      "key": "The coffee pot was clean, but the victim's cup was poisoned. The recovered footage fixed the collapse at the bakery, and the fabric match placed the caretaker in the cup cabinet he denied entering. The dismissal letter revealed the motive. The body was later moved to the closed bar.",
+      "value": "The coffee pot was clean, but the victim's cup was poisoned. The recovered footage fixed the collapse at the bakery, and the fabric match placed the caretaker in the cup cabinet he denied entering. The dismissal letter revealed the motive. The body was later moved to the closed bar."
+    },
+    {
+      "key": "Record report and end call",
+      "value": "Registrar informe y finalizar llamada"
+    },
+    {
+      "key": "What were you doing at the bar?",
+      "value": "¿Qué hacías en el bar?"
+    },
+    {
+      "key": "Did you know the victim?",
+      "value": "¿Conocías a la víctima?"
+    },
+    {
+      "key": "Challenge with the schedule and weapon",
+      "value": "Challenge with the schedule and weapon"
+    },
+    {
+      "key": "I... was helping with the service. I do not remember who called me.",
+      "value": "I... was helping with the service. I do not remember who called me."
+    },
+    {
+      "key": "I had never seen her before. She came in and ordered a drink. It all happened so fast.",
+      "value": "I had never seen her before. She came in and ordered a drink. It all happened so fast."
+    },
+    {
+      "key": "End interview",
+      "value": "Finalizar interrogatorio"
+    },
+    {
+      "key": "Back to questions",
+      "value": "Volver a las preguntas"
+    },
+    {
+      "key": "No report is pending. Submit a collected item through the phone to request a forensic result.",
+      "value": "No hay ningún informe pendiente. Envía un objeto recogido por teléfono para solicitar un análisis forense."
+    },
+    {
+      "key": "Ask about the camera outage",
+      "value": "Ask about the camera outage"
+    },
+    {
+      "key": "Ask about the button",
+      "value": "Ask about the button"
+    },
+    {
+      "key": "Challenge the timeline",
+      "value": "Challenge the timeline"
+    },
+    {
+      "key": "You said the cameras failed, but the terminal records a manual shutdown under your account. Why?",
+      "value": "You said the cameras failed, but the terminal records a manual shutdown under your account. Why?"
+    },
+    {
+      "key": "That is a company uniform button. I do not know how it ended up at the bar.",
+      "value": "That is a company uniform button. I do not know how it ended up at the bar."
+    },
+    {
+      "key": "Ask about the spare key",
+      "value": "Ask about the spare key"
+    },
+    {
+      "key": "Ask about the appointment at the bar",
+      "value": "Ask about the appointment at the bar"
+    },
+    {
+      "key": "End conversation",
+      "value": "End conversation"
+    },
+    {
+      "key": "I used the key for an earlier repair. I must have dropped the key ring then. It does not mean I entered the apartment that night.",
+      "value": "I used the key for an earlier repair. I must have dropped the key ring then. It does not mean I entered the apartment that night."
+    },
+    {
+      "key": "I knew the bar was closed, but I did not meet the victim there. Check the evidence from the bar before deciding who had access.",
+      "value": "I knew the bar was closed, but I did not meet the victim there. Check the evidence from the bar before deciding who had access."
+    },
+    {
+      "key": "Ask about the closed bar",
+      "value": "Ask about the closed bar"
+    },
+    {
+      "key": "Ask about the security company",
+      "value": "Ask about the security company"
+    },
+    {
+      "key": "The bar has been closed since the first case. I did not see who went inside that night.",
+      "value": "The bar has been closed since the first case. I did not see who went inside that night."
+    },
+    {
+      "key": "The button belongs to the security company. The guard wore that uniform, but the forensic comparison will tell us more.",
+      "value": "The button belongs to the security company. The guard wore that uniform, but the forensic comparison will tell us more."
+    },
+    {
+      "key": "Ask what happened in the corridor",
+      "value": "Ask what happened in the corridor"
+    },
+    {
+      "key": "Ask when the body was found",
+      "value": "Ask when the body was found"
+    },
+    {
+      "key": "I noticed movement after the victim had already been found. I could not identify the person, but the body was inside the apartment when help arrived.",
+      "value": "I noticed movement after the victim had already been found. I could not identify the person, but the body was inside the apartment when help arrived."
+    },
+    {
+      "key": "The apartment door was intact. I cannot say whether the victim was attacked there or brought there afterward.",
+      "value": "The apartment door was intact. I cannot say whether the victim was attacked there or brought there afterward."
+    },
+    {
+      "key": "Ask about the fabric in the kitchen",
+      "value": "Ask about the fabric in the kitchen"
+    },
+    {
+      "key": "Ask about the dismissal",
+      "value": "Ask about the dismissal"
+    },
+    {
+      "key": "Challenge the denial",
+      "value": "Challenge the denial"
+    },
+    {
+      "key": "That could have come from an old work jacket. I said I never entered the kitchen that morning.",
+      "value": "That could have come from an old work jacket. I said I never entered the kitchen that morning."
+    },
+    {
+      "key": "The victim blamed me for an accident that was not my fault. I was angry, but that does not prove I poisoned anyone.",
+      "value": "The victim blamed me for an accident that was not my fault. I was angry, but that does not prove I poisoned anyone."
+    },
+    {
+      "key": "Ask about the collapse",
+      "value": "Ask about the collapse"
+    },
+    {
+      "key": "The victim always used that cup. I prepared the coffee, but I drank from the same pot and was fine.",
+      "value": "The victim always used that cup. I prepared the coffee, but I drank from the same pot and was fine."
+    },
+    {
+      "key": "The recording shows the victim drinking and collapsing. It does not show who handled the cup before that.",
+      "value": "The recording shows the victim drinking and collapsing. It does not show who handled the cup before that."
+    },
+    {
+      "key": "Ask what the recording shows",
+      "value": "Ask what the recording shows"
+    },
+    {
+      "key": "The victim visited the bakery before opening and always used the same cup. I saw them alive there that morning.",
+      "value": "The victim visited the bakery before opening and always used the same cup. I saw them alive there that morning."
+    },
+    {
+      "key": "They drank coffee, became ill, and collapsed. I tried to help, but I cannot identify who touched the cup.",
+      "value": "They drank coffee, became ill, and collapsed. I tried to help, but I cannot identify who touched the cup."
+    },
+    {
+      "key": "Ask about moving the body",
+      "value": "Ask about moving the body"
+    },
+    {
+      "key": "Ask about the toxicology report",
+      "value": "Ask about the toxicology report"
+    },
+    {
+      "key": "The bar was locked when we arrived. The maintenance log shows who had access, but access alone does not prove who killed the victim.",
+      "value": "The bar was locked when we arrived. The maintenance log shows who had access, but access alone does not prove who killed the victim."
+    },
+    {
+      "key": "The victim's cup was poisoned, while the coffee pot was clean. We still need to identify who used the victim's routine against them.",
+      "value": "The victim's cup was poisoned, while the coffee pot was clean. We still need to identify who used the victim's routine against them."
+    },
+    {
+      "key": "CASE UNSOLVED",
+      "value": "CASO SIN RESOLVER"
+    },
+    {
+      "key": "CASE SOLVED",
+      "value": "CASO RESUELTO"
+    },
+    {
+      "key": "View campaign results",
+      "value": "View campaign results"
+    },
+    {
+      "key": "INCOMING CALL • open the phone",
+      "value": "LLAMADA ENTRANTE • abre el teléfono"
+    },
+    {
+      "key": "EVIDENCE • CASE ",
+      "value": "EVIDENCE • CASE "
+    },
+    {
+      "key": " • recorded",
+      "value": " • recorded"
+    },
+    {
+      "key": " • interviewed",
+      "value": " • interviewed"
+    },
+    {
+      "key": "Challenge • find evidence that contradicts the account",
+      "value": "Challenge • find evidence that contradicts the account"
+    },
+    {
+      "key": "Compare • investigate records and contradictions",
+      "value": "Compare • investigate records and contradictions"
+    },
+    {
+      "key": "ON THE LINE • ",
+      "value": "ON THE LINE • "
+    },
+    {
+      "key": "Answer to receive new information about the case.",
+      "value": "Answer to receive new information about the case."
+    },
+    {
+      "key": "Material submitted. Forensics is preparing its response. Keep investigating; the phone will alert you when the call arrives.",
+      "value": "Material submitted. Forensics is preparing its response. Keep investigating; the phone will alert you when the call arrives."
+    },
+    {
+      "key": "You can request the next forensic examination. Results arrive by phone and are collected at the police station.",
+      "value": "You can request the next forensic examination. Results arrive by phone and are collected at the police station."
+    },
+    {
+      "key": "DISPATCH AVAILABLE",
+      "value": "DISPATCH AVAILABLE"
+    },
+    {
+      "key": "Read the documents or ask for guidance. For a ballistic comparison, preserve the weapon and the material from the shooting.",
+      "value": "Read the documents or ask for guidance. For a ballistic comparison, preserve the weapon and the material from the shooting."
+    },
+    {
+      "key": "Read the documents or ask for guidance. Preserve the records and traces at the scene to request an examination.",
+      "value": "Read the documents or ask for guidance. Preserve the records and traces at the scene to request an examination."
+    },
+    {
+      "key": "CONNECTED • CENTRAL DISPATCH",
+      "value": "CONNECTED • CENTRAL DISPATCH"
+    },
+    {
+      "key": "Dispatch: Detective, do you read me?",
+      "value": "Dispatch: Detective, do you read me?"
+    },
+    {
+      "key": "Your current objective is: ",
+      "value": "Your current objective is: "
+    },
+    {
+      "key": "Go over the recorded evidence and compare it with each account. Look for details that support or contradict what you have been told. Call me again if you need another briefing.",
+      "value": "Go over the recorded evidence and compare it with each account. Look for details that support or contradict what you have been told. Call me again if you need another briefing."
+    },
+    {
+      "key": "SHIFT DOCUMENTS",
+      "value": "SHIFT DOCUMENTS"
+    },
+    {
+      "key": "Initial incident: a woman was found shot dead in a bar. The circumstances need to be investigated.",
+      "value": "Initial incident: a woman was found shot dead in a bar. The circumstances need to be investigated."
+    },
+    {
+      "key": "Reference location: ",
+      "value": "Reference location: "
+    },
+    {
+      "key": "Open the case file with Tab or the on-screen button. Map: visit locations. Evidence: read collected records. Interviews: listen and compare accounts. Deduction: present your conclusion after recording the report.",
+      "value": "Open the case file with Tab or the on-screen button. Map: visit locations. Evidence: read collected records. Interviews: listen and compare accounts. Deduction: present your conclusion after recording the report."
+    },
+    {
+      "key": "FORENSIC REPORT RECORDED",
+      "value": "FORENSIC REPORT RECORDED"
+    },
+    {
+      "key": "This case is already closed. View the result or restart through Settings.",
+      "value": "This case is already closed. View the result or restart through Settings."
+    },
+    {
+      "key": "Review your theory before confirming. ",
+      "value": "Review your theory before confirming. "
+    },
+    {
+      "key": " accusation attempt(s) remaining.",
+      "value": " accusation attempt(s) remaining."
+    },
+    {
+      "key": "The forensic report is missing: submit the material by phone, answer, and record the response.",
+      "value": "The forensic report is missing: submit the material by phone, answer, and record the response."
+    },
+    {
+      "key": "Investigate the scene, compare statements, and consult forensics.",
+      "value": "Investigate the scene, compare statements, and consult forensics."
+    },
+    {
+      "key": "Examine the records, interview those involved, and challenge contradictions.",
+      "value": "Examine the records, interview those involved, and challenge contradictions."
+    },
+    {
+      "key": "CONFIRM ACCUSATION",
+      "value": "CONFIRMAR ACUSACIÓN"
+    },
+    {
+      "key": "You have ",
+      "value": "You have "
+    },
+    {
+      "key": " attempt(s).",
+      "value": " attempt(s)."
+    },
+    {
+      "key": "An incorrect accusation costs one attempt. After three mistakes, the investigation ends in defeat.",
+      "value": "An incorrect accusation costs one attempt. After three mistakes, the investigation ends in defeat."
+    },
+    {
+      "key": "Confirm the selected combination?",
+      "value": "Confirm the selected combination?"
+    },
+    {
+      "key": "Restart only the current case? Its clues and attempts will be reset. Previously completed cases will be preserved.",
+      "value": "Restart only the current case? Its clues and attempts will be reset. Previously completed cases will be preserved."
+    },
+    {
+      "key": "CONFIRM OVERWRITE",
+      "value": "CONFIRM OVERWRITE"
+    },
+    {
+      "key": "Confirm overwrite",
+      "value": "Confirm overwrite"
+    },
+    {
+      "key": "DELETE SAVE",
+      "value": "ELIMINAR PARTIDA"
+    },
+    {
+      "key": "Add the Menu scene to the build profile.",
+      "value": "Add the Menu scene to the build profile."
+    },
+    {
+      "key": "Add the Game scene to the build profile.",
+      "value": "Add the Game scene to the build profile."
+    },
+    {
+      "key": "Start or load an investigation.",
+      "value": "Comienza o carga una investigación."
+    },
+    {
+      "key": "VICTIM • CASE",
+      "value": "VICTIM • CASE"
+    },
+    {
+      "key": "Woman from the bar",
+      "value": "Woman from the bar"
+    },
+    {
+      "key": "Victim 2",
+      "value": "Victim 2"
+    },
+    {
+      "key": "Victim 3",
+      "value": "Victim 3"
+    },
+    {
+      "key": "Go to Case ",
+      "value": "Go to Case "
+    },
+    {
+      "key": "Continue conversation",
+      "value": "Continue conversation"
+    },
+    {
+      "key": "Slot ",
+      "value": "Slot "
+    },
+    {
+      "key": "OBJECTIVE • ",
+      "value": "OBJETIVO • "
     }
   ]
 }

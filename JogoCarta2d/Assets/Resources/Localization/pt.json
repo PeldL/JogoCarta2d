@@ -367,6 +367,806 @@
     {
       "key": "CONTINUE • CHOOSE A SLOT",
       "value": "CONTINUAR • ESCOLHA UM ARQUIVO"
+    },
+    {
+      "key": "A woman entered the bar and was shot dead. Gather evidence, question the man behind the counter, and establish the culprit, weapon, and crime scene.",
+      "value": "Uma mulher entrou no bar e foi morta a tiros. Reúna provas, interrogue o homem atrás do balcão e descubra o culpado, a arma e o local do crime."
+    },
+    {
+      "key": "Employee records",
+      "value": "Registros dos funcionários"
+    },
+    {
+      "key": "Pistol under the counter",
+      "value": "Pistola escondida sob o balcão"
+    },
+    {
+      "key": "Cartridge case on the floor",
+      "value": "Estojo de munição no chão"
+    },
+    {
+      "key": "Crime scene traces",
+      "value": "Vestígios da cena do crime"
+    },
+    {
+      "key": "The schedule identifies the actual employee: he left before the crime. The man seen behind the counter does not work here.",
+      "value": "A escala identifica o verdadeiro funcionário: ele saiu antes do crime. O homem visto atrás do balcão não trabalha aqui."
+    },
+    {
+      "key": "A pistol was found hidden under the counter. Preserve it for ballistic comparison.",
+      "value": "Uma pistola foi encontrada escondida sob o balcão. Preserve-a para a comparação balística."
+    },
+    {
+      "key": "A cartridge case was found near the body in the bar service area. It indicates a shot was fired here.",
+      "value": "Um estojo de munição foi encontrado perto do corpo, na área de atendimento do bar. Isso indica que um disparo foi feito aqui."
+    },
+    {
+      "key": "Bloodstains by the counter. Their position is consistent with the account of the victim's arrival.",
+      "value": "Manchas de sangue perto do balcão. Sua posição é compatível com o relato da chegada da vítima."
+    },
+    {
+      "key": "Challenged testimony",
+      "value": "Depoimento contestado"
+    },
+    {
+      "key": "Confronted with the schedule and the pistol, the man admits he was robbing the bar. The victim entered during the robbery.",
+      "value": "Confrontado com a escala e a pistola, o homem admite que estava assaltando o bar. A vítima entrou durante o assalto."
+    },
+    {
+      "key": "I was behind the counter when that woman came in. I have nothing else to say.",
+      "value": "Eu estava atrás do balcão quando aquela mulher entrou. Não tenho mais nada a dizer."
+    },
+    {
+      "key": "All right. I was not an employee. I was robbing the bar. She came in, saw my face... I shot her because I was afraid she would report me.",
+      "value": "Tudo bem. Eu não era funcionário. Estava assaltando o bar. Ela entrou e viu meu rosto... Atirei porque tive medo de que me denunciasse."
+    },
+    {
+      "key": "The man behind the counter was a robber. He killed the woman with the pistol in the bar to stop her from reporting him.",
+      "value": "O homem atrás do balcão era um assaltante. Ele matou a mulher com a pistola dentro do bar para impedir que ela o denunciasse."
+    },
+    {
+      "key": "A person was found dead in their apartment. There are no signs of forced entry, and the building cameras were offline for part of the night. The body may not have been found where the murder happened.",
+      "value": "Uma pessoa foi encontrada morta em seu apartamento. Não há sinais de arrombamento, e as câmeras do prédio ficaram desligadas durante parte da noite. O corpo pode não ter sido encontrado no local do assassinato."
+    },
+    {
+      "key": "Rug beneath the body",
+      "value": "Tapete sob o corpo"
+    },
+    {
+      "key": "Victim's appointment book",
+      "value": "Agenda da vítima"
+    },
+    {
+      "key": "Caretaker's key ring",
+      "value": "Chaveiro do zelador"
+    },
+    {
+      "key": "Blood beneath the bench",
+      "value": "Sangue sob o banco"
+    },
+    {
+      "key": "Security uniform button",
+      "value": "Botão do uniforme de segurança"
+    },
+    {
+      "key": "Camera terminal",
+      "value": "Terminal das câmeras"
+    },
+    {
+      "key": "Medical examiner's report",
+      "value": "Laudo do médico-legista"
+    },
+    {
+      "key": "Seized uniform",
+      "value": "Uniforme apreendido"
+    },
+    {
+      "key": "Knife from the security locker",
+      "value": "Faca do armário da segurança"
+    },
+    {
+      "key": "There is surprisingly little blood beneath the body despite the severity of the wounds. The scene may have been moved after the attack.",
+      "value": "Há surpreendentemente pouco sangue sob o corpo, apesar da gravidade dos ferimentos. A cena pode ter sido alterada depois do ataque."
+    },
+    {
+      "key": "The victim noted a meeting at the closed bar after closing time. The appointment connects the victim to a second scene.",
+      "value": "A vítima anotou um encontro no bar fechado, após o expediente. Esse compromisso liga a vítima a uma segunda cena."
+    },
+    {
+      "key": "A caretaker's key ring was left behind during an earlier repair. It explains access to the apartment, but does not place its owner there that night.",
+      "value": "Um chaveiro do zelador foi deixado para trás durante um reparo anterior. Ele explica o acesso ao apartamento, mas não prova que seu dono esteve lá naquela noite."
+    },
+    {
+      "key": "Blood beneath a bench matches the victim. The pattern is consistent with a violent attack in the closed bar.",
+      "value": "O sangue sob o banco corresponde ao da vítima. O padrão é compatível com um ataque violento no bar fechado."
+    },
+    {
+      "key": "A dark button bears the logo of the security company. It was found beside the bloodstain and may have come off during a struggle.",
+      "value": "Um botão escuro tem o logotipo da empresa de segurança. Foi encontrado ao lado da mancha de sangue e pode ter se soltado durante uma luta."
+    },
+    {
+      "key": "The terminal records a manual camera shutdown under the security guard's account, contradicting the claim that the system simply failed.",
+      "value": "O terminal registra que as câmeras foram desligadas manualmente pela conta do segurança, contradizendo a alegação de que o sistema simplesmente falhou."
+    },
+    {
+      "key": "The medical examiner confirms 28 stab wounds and finds signs that the body was moved after death. The estimated time matches the camera outage.",
+      "value": "O médico-legista confirma 28 facadas e encontra sinais de que o corpo foi movido após a morte. O horário estimado coincide com o período em que as câmeras ficaram desligadas."
+    },
+    {
+      "key": "One button is missing from the security guard's uniform. Its design and remaining threads match the button from the bar.",
+      "value": "Falta um botão no uniforme do segurança. O desenho e os fios restantes correspondem ao botão encontrado no bar."
+    },
+    {
+      "key": "A knife recovered from the security guard's locker carries the victim's blood on its blade.",
+      "value": "Uma faca encontrada no armário do segurança tem o sangue da vítima na lâmina."
+    },
+    {
+      "key": "Security guard's revised statement",
+      "value": "Novo depoimento do segurança"
+    },
+    {
+      "key": "Confronted with the uniform button, the camera log, and the matching uniform, the security guard changes his story: he went to the bar, but claims the victim was alive when he left.",
+      "value": "Confrontado com o botão do uniforme, o registro das câmeras e o uniforme correspondente, o segurança muda sua versão: admite que foi ao bar, mas afirma que a vítima ainda estava viva quando saiu."
+    },
+    {
+      "key": "The cameras had a problem. I stayed in the surveillance room all night.",
+      "value": "As câmeras apresentaram um problema. Fiquei na sala de monitoramento a noite toda."
+    },
+    {
+      "key": "I went in earlier to make a repair. I have a spare key, but I did not enter that night.",
+      "value": "Entrei mais cedo para fazer um reparo. Tenho uma chave reserva, mas não entrei naquela noite."
+    },
+    {
+      "key": "I had no reason to visit the apartment or the closed bar. I have nothing to do with the camera system.",
+      "value": "Eu não tinha motivo para visitar o apartamento ou o bar fechado. Não tenho relação com o sistema de câmeras."
+    },
+    {
+      "key": "I live in the building. I noticed movement in the corridor after the victim was found, but I could not identify who was there.",
+      "value": "Moro no prédio. Percebi alguém se movimentando no corredor depois que encontraram a vítima, mas não consegui identificar quem era."
+    },
+    {
+      "key": "All right. I went to the bar, but the victim was alive when I left.",
+      "value": "Tudo bem. Fui ao bar, mas a vítima estava viva quando saí."
+    },
+    {
+      "key": "The key ring was left during the earlier repair. I did not kill the victim or move the body.",
+      "value": "O chaveiro ficou lá durante o reparo anterior. Não matei a vítima nem movi o corpo."
+    },
+    {
+      "key": "I did not go to the closed bar that night. The evidence from the scene and the security room should be checked against the guard's account.",
+      "value": "Não fui ao bar fechado naquela noite. As provas da cena e da sala de segurança devem ser comparadas com o relato do segurança."
+    },
+    {
+      "key": "I saw someone moving through the corridor, but I could not identify them. I can confirm the body was in the apartment when it was discovered.",
+      "value": "Vi alguém passando pelo corredor, mas não consegui identificar a pessoa. Posso confirmar que o corpo estava no apartamento quando foi encontrado."
+    },
+    {
+      "key": "The blood beneath the bar bench matches the victim, confirming the attack happened there, not in the apartment. The button matches the security uniform, and the camera terminal records a manual shutdown under the guard's account. The medical examiner's report and uniform comparison are ready at the police station.",
+      "value": "O sangue sob o banco do bar corresponde ao da vítima, confirmando que o ataque aconteceu ali, e não no apartamento. O botão corresponde ao uniforme de segurança, e o terminal registra o desligamento manual das câmeras pela conta do segurança. O laudo e a comparação do uniforme estão prontos na delegacia."
+    },
+    {
+      "key": "The search of the security locker found a knife. The lab identified the victim's blood on its blade. The seized knife and final report are ready at the police station.",
+      "value": "A busca no armário do segurança encontrou uma faca. O laboratório identificou o sangue da vítima na lâmina. A faca apreendida e o laudo final estão prontos na delegacia."
+    },
+    {
+      "key": "The cameras went blind, but the traces remained. The button and uniform placed the security guard in the closed bar, while the terminal exposed the manual shutdown. The knife linked him to the 28 wounds. The body had been moved to the apartment to mislead the investigation.",
+      "value": "As câmeras ficaram cegas, mas os vestígios permaneceram. O botão e o uniforme colocaram o segurança no bar fechado, enquanto o terminal revelou o desligamento manual. A faca o ligou às 28 facadas. O corpo foi levado ao apartamento para confundir a investigação."
+    },
+    {
+      "key": "A person was found dead in the closed bar. A receipt and coffee-stained fabric suggest the body may have been brought from somewhere else. The cause of death is not yet known.",
+      "value": "Uma pessoa foi encontrada morta no bar fechado. Um recibo e um tecido manchado de café sugerem que o corpo pode ter sido trazido de outro lugar. A causa da morte ainda é desconhecida."
+    },
+    {
+      "key": "Receipt in the victim's pocket",
+      "value": "Recibo no bolso da vítima"
+    },
+    {
+      "key": "Cloth caught on the victim",
+      "value": "Tecido preso à vítima"
+    },
+    {
+      "key": "Bar maintenance log",
+      "value": "Registro de manutenção do bar"
+    },
+    {
+      "key": "Cup behind the bakery counter",
+      "value": "Xícara atrás do balcão da padaria"
+    },
+    {
+      "key": "Recovered bakery footage",
+      "value": "Gravação recuperada da padaria"
+    },
+    {
+      "key": "Fabric snagged in the cup cabinet",
+      "value": "Tecido preso no armário das xícaras"
+    },
+    {
+      "key": "Toxicology report",
+      "value": "Laudo toxicológico"
+    },
+    {
+      "key": "Caretaker's uniform",
+      "value": "Uniforme do zelador"
+    },
+    {
+      "key": "Dismissal letter",
+      "value": "Carta de demissão"
+    },
+    {
+      "key": "The receipt records a delivery received at the bakery that morning. It points to the victim's last known appointment.",
+      "value": "O recibo registra uma entrega recebida na padaria naquela manhã. Ele aponta para o último compromisso conhecido da vítima."
+    },
+    {
+      "key": "The cloth bears the bakery's name and coffee stains. It links the victim's clothing to a different location.",
+      "value": "O tecido tem o nome da padaria e manchas de café. Ele liga as roupas da vítima a outro local."
+    },
+    {
+      "key": "The maintenance log shows that the caretaker had a key to the closed bar that day, providing a way to move the body.",
+      "value": "O registro de manutenção mostra que o zelador tinha a chave do bar fechado naquele dia, o que permitiria mover o corpo."
+    },
+    {
+      "key": "The victim's cup contains leftover coffee. It was found behind the counter beside a spill and can be submitted for toxicology.",
+      "value": "A xícara da vítima contém restos de café. Foi encontrada atrás do balcão, ao lado de um líquido derramado, e pode ser enviada para análise toxicológica."
+    },
+    {
+      "key": "Recovered footage shows the victim drinking coffee and collapsing behind the counter. The image does not show who handled the cup.",
+      "value": "A gravação recuperada mostra a vítima tomando café e desmaiando atrás do balcão. A imagem não mostra quem manuseou a xícara."
+    },
+    {
+      "key": "A piece of gray fabric with yellow stitching is caught on the cup-cabinet hinge. It can be compared with the caretaker's uniform.",
+      "value": "Um pedaço de tecido cinza com costura amarela está preso à dobradiça do armário de xícaras. Ele pode ser comparado ao uniforme do zelador."
+    },
+    {
+      "key": "Toxicology identifies poison in the victim's cup. The sample from the coffee pot is clean, showing that only one drink was contaminated.",
+      "value": "A toxicologia identificou veneno na xícara da vítima. A amostra da garrafa de café está limpa, mostrando que apenas uma bebida foi contaminada."
+    },
+    {
+      "key": "The tear and yellow seam in the caretaker's uniform match the fabric caught in the cup cabinet.",
+      "value": "O rasgo e a costura amarela no uniforme do zelador correspondem ao tecido preso no armário de xícaras."
+    },
+    {
+      "key": "The victim blamed the caretaker for a workplace accident. On the back is a handwritten note: 'You knew it wasn't my fault.'",
+      "value": "A vítima culpava o zelador por um acidente de trabalho. No verso há uma anotação: 'Você sabia que não foi minha culpa.'"
+    },
+    {
+      "key": "Caretaker's changed statement",
+      "value": "Depoimento alterado do zelador"
+    },
+    {
+      "key": "Confronted with the fabric match, the caretaker admits entering the bakery's kitchen despite denying it. The admission and the victim-only poison result must be considered with the motive in the letter.",
+      "value": "Confrontado com a correspondência do tecido, o zelador admite que entrou na cozinha da padaria, apesar de ter negado. A confissão e o resultado que detectou veneno apenas na bebida da vítima devem ser analisados junto ao motivo indicado na carta."
+    },
+    {
+      "key": "I only came back to collect my belongings. I never entered the kitchen.",
+      "value": "Voltei apenas para buscar meus pertences. Nunca entrei na cozinha."
+    },
+    {
+      "key": "I prepared the coffee as usual and drank from the same pot. I had argued with the victim about delayed wages, but I did not touch their cup.",
+      "value": "Preparei o café como sempre e bebi da mesma garrafa. Discuti com a vítima por causa de salários atrasados, mas não toquei na xícara dela."
+    },
+    {
+      "key": "I saw the victim at the bakery that morning. They drank coffee and became ill shortly afterward. I tried to help.",
+      "value": "Vi a vítima na padaria naquela manhã. Ela tomou café e passou mal pouco depois. Tentei ajudar."
+    },
+    {
+      "key": "The body was found in the closed bar. We will collect the items you identify and compare them with the witness accounts.",
+      "value": "O corpo foi encontrado no bar fechado. Vamos recolher os itens que você identificar e compará-los com os relatos das testemunhas."
+    },
+    {
+      "key": "I... did enter the bakery kitchen, just for a moment. I only wanted to retrieve something. I did not poison the coffee.",
+      "value": "Eu... entrei na cozinha da padaria, só por um instante. Queria apenas pegar uma coisa. Não envenenei o café."
+    },
+    {
+      "key": "The victim always used that cup. Anyone who worked there knew where it was kept, but I did not poison it.",
+      "value": "A vítima sempre usava aquela xícara. Qualquer pessoa que trabalhava lá sabia onde ela ficava, mas eu não a envenenei."
+    },
+    {
+      "key": "I saw the victim take a few sips and collapse. I cannot say who prepared or handled that cup.",
+      "value": "Vi a vítima tomar alguns goles e desmaiar. Não posso dizer quem preparou ou manuseou aquela xícara."
+    },
+    {
+      "key": "The evidence shows where the victim collapsed and how the body was moved. The lab reports and witness accounts should be compared before making an accusation.",
+      "value": "As provas mostram onde a vítima desmaiou e como o corpo foi movido. Os laudos do laboratório e os relatos das testemunhas devem ser comparados antes de fazer uma acusação."
+    },
+    {
+      "key": "Toxicology found a poisonous substance in the victim's cup. The coffee-pot sample is clean. The toxicology report and the victim's personnel records are ready at the police station.",
+      "value": "A toxicologia encontrou uma substância venenosa na xícara da vítima. A amostra da garrafa de café está limpa. O laudo toxicológico e os registros profissionais da vítima estão prontos na delegacia."
+    },
+    {
+      "key": "The yellow seam and tear on the caretaker's uniform match the fabric caught in the cup cabinet. The comparison report is ready at the police station.",
+      "value": "A costura amarela e o rasgo no uniforme do zelador correspondem ao tecido preso no armário de xícaras. O relatório da comparação está pronto na delegacia."
+    },
+    {
+      "key": "The coffee pot was clean, but the victim's cup was poisoned. The recovered footage fixed the collapse at the bakery, and the fabric match placed the caretaker in the cup cabinet he denied entering. The dismissal letter revealed the motive. The body was later moved to the closed bar.",
+      "value": "A garrafa de café estava limpa, mas a xícara da vítima foi envenenada. A gravação confirmou que o desmaio ocorreu na padaria, e a correspondência do tecido colocou o zelador diante do armário de xícaras que ele negou ter acessado. A carta de demissão revelou o motivo. Depois, o corpo foi levado ao bar fechado."
+    },
+    {
+      "key": "Record report and end call",
+      "value": "Registrar laudo e encerrar chamada"
+    },
+    {
+      "key": "What were you doing at the bar?",
+      "value": "O que você fazia no bar?"
+    },
+    {
+      "key": "Did you know the victim?",
+      "value": "Você conhecia a vítima?"
+    },
+    {
+      "key": "Challenge with the schedule and weapon",
+      "value": "Confrontar com a escala e a arma"
+    },
+    {
+      "key": "I... was helping with the service. I do not remember who called me.",
+      "value": "Eu... estava ajudando no atendimento. Não lembro quem me chamou."
+    },
+    {
+      "key": "I had never seen her before. She came in and ordered a drink. It all happened so fast.",
+      "value": "Eu nunca a tinha visto antes. Ela entrou e pediu uma bebida. Tudo aconteceu muito rápido."
+    },
+    {
+      "key": "End interview",
+      "value": "Encerrar interrogatório"
+    },
+    {
+      "key": "Back to questions",
+      "value": "Voltar às perguntas"
+    },
+    {
+      "key": "No report is pending. Submit a collected item through the phone to request a forensic result.",
+      "value": "Não há laudo pendente. Envie um item coletado pelo telefone para solicitar uma análise forense."
+    },
+    {
+      "key": "Ask about the camera outage",
+      "value": "Perguntar sobre o desligamento das câmeras"
+    },
+    {
+      "key": "Ask about the button",
+      "value": "Perguntar sobre o botão"
+    },
+    {
+      "key": "Challenge the timeline",
+      "value": "Questionar a linha do tempo"
+    },
+    {
+      "key": "You said the cameras failed, but the terminal records a manual shutdown under your account. Why?",
+      "value": "Você disse que as câmeras falharam, mas o terminal registra um desligamento manual pela sua conta. Por quê?"
+    },
+    {
+      "key": "That is a company uniform button. I do not know how it ended up at the bar.",
+      "value": "Esse é um botão do uniforme da empresa. Não sei como foi parar no bar."
+    },
+    {
+      "key": "Ask about the spare key",
+      "value": "Perguntar sobre a chave reserva"
+    },
+    {
+      "key": "Ask about the appointment at the bar",
+      "value": "Perguntar sobre o encontro no bar"
+    },
+    {
+      "key": "End conversation",
+      "value": "Encerrar conversa"
+    },
+    {
+      "key": "I used the key for an earlier repair. I must have dropped the key ring then. It does not mean I entered the apartment that night.",
+      "value": "Usei a chave em um reparo anterior. Devo ter deixado o chaveiro cair naquela ocasião. Isso não significa que entrei no apartamento naquela noite."
+    },
+    {
+      "key": "I knew the bar was closed, but I did not meet the victim there. Check the evidence from the bar before deciding who had access.",
+      "value": "Eu sabia que o bar estava fechado, mas não encontrei a vítima lá. Verifique as provas do bar antes de decidir quem teve acesso."
+    },
+    {
+      "key": "Ask about the closed bar",
+      "value": "Perguntar sobre o bar fechado"
+    },
+    {
+      "key": "Ask about the security company",
+      "value": "Perguntar sobre a empresa de segurança"
+    },
+    {
+      "key": "The bar has been closed since the first case. I did not see who went inside that night.",
+      "value": "O bar está fechado desde o primeiro caso. Não vi quem entrou lá naquela noite."
+    },
+    {
+      "key": "The button belongs to the security company. The guard wore that uniform, but the forensic comparison will tell us more.",
+      "value": "O botão pertence à empresa de segurança. O segurança usava aquele uniforme, mas a comparação forense poderá revelar mais."
+    },
+    {
+      "key": "Ask what happened in the corridor",
+      "value": "Perguntar o que aconteceu no corredor"
+    },
+    {
+      "key": "Ask when the body was found",
+      "value": "Perguntar quando o corpo foi encontrado"
+    },
+    {
+      "key": "I noticed movement after the victim had already been found. I could not identify the person, but the body was inside the apartment when help arrived.",
+      "value": "Percebi movimentação depois que a vítima já havia sido encontrada. Não consegui identificar a pessoa, mas o corpo estava no apartamento quando a ajuda chegou."
+    },
+    {
+      "key": "The apartment door was intact. I cannot say whether the victim was attacked there or brought there afterward.",
+      "value": "A porta do apartamento estava intacta. Não posso dizer se a vítima foi atacada ali ou levada para lá depois."
+    },
+    {
+      "key": "Ask about the fabric in the kitchen",
+      "value": "Perguntar sobre o tecido na cozinha"
+    },
+    {
+      "key": "Ask about the dismissal",
+      "value": "Perguntar sobre a demissão"
+    },
+    {
+      "key": "Challenge the denial",
+      "value": "Questionar a negação"
+    },
+    {
+      "key": "That could have come from an old work jacket. I said I never entered the kitchen that morning.",
+      "value": "Isso pode ter vindo de uma jaqueta antiga de trabalho. Eu disse que nunca entrei na cozinha naquela manhã."
+    },
+    {
+      "key": "The victim blamed me for an accident that was not my fault. I was angry, but that does not prove I poisoned anyone.",
+      "value": "A vítima me culpou por um acidente que não foi minha culpa. Eu estava com raiva, mas isso não prova que envenenei alguém."
+    },
+    {
+      "key": "Ask about the collapse",
+      "value": "Perguntar sobre o desmaio"
+    },
+    {
+      "key": "The victim always used that cup. I prepared the coffee, but I drank from the same pot and was fine.",
+      "value": "A vítima sempre usava aquela xícara. Preparei o café, mas bebi da mesma garrafa e não passei mal."
+    },
+    {
+      "key": "The recording shows the victim drinking and collapsing. It does not show who handled the cup before that.",
+      "value": "A gravação mostra a vítima bebendo e desmaiando. Não mostra quem manuseou a xícara antes disso."
+    },
+    {
+      "key": "Ask what the recording shows",
+      "value": "Perguntar o que a gravação mostra"
+    },
+    {
+      "key": "The victim visited the bakery before opening and always used the same cup. I saw them alive there that morning.",
+      "value": "A vítima visitava a padaria antes de abrir e sempre usava a mesma xícara. Eu a vi viva lá naquela manhã."
+    },
+    {
+      "key": "They drank coffee, became ill, and collapsed. I tried to help, but I cannot identify who touched the cup.",
+      "value": "Ela tomou café, passou mal e desmaiou. Tentei ajudar, mas não consigo identificar quem tocou na xícara."
+    },
+    {
+      "key": "Ask about moving the body",
+      "value": "Perguntar sobre a remoção do corpo"
+    },
+    {
+      "key": "Ask about the toxicology report",
+      "value": "Perguntar sobre o laudo toxicológico"
+    },
+    {
+      "key": "The bar was locked when we arrived. The maintenance log shows who had access, but access alone does not prove who killed the victim.",
+      "value": "O bar estava trancado quando chegamos. O registro de manutenção mostra quem tinha acesso, mas isso por si só não prova quem matou a vítima."
+    },
+    {
+      "key": "The victim's cup was poisoned, while the coffee pot was clean. We still need to identify who used the victim's routine against them.",
+      "value": "A xícara da vítima estava envenenada, enquanto a garrafa de café estava limpa. Ainda precisamos descobrir quem usou a rotina da vítima contra ela."
+    },
+    {
+      "key": "CASE UNSOLVED",
+      "value": "CASO NÃO RESOLVIDO"
+    },
+    {
+      "key": "CASE SOLVED",
+      "value": "CASO RESOLVIDO"
+    },
+    {
+      "key": "View campaign results",
+      "value": "Ver resultados da campanha"
+    },
+    {
+      "key": "INCOMING CALL • open the phone",
+      "value": "CHAMADA RECEBIDA • abra o telefone"
+    },
+    {
+      "key": "EVIDENCE • CASE ",
+      "value": "EVIDÊNCIA • CASO "
+    },
+    {
+      "key": " • recorded",
+      "value": " • registrada"
+    },
+    {
+      "key": " • interviewed",
+      "value": " • interrogado"
+    },
+    {
+      "key": "Challenge • find evidence that contradicts the account",
+      "value": "Confrontar • encontre provas que contradigam o relato"
+    },
+    {
+      "key": "Compare • investigate records and contradictions",
+      "value": "Comparar • investigue registros e contradições"
+    },
+    {
+      "key": "ON THE LINE • ",
+      "value": "EM LIGAÇÃO • "
+    },
+    {
+      "key": "Answer to receive new information about the case.",
+      "value": "Atenda para receber novas informações sobre o caso."
+    },
+    {
+      "key": "Material submitted. Forensics is preparing its response. Keep investigating; the phone will alert you when the call arrives.",
+      "value": "Material enviado. A perícia está preparando o resultado. Continue investigando; o telefone avisará quando a chamada chegar."
+    },
+    {
+      "key": "You can request the next forensic examination. Results arrive by phone and are collected at the police station.",
+      "value": "Você pode solicitar a próxima análise forense. Os resultados chegam por telefone e são retirados na delegacia."
+    },
+    {
+      "key": "DISPATCH AVAILABLE",
+      "value": "CENTRAL DISPONÍVEL"
+    },
+    {
+      "key": "Read the documents or ask for guidance. For a ballistic comparison, preserve the weapon and the material from the shooting.",
+      "value": "Leia os documentos ou peça orientação. Para uma comparação balística, preserve a arma e o material do disparo."
+    },
+    {
+      "key": "Read the documents or ask for guidance. Preserve the records and traces at the scene to request an examination.",
+      "value": "Leia os documentos ou peça orientação. Preserve os registros e vestígios da cena para solicitar uma análise."
+    },
+    {
+      "key": "CONNECTED • CENTRAL DISPATCH",
+      "value": "CONECTADO • CENTRAL DE OPERAÇÕES"
+    },
+    {
+      "key": "Dispatch: Detective, do you read me?",
+      "value": "Central: Detetive, está me ouvindo?"
+    },
+    {
+      "key": "Your current objective is: ",
+      "value": "Seu objetivo atual é: "
+    },
+    {
+      "key": "Go over the recorded evidence and compare it with each account. Look for details that support or contradict what you have been told. Call me again if you need another briefing.",
+      "value": "Revise as provas registradas e compare-as com cada depoimento. Procure detalhes que confirmem ou contradigam o que lhe contaram. Ligue novamente se precisar de outra orientação."
+    },
+    {
+      "key": "SHIFT DOCUMENTS",
+      "value": "DOCUMENTOS DO TURNO"
+    },
+    {
+      "key": "Initial incident: a woman was found shot dead in a bar. The circumstances need to be investigated.",
+      "value": "Ocorrência inicial: uma mulher foi encontrada morta a tiros em um bar. As circunstâncias precisam ser investigadas."
+    },
+    {
+      "key": "Reference location: ",
+      "value": "Local de referência: "
+    },
+    {
+      "key": "Open the case file with Tab or the on-screen button. Map: visit locations. Evidence: read collected records. Interviews: listen and compare accounts. Deduction: present your conclusion after recording the report.",
+      "value": "Abra o arquivo do caso com Tab ou pelo botão na tela. Mapa: visite os locais. Evidências: leia os registros coletados. Interrogatórios: ouça e compare os relatos. Dedução: apresente sua conclusão após registrar o laudo."
+    },
+    {
+      "key": "FORENSIC REPORT RECORDED",
+      "value": "LAUDO PERICIAL REGISTRADO"
+    },
+    {
+      "key": "This case is already closed. View the result or restart through Settings.",
+      "value": "Este caso já foi encerrado. Veja o resultado ou reinicie pelas Configurações."
+    },
+    {
+      "key": "Review your theory before confirming. ",
+      "value": "Revise sua teoria antes de confirmar. "
+    },
+    {
+      "key": " accusation attempt(s) remaining.",
+      "value": " tentativa(s) de acusação restante(s)."
+    },
+    {
+      "key": "The forensic report is missing: submit the material by phone, answer, and record the response.",
+      "value": "Falta o laudo pericial: envie o material pelo telefone, atenda e registre a resposta."
+    },
+    {
+      "key": "Investigate the scene, compare statements, and consult forensics.",
+      "value": "Investigue a cena, compare os depoimentos e consulte a perícia."
+    },
+    {
+      "key": "Examine the records, interview those involved, and challenge contradictions.",
+      "value": "Examine os registros, interrogue os envolvidos e questione as contradições."
+    },
+    {
+      "key": "CONFIRM ACCUSATION",
+      "value": "CONFIRMAR ACUSAÇÃO"
+    },
+    {
+      "key": "You have ",
+      "value": "Você tem "
+    },
+    {
+      "key": " attempt(s).",
+      "value": " tentativa(s)."
+    },
+    {
+      "key": "An incorrect accusation costs one attempt. After three mistakes, the investigation ends in defeat.",
+      "value": "Uma acusação incorreta custa uma tentativa. Após três erros, a investigação termina em derrota."
+    },
+    {
+      "key": "Confirm the selected combination?",
+      "value": "Confirmar a combinação selecionada?"
+    },
+    {
+      "key": "Restart only the current case? Its clues and attempts will be reset. Previously completed cases will be preserved.",
+      "value": "Reiniciar apenas o caso atual? Suas pistas e tentativas serão reiniciadas. Os casos concluídos anteriormente serão preservados."
+    },
+    {
+      "key": "CONFIRM OVERWRITE",
+      "value": "CONFIRMAR SUBSTITUIÇÃO"
+    },
+    {
+      "key": "Confirm overwrite",
+      "value": "Confirmar substituição"
+    },
+    {
+      "key": "DELETE SAVE",
+      "value": "EXCLUIR ARQUIVO"
+    },
+    {
+      "key": "Add the Menu scene to the build profile.",
+      "value": "Adicione a cena Menu ao perfil de compilação."
+    },
+    {
+      "key": "Add the Game scene to the build profile.",
+      "value": "Adicione a cena Game ao perfil de compilação."
+    },
+    {
+      "key": "Start or load an investigation.",
+      "value": "Comece ou carregue uma investigação."
+    },
+    {
+      "key": "VICTIM • CASE",
+      "value": "VÍTIMA • CASO"
+    },
+    {
+      "key": "Woman from the bar",
+      "value": "Mulher do bar"
+    },
+    {
+      "key": "Victim 2",
+      "value": "Vítima 2"
+    },
+    {
+      "key": "Victim 3",
+      "value": "Vítima 3"
+    },
+    {
+      "key": "Go to Case ",
+      "value": "Ir para o Caso "
+    },
+    {
+      "key": "Continue conversation",
+      "value": "Continuar conversa"
+    },
+    {
+      "key": "Slot ",
+      "value": "Arquivo "
+    },
+    {
+      "key": "AT HOME • A CALL ON THE RADIO",
+      "value": "EM CASA • UMA CHAMADA PELO RÁDIO"
+    },
+    {
+      "key": "FIRST SHIFT",
+      "value": "PRIMEIRO TURNO"
+    },
+    {
+      "key": "— — DISPATCH... Detective, do you copy? — —\n\nThe signal is weak. Adjust the frequency until you find dispatch. The clearer the signal, the closer you are. Hold the frequency steady for a moment.",
+      "value": "— — CENTRAL... Detetive, está me ouvindo? — —\n\nO sinal está fraco. Ajuste a frequência até encontrar a central. Quanto mais claro o sinal, mais perto você está. Mantenha a frequência estável por um instante."
+    },
+    {
+      "key": "Waiting for signal…",
+      "value": "Aguardando sinal…"
+    },
+    {
+      "key": "CLEAR SIGNAL — hold here",
+      "value": "SINAL LIMPO — mantenha aqui"
+    },
+    {
+      "key": "Signal nearby",
+      "value": "Sinal próximo"
+    },
+    {
+      "key": "Weak signal",
+      "value": "Sinal fraco"
+    },
+    {
+      "key": "CONNECTION ESTABLISHED",
+      "value": "CONEXÃO ESTABELECIDA"
+    },
+    {
+      "key": "DISPATCH ↔ DETECTIVE",
+      "value": "CENTRAL ↔ DETETIVE"
+    },
+    {
+      "key": "RADIO • CONNECTION ESTABLISHED",
+      "value": "RÁDIO • CONEXÃO ESTABELECIDA"
+    },
+    {
+      "key": "Go to ",
+      "value": "Ir para "
+    },
+    {
+      "key": "PRESENTATION PREVIEW",
+      "value": "PRÉVIA DA APRESENTAÇÃO"
+    },
+    {
+      "key": "Start a game from the Menu to test the full flow. The elements on this screen can be edited in the scene.",
+      "value": "Inicie um jogo pelo Menu para testar o fluxo completo. Os elementos desta tela podem ser editados na cena."
+    },
+    {
+      "key": "CAMPAIGN COMPLETE",
+      "value": "CAMPANHA CONCLUÍDA"
+    },
+    {
+      "key": "3 CASES SOLVED",
+      "value": "3 CASOS RESOLVIDOS"
+    },
+    {
+      "key": "View credits",
+      "value": "Ver créditos"
+    },
+    {
+      "key": "Start investigation",
+      "value": "Iniciar investigação"
+    },
+    {
+      "key": "TUTORIAL • ",
+      "value": "TUTORIAL • "
+    },
+    {
+      "key": "CASE BRIEFING",
+      "value": "RESUMO DO CASO"
+    },
+    {
+      "key": "OBSERVE AND GATHER CLUES",
+      "value": "OBSERVE E REÚNA PISTAS"
+    },
+    {
+      "key": "You are the detective in charge of the investigation.\n\nClick marked objects in the scene to examine them and collect evidence. A notification confirms each discovery.\n\nClues are stored in the case file. You do not need to take photographs.",
+      "value": "Você é o detetive responsável pela investigação.\n\nClique nos objetos marcados na cena para examiná-los e coletar provas. Uma notificação confirma cada descoberta.\n\nAs pistas ficam armazenadas no arquivo do caso. Você não precisa tirar fotografias."
+    },
+    {
+      "key": "COMPARE EVIDENCE AND TESTIMONY",
+      "value": "COMPARE PROVAS E DEPOIMENTOS"
+    },
+    {
+      "key": "Open the investigation using the on-screen button or Tab.\n\nIn Evidence, read what you have found. In Interviews, listen to those involved and compare their accounts with the evidence.\n\nThe Map lets you visit other locations. The phone alerts you to new information: open it, answer, and record the message.",
+      "value": "Abra a investigação pelo botão na tela ou pela tecla Tab.\n\nEm Evidências, leia o que encontrou. Em Interrogatórios, ouça os envolvidos e compare seus relatos com as provas.\n\nO Mapa permite visitar outros locais. O telefone avisa quando há novas informações: abra-o, atenda e registre a mensagem."
+    },
+    {
+      "key": "CONCLUDE WITH CARE",
+      "value": "CONCLUA COM CUIDADO"
+    },
+    {
+      "key": "When you have the necessary evidence, open Deduction and select the combination that explains the case.\n\nAn incorrect accusation costs one attempt. After three mistakes, you can restart the case. Canceling the confirmation does not use an attempt.\n\nProgress is saved automatically. Use Saves to save or load another slot; Settings contains fullscreen, music, and sound effects.",
+      "value": "Quando tiver as provas necessárias, abra Dedução e selecione a combinação que explica o caso.\n\nUma acusação incorreta custa uma tentativa. Após três erros, você pode reiniciar o caso. Cancelar a confirmação não consome uma tentativa.\n\nO progresso é salvo automaticamente. Use Arquivos para salvar ou carregar outro espaço; Configurações reúne tela cheia, música e efeitos sonoros."
+    },
+    {
+      "key": "CASE ",
+      "value": "CASO "
+    },
+    {
+      "key": "You have completed every case in Detective: Case Zero!",
+      "value": "Você concluiu todos os casos de Detetive: Caso Zero!"
+    },
+    {
+      "key": "Signal bar",
+      "value": "Barra de sinal"
+    },
+    {
+      "key": "Victim",
+      "value": "Vítima"
+    },
+    {
+      "key": "Detective",
+      "value": "Detetive"
     }
   ]
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -113,8 +114,19 @@ public sealed class LocalizationManager : MonoBehaviour
     public string LocalizeText(string source)
     {
         if (string.IsNullOrEmpty(source)) return string.Empty;
-        if (translations.TryGetValue(CurrentLanguage, out var table) && table.TryGetValue(source, out string value)) return value;
-        return source;
+        if (!translations.TryGetValue(CurrentLanguage, out var table)) return source;
+        if (table.TryGetValue(source, out string exact)) return exact;
+        // Also translate phrases embedded in generated labels (case numbers, counters, notifications).
+        var keys = new List<string>(table.Keys);
+        keys.Sort((a, b) => b.Length.CompareTo(a.Length));
+        string result = source;
+        foreach (string key in keys)
+        {
+            if (key.Length < 4 || string.Equals(table[key], key, StringComparison.Ordinal)) continue;
+            string pattern = @"(?<![\\p{L}\\p{N}])" + Regex.Escape(key) + @"(?![\\p{L}\\p{N}])";
+            result = Regex.Replace(result, pattern, Match => table[key]);
+        }
+        return result;
     }
 
     void LoadLanguage(GameLanguage language)
