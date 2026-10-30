@@ -54,7 +54,7 @@ public sealed class CaseZeroPresentation : MonoBehaviour
             label.alignment = TextAlignmentOptions.Center;
             var rect = label.rectTransform;
             rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = new Vector2(0, 209);
+            rect.anchoredPosition = new Vector2(0, 120);
             rect.sizeDelta = new Vector2(798.9585f, 354.3582f);
             rect.localScale = Vector3.one * 0.69067f;
             rect.localRotation = Quaternion.identity;

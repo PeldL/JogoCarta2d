@@ -98,7 +98,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         var labelRect = frequency.rectTransform;
         labelRect.anchorMin = labelRect.anchorMax = new Vector2(0.5f, 0.5f);
         labelRect.pivot = new Vector2(0.5f, 0.5f);
-        labelRect.anchoredPosition = new Vector2(0, 209);
+        labelRect.anchoredPosition = new Vector2(0, 120);
         labelRect.sizeDelta = new Vector2(798.9585f, 354.3582f);
         labelRect.localScale = Vector3.one * 0.69067f;
         frequency.enableAutoSizing = false;
