@@ -11,112 +11,112 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77adbf1ae7e6476e9e71c3cec0362193, type: 3}
   m_Name: ArtesCasoZero
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   personagens:
-  - name: "Padeiro"
+  - name: Padeiro
     sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
-  - name: "Zelador"
-    sprite: {fileID: 21300000, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
-  - name: "Policial"
+  - name: Zelador
+    sprite: {fileID: -8136669070187365587, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
+  - name: Policial
     sprite: {fileID: 21300000, guid: 39be66199a1ab3d4bb6d8b9ee3bc3952, type: 3}
-  - name: "Vítima 1 - Mulher no bar"
+  - name: "V\xEDtima 1 - Mulher no bar"
     sprite: {fileID: 21300000, guid: a20dfad0dd7a8d6489463b130c329bc6, type: 3}
-  - name: "Vítima 2"
+  - name: "V\xEDtima 2"
     sprite: {fileID: 21300000, guid: 67b566b17301396418ee3c0187297a54, type: 3}
-  - name: "Vítima 3"
-    sprite: {fileID: 21300000, guid: 511c48f657a54b44c81b572d9d8af5a1, type: 3}
-  - name: "Legista"
+  - name: "V\xEDtima 3"
+    sprite: {fileID: 4585592838154230165, guid: 511c48f657a54b44c81b572d9d8af5a1, type: 3}
+  - name: Legista
     sprite: {fileID: 21300000, guid: 5245eff8a0984674cb91ce8cb8f5c959, type: 3}
-  - name: "Barista"
+  - name: Barista
     sprite: {fileID: 21300000, guid: b58dc27a9a38d3048ac9270494793680, type: 3}
-  - name: "Segurança das câmeras"
+  - name: "Seguran\xE7a das c\xE2meras"
     sprite: {fileID: 21300000, guid: d0b59135122360b4d937ffc9518da516, type: 3}
-  - name: "Enfermeiro"
+  - name: Enfermeiro
     sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
-  - name: "Carinha do rádio"
+  - name: "Carinha do r\xE1dio"
     sprite: {fileID: -6104331486087533166, guid: 118e3dbf479c63944a57e27ddeaf63ff, type: 3}
-  - name: "Detetive do rádio"
-    sprite: {fileID: 8976014178738555684, guid: c8766ca73a143e24e91e247383b67240, type: 3}
+  - name: "Detetive do r\xE1dio"
+    sprite: {fileID: 21300000, guid: c8766ca73a143e24e91e247383b67240, type: 3}
   cenarios:
-  - name: "Bar"
+  - name: Bar
     sprite: {fileID: 0}
-  - name: "Delegacia"
+  - name: Delegacia
     sprite: {fileID: 0}
-  - name: "Laboratório de perícia"
+  - name: "Laborat\xF3rio de per\xEDcia"
     sprite: {fileID: 0}
-  - name: "Padaria"
+  - name: Padaria
     sprite: {fileID: -2493657390549581402, guid: 9da273dd2a9c2304f92b6d709ceefd0f, type: 3}
-  - name: "Rua"
+  - name: Rua
     sprite: {fileID: 0}
-  - name: "Estacionamento"
+  - name: Estacionamento
     sprite: {fileID: 0}
-  - name: "Hospital"
+  - name: Hospital
     sprite: {fileID: 0}
-  - name: "Escritório"
+  - name: "Escrit\xF3rio"
     sprite: {fileID: 0}
-  - name: "Apartamento"
+  - name: Apartamento
     sprite: {fileID: 7552383343446757701, guid: 1c75ce84bdf88f64ca624303cb0ec7f3, type: 3}
   retratos:
-  - name: "Homem do balcão"
+  - name: "Homem do balc\xE3o"
     caseId: ultima-testemunha
     suspectIndex: 0
     artName: Barista
     sprite: {fileID: 21300000, guid: b58dc27a9a38d3048ac9270494793680, type: 3}
-  - name: "Funcionário do bar"
+  - name: "Funcion\xE1rio do bar"
     caseId: ultima-testemunha
     suspectIndex: 1
-    artName:
+    artName: 
     sprite: {fileID: 0}
-  - name: "Cliente desconhecido"
+  - name: Cliente desconhecido
     caseId: ultima-testemunha
     suspectIndex: 2
-    artName:
+    artName: 
     sprite: {fileID: 0}
-  - name: "Segurança das câmeras"
+  - name: "Seguran\xE7a das c\xE2meras"
     caseId: apartamento-302
     suspectIndex: 0
-    artName: "Segurança das câmeras"
-    sprite: {fileID: 0}
-  - name: "Zelador"
+    artName: "Seguran\xE7a das c\xE2meras"
+    sprite: {fileID: 21300000, guid: d0b59135122360b4d937ffc9518da516, type: 3}
+  - name: Zelador
     caseId: apartamento-302
     suspectIndex: 1
-    artName: "Zelador"
-    sprite: {fileID: 0}
-  - name: "Padeiro"
+    artName: Zelador
+    sprite: {fileID: -8136669070187365587, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
+  - name: Padeiro
     caseId: apartamento-302
     suspectIndex: 2
-    artName: "Padeiro"
-    sprite: {fileID: 0}
-  - name: "Enfermeiro • testemunha"
+    artName: Padeiro
+    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
+  - name: "Enfermeiro \u2022 testemunha"
     caseId: apartamento-302
     suspectIndex: 3
-    artName: "Enfermeiro"
-    sprite: {fileID: 0}
-  - name: "Zelador"
+    artName: Enfermeiro
+    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
+  - name: Zelador
     caseId: arquivo-vertice
     suspectIndex: 0
-    artName: "Zelador"
-    sprite: {fileID: 0}
-  - name: "Padeiro"
+    artName: Zelador
+    sprite: {fileID: -8136669070187365587, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
+  - name: Padeiro
     caseId: arquivo-vertice
     suspectIndex: 1
-    artName: "Padeiro"
-    sprite: {fileID: 0}
-  - name: "Enfermeiro • testemunha"
+    artName: Padeiro
+    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
+  - name: "Enfermeiro \u2022 testemunha"
     caseId: arquivo-vertice
     suspectIndex: 2
-    artName: "Enfermeiro"
-    sprite: {fileID: 0}
-  - name: "Policial"
+    artName: Enfermeiro
+    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
+  - name: Policial
     caseId: arquivo-vertice
     suspectIndex: 3
-    artName: "Policial"
-    sprite: {fileID: 0}
+    artName: Policial
+    sprite: {fileID: 21300000, guid: 39be66199a1ab3d4bb6d8b9ee3bc3952, type: 3}
   cursorLupa: {fileID: 0}
   cursorInteracao: {fileID: 0}
   cursorEscrita: {fileID: 0}
   hotspotLupa: {x: 0, y: 0}
   hotspotInteracao: {x: 0, y: 0}
   hotspotEscrita: {x: 0, y: 0}
-  radioDetetive: {fileID: 8976014178738555684, guid: c8766ca73a143e24e91e247383b67240, type: 3}
+  radioDetetive: {fileID: 21300000, guid: c8766ca73a143e24e91e247383b67240, type: 3}
   radioCentral: {fileID: -6104331486087533166, guid: 118e3dbf479c63944a57e27ddeaf63ff, type: 3}
