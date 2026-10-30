@@ -157,9 +157,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 820, y: 34}
+  m_AnchoredPosition: {x: 910, y: 2}
   m_SizeDelta: {x: 180, y: 64}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &14190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8615525353570018051, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 7383811768874348416, guid: 24e4ebfcfc4195249a73328f299a6d68, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -301,11 +301,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1409435916}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -5}
-  m_SizeDelta: {x: 156, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 180, y: 64}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &14839285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,8 +328,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Suspects
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
+  m_sharedMaterial: {fileID: -8639069206979347603, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -353,8 +353,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -0.07550049, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -472,14 +472,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 547966395273778535, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -554,7 +554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Bakery"
+  m_text: Bakery
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -879,11 +879,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1435637252}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -5}
-  m_SizeDelta: {x: 156, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 180, y: 64}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &205648507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -906,8 +906,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Interviews
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
+  m_sharedMaterial: {fileID: -8639069206979347603, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -931,8 +931,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1041,7 +1041,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Hospital"
+  m_text: Hospital
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1239,11 +1239,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1228015390}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -5}
-  m_SizeDelta: {x: 156, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 180, y: 64}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &323578458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1266,8 +1266,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Deduction
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
+  m_sharedMaterial: {fileID: -8639069206979347603, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1291,8 +1291,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1535,7 +1535,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Bar"
+  m_text: Bar
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1901,9 +1901,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1010, y: 31}
+  m_AnchoredPosition: {x: 1100, y: -1}
   m_SizeDelta: {x: 180, y: 64}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &620378151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1980,7 +1980,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3630647685218452677, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 7383811768874348416, guid: 24e4ebfcfc4195249a73328f299a6d68, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2379,7 +2379,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Forensics laboratory"
+  m_text: Forensics laboratory
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2975,11 +2975,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 14189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -5}
-  m_SizeDelta: {x: 156, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 180, y: 64}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1175221433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3002,8 +3002,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Evidence
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
+  m_sharedMaterial: {fileID: -8639069206979347603, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3027,8 +3027,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3241,9 +3241,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: 43}
+  m_AnchoredPosition: {x: 340, y: 11}
   m_SizeDelta: {x: 180, y: 64}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1228015391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3320,7 +3320,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8681919519219086849, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 7383811768874348416, guid: 24e4ebfcfc4195249a73328f299a6d68, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3476,9 +3476,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 630, y: 37}
+  m_AnchoredPosition: {x: 720, y: 5}
   m_SizeDelta: {x: 180, y: 64}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1409435917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3555,7 +3555,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8615525353570018051, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 7383811768874348416, guid: 24e4ebfcfc4195249a73328f299a6d68, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3626,9 +3626,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 440, y: 40}
+  m_AnchoredPosition: {x: 530, y: 8}
   m_SizeDelta: {x: 180, y: 64}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1435637253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3705,7 +3705,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3630647685218452677, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 7383811768874348416, guid: 24e4ebfcfc4195249a73328f299a6d68, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4197,7 +4197,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Police station"
+  m_text: Police station
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4619,7 +4619,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1869386867
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4847,11 +4847,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 620378150}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -5}
-  m_SizeDelta: {x: 156, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 180, y: 64}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2002160797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4874,8 +4874,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Settings
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
+  m_sharedMaterial: {fileID: -8639069206979347603, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4899,8 +4899,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5415,7 +5415,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000018
 GameObject:
   m_ObjectHideFlags: 0
@@ -5433,7 +5437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3000000019
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5483,7 +5487,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!225 &3000000022
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -5510,7 +5518,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaseZeroPanelMotion
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!225 &3000000024
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -5537,7 +5549,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaseZeroPanelMotion
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!225 &3000000026
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -5564,10 +5580,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaseZeroPanelMotion
   duration: 0.48
   initialScale: 0.995
-  childTravel: 5
   entranceTravel: 90
   paperTilt: 0
   rigidObject: 1
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000028
 GameObject:
   m_ObjectHideFlags: 0
@@ -5636,7 +5653,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000032
 GameObject:
   m_ObjectHideFlags: 0
@@ -5782,7 +5803,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000040
 GameObject:
   m_ObjectHideFlags: 0
@@ -5933,6 +5958,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000046
 GameObject:
   m_ObjectHideFlags: 0
@@ -6220,6 +6246,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000056
 GameObject:
   m_ObjectHideFlags: 0
@@ -6507,6 +6534,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000066
 GameObject:
   m_ObjectHideFlags: 0
@@ -6794,6 +6822,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000076
 GameObject:
   m_ObjectHideFlags: 0
@@ -7081,6 +7110,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000086
 GameObject:
   m_ObjectHideFlags: 0
@@ -7921,7 +7951,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000114
 GameObject:
   m_ObjectHideFlags: 0
@@ -8560,6 +8594,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000136
 GameObject:
   m_ObjectHideFlags: 0
@@ -8847,6 +8882,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000146
 GameObject:
   m_ObjectHideFlags: 0
@@ -9134,6 +9170,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000156
 GameObject:
   m_ObjectHideFlags: 0
@@ -9346,7 +9383,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000164
 GameObject:
   m_ObjectHideFlags: 0
@@ -9636,6 +9677,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000174
 GameObject:
   m_ObjectHideFlags: 0
@@ -10000,6 +10042,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000188
 GameObject:
   m_ObjectHideFlags: 0
@@ -10364,6 +10407,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000202
 GameObject:
   m_ObjectHideFlags: 0
@@ -10864,6 +10908,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000220
 GameObject:
   m_ObjectHideFlags: 0
@@ -11227,6 +11272,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000234
 GameObject:
   m_ObjectHideFlags: 0
@@ -11590,6 +11636,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000248
 GameObject:
   m_ObjectHideFlags: 0
@@ -12090,6 +12137,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000266
 GameObject:
   m_ObjectHideFlags: 0
@@ -12453,6 +12501,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000280
 GameObject:
   m_ObjectHideFlags: 0
@@ -12816,6 +12865,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000294
 GameObject:
   m_ObjectHideFlags: 0
@@ -13315,6 +13365,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000312
 GameObject:
   m_ObjectHideFlags: 0
@@ -13526,7 +13577,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000320
 GameObject:
   m_ObjectHideFlags: 0
@@ -13951,6 +14006,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000334
 GameObject:
   m_ObjectHideFlags: 0
@@ -14238,6 +14294,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000344
 GameObject:
   m_ObjectHideFlags: 0
@@ -14525,6 +14582,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000354
 GameObject:
   m_ObjectHideFlags: 0
@@ -14812,6 +14870,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000364
 GameObject:
   m_ObjectHideFlags: 0
@@ -15099,6 +15158,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000374
 GameObject:
   m_ObjectHideFlags: 0
@@ -15388,6 +15448,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000384
 GameObject:
   m_ObjectHideFlags: 0
@@ -15677,6 +15738,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000394
 GameObject:
   m_ObjectHideFlags: 0
@@ -16103,6 +16165,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000408
 GameObject:
   m_ObjectHideFlags: 0
@@ -16405,6 +16468,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000419
 GameObject:
   m_ObjectHideFlags: 0
@@ -16966,6 +17030,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000437
 GameObject:
   m_ObjectHideFlags: 0
@@ -17253,6 +17318,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000447
 GameObject:
   m_ObjectHideFlags: 0
@@ -17540,6 +17606,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000457
 GameObject:
   m_ObjectHideFlags: 0
@@ -17827,6 +17894,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000467
 GameObject:
   m_ObjectHideFlags: 0
@@ -18114,6 +18182,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000477
 GameObject:
   m_ObjectHideFlags: 0
@@ -18675,6 +18744,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000495
 GameObject:
   m_ObjectHideFlags: 0
@@ -18884,7 +18954,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000503
 GameObject:
   m_ObjectHideFlags: 0
@@ -19315,6 +19389,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000517
 GameObject:
   m_ObjectHideFlags: 0
@@ -19602,6 +19677,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000527
 GameObject:
   m_ObjectHideFlags: 0
@@ -20026,6 +20102,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000541
 GameObject:
   m_ObjectHideFlags: 0
@@ -20315,6 +20392,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000551
 GameObject:
   m_ObjectHideFlags: 0
@@ -20604,6 +20682,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000561
 GameObject:
   m_ObjectHideFlags: 0
@@ -20893,6 +20972,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000571
 GameObject:
   m_ObjectHideFlags: 0
@@ -21096,7 +21176,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000579
 GameObject:
   m_ObjectHideFlags: 0
@@ -21388,6 +21472,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000589
 GameObject:
   m_ObjectHideFlags: 0
@@ -21675,6 +21760,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000599
 GameObject:
   m_ObjectHideFlags: 0
@@ -21880,7 +21966,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &3000000607
 GameObject:
   m_ObjectHideFlags: 0
@@ -22305,6 +22395,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000621
 GameObject:
   m_ObjectHideFlags: 0
@@ -22729,6 +22820,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000635
 GameObject:
   m_ObjectHideFlags: 0
@@ -23899,6 +23991,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000672
 GameObject:
   m_ObjectHideFlags: 0
@@ -24186,6 +24279,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000682
 GameObject:
   m_ObjectHideFlags: 0
@@ -24455,7 +24549,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument:
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &3000000691
@@ -24473,6 +24567,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000692
 GameObject:
   m_ObjectHideFlags: 0
@@ -24742,7 +24837,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument:
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &3000000701
@@ -24760,6 +24855,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000702
 GameObject:
   m_ObjectHideFlags: 0
@@ -25029,7 +25125,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 2
           m_FloatArgument: 0
-          m_StringArgument:
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &3000000711
@@ -25047,6 +25143,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000712
 GameObject:
   m_ObjectHideFlags: 0
@@ -25316,7 +25413,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 3
           m_FloatArgument: 0
-          m_StringArgument:
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &3000000721
@@ -25334,6 +25431,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000722
 GameObject:
   m_ObjectHideFlags: 0
@@ -25621,6 +25719,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000732
 GameObject:
   m_ObjectHideFlags: 0
@@ -25908,6 +26007,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &3000000742
 GameObject:
   m_ObjectHideFlags: 0
@@ -26489,6 +26589,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26504,6 +26605,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26519,6 +26621,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26534,6 +26637,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26549,6 +26653,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26564,6 +26669,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26579,6 +26685,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26594,6 +26701,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26609,6 +26717,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26624,6 +26733,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26639,6 +26749,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26654,6 +26765,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26669,6 +26781,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000772
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26684,6 +26797,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26699,6 +26813,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26714,6 +26829,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26729,6 +26845,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26744,6 +26861,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26759,6 +26877,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26774,6 +26893,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26789,6 +26909,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26804,6 +26925,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26819,6 +26941,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26834,6 +26957,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26849,6 +26973,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26864,6 +26989,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000785
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26879,6 +27005,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26894,6 +27021,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26909,6 +27037,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26924,6 +27053,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26939,6 +27069,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26954,6 +27085,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26969,6 +27101,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26984,6 +27117,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26999,6 +27133,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27014,6 +27149,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27029,6 +27165,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27044,6 +27181,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27059,6 +27197,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27074,6 +27213,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27089,6 +27229,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27104,6 +27245,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27119,6 +27261,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27134,6 +27277,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27149,6 +27293,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27164,6 +27309,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27179,6 +27325,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27194,6 +27341,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27209,6 +27357,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27224,6 +27373,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27239,6 +27389,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27254,6 +27405,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27269,6 +27421,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27284,6 +27437,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27299,6 +27453,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27314,6 +27469,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27329,6 +27485,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27344,6 +27501,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27359,6 +27517,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27374,6 +27533,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27389,6 +27549,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27404,6 +27565,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27419,6 +27581,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!114 &3000000822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27434,6 +27597,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &4000000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -27824,9 +27988,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 60, y: 46}
+  m_AnchoredPosition: {x: 150, y: 14}
   m_SizeDelta: {x: 180, y: 64}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5000000003
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -27855,7 +28019,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8681919519219086849, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 7383811768874348416, guid: 24e4ebfcfc4195249a73328f299a6d68, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -27936,6 +28100,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &5000000007
 GameObject:
   m_ObjectHideFlags: 0
@@ -27968,11 +28133,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5000000002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -5}
-  m_SizeDelta: {x: 156, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 180, y: 64}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5000000009
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -28003,8 +28168,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Map
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
+  m_sharedMaterial: {fileID: -8639069206979347603, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -28028,8 +28193,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -28163,6 +28328,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &6000000001
 GameObject:
   m_ObjectHideFlags: 0
@@ -28365,7 +28531,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &6000000009
 GameObject:
   m_ObjectHideFlags: 0
@@ -28727,6 +28897,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &6000000024
 GameObject:
   m_ObjectHideFlags: 0
@@ -29013,6 +29184,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000007
 GameObject:
   m_ObjectHideFlags: 0
@@ -29299,6 +29471,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000017
 GameObject:
   m_ObjectHideFlags: 0
@@ -29585,6 +29758,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000027
 GameObject:
   m_ObjectHideFlags: 0
@@ -29871,6 +30045,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000037
 GameObject:
   m_ObjectHideFlags: 0
@@ -30159,6 +30334,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000047
 GameObject:
   m_ObjectHideFlags: 0
@@ -30520,6 +30696,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000061
 GameObject:
   m_ObjectHideFlags: 0
@@ -30806,6 +30983,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000071
 GameObject:
   m_ObjectHideFlags: 0
@@ -30871,7 +31049,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Apartment 302"
+  m_text: Apartment 302
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -31092,6 +31270,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &7000000081
 GameObject:
   m_ObjectHideFlags: 0
@@ -31157,7 +31336,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Office"
+  m_text: Office
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -31430,7 +31609,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 0.22
   initialScale: 0.985
-  childTravel: 22
+  entranceTravel: 14
+  paperTilt: 0.65
+  rigidObject: 0
+  pageContent: 0
+  mapReveal: 0
 --- !u!1 &8000000005
 GameObject:
   m_ObjectHideFlags: 0
@@ -31468,9 +31651,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1200, y: 28}
+  m_AnchoredPosition: {x: 1290, y: -4}
   m_SizeDelta: {x: 180, y: 64}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8000000007
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -31499,7 +31682,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8681919519219086849, guid: 1d4daa30fc574e94a8d30a3cbe1575ec, type: 3}
+  m_Sprite: {fileID: 7383811768874348416, guid: 24e4ebfcfc4195249a73328f299a6d68, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -31580,6 +31763,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &8000000011
 GameObject:
   m_ObjectHideFlags: 0
@@ -31612,11 +31796,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 8000000006}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 12, y: -5}
-  m_SizeDelta: {x: 156, y: 30}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 180, y: 64}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8000000013
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -31647,8 +31831,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Saves
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
+  m_sharedMaterial: {fileID: -8639069206979347603, guid: 7e91c76bcfdc3114883d97cb7dab9e44, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -31672,8 +31856,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21
-  m_fontSizeBase: 21
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -32641,6 +32825,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &8600000006
 GameObject:
   m_ObjectHideFlags: 0
@@ -32927,6 +33112,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &8600000106
 GameObject:
   m_ObjectHideFlags: 0
@@ -33213,6 +33399,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &8600000206
 GameObject:
   m_ObjectHideFlags: 0
@@ -33499,6 +33686,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &8600000306
 GameObject:
   m_ObjectHideFlags: 0
@@ -33999,17 +34187,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1660057539 &9223372036854775807
-SceneRoots:
-  m_ObjectHideFlags: 0
-  m_Roots:
-  - {fileID: 180906549}
-  - {fileID: 1074303671}
-  - {fileID: 1832333432}
-  - {fileID: 3000000002}
-  - {fileID: 3000000006}
-  - {fileID: 3000000009}
-  - {fileID: 3000000012}
 --- !u!1 &9400000000
 GameObject:
   m_ObjectHideFlags: 0
@@ -34159,6 +34336,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &9400000006
 GameObject:
   m_ObjectHideFlags: 0
@@ -34224,7 +34402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Street"
+  m_text: Street
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -34445,6 +34623,7 @@ MonoBehaviour:
   hoverScale: 1.025
   pressedScale: 0.97
   duration: 0.13
+  textOnly: 0
 --- !u!1 &9400000106
 GameObject:
   m_ObjectHideFlags: 0
@@ -34510,7 +34689,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Parking lot"
+  m_text: Parking lot
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -34582,3 +34761,14 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1660057539 &9223372036854775807
+SceneRoots:
+  m_ObjectHideFlags: 0
+  m_Roots:
+  - {fileID: 180906549}
+  - {fileID: 1074303671}
+  - {fileID: 1832333432}
+  - {fileID: 3000000002}
+  - {fileID: 3000000006}
+  - {fileID: 3000000009}
+  - {fileID: 3000000012}
