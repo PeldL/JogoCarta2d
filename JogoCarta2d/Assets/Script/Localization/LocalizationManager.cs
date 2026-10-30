@@ -123,7 +123,7 @@ public sealed class LocalizationManager : MonoBehaviour
         foreach (string key in keys)
         {
             if (key.Length < 4 || string.Equals(table[key], key, StringComparison.Ordinal)) continue;
-            string pattern = @"(?<![\\p{L}\\p{N}])" + Regex.Escape(key) + @"(?![\\p{L}\\p{N}])";
+            string pattern = @"(?<![\p{L}\p{N}])" + Regex.Escape(key) + @"(?![\p{L}\p{N}])";
             result = Regex.Replace(result, pattern, Match => table[key]);
         }
         return result;
