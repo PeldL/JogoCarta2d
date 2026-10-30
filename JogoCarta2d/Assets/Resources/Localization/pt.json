@@ -199,6 +199,174 @@
     {
       "key": "Office",
       "value": "Escritório"
+    },
+    {
+      "key": "Fullscreen: on",
+      "value": "Tela cheia: ativada"
+    },
+    {
+      "key": "Fullscreen: off",
+      "value": "Tela cheia: desativada"
+    },
+    {
+      "key": "The Last Witness",
+      "value": "A Última Testemunha"
+    },
+    {
+      "key": "Blind Spot",
+      "value": "Ponto Cego"
+    },
+    {
+      "key": "The Last Break",
+      "value": "A Última Pausa"
+    },
+    {
+      "key": "Bar",
+      "value": "Bar"
+    },
+    {
+      "key": "Security guard",
+      "value": "Segurança"
+    },
+    {
+      "key": "Caretaker",
+      "value": "Zelador"
+    },
+    {
+      "key": "Baker",
+      "value": "Padeiro"
+    },
+    {
+      "key": "Nurse • witness",
+      "value": "Enfermeira • testemunha"
+    },
+    {
+      "key": "Man behind the counter",
+      "value": "Homem atrás do balcão"
+    },
+    {
+      "key": "Bar employee",
+      "value": "Funcionário do bar"
+    },
+    {
+      "key": "Unknown customer",
+      "value": "Cliente desconhecido"
+    },
+    {
+      "key": "Pistol",
+      "value": "Pistola"
+    },
+    {
+      "key": "Knife",
+      "value": "Faca"
+    },
+    {
+      "key": "Poison",
+      "value": "Veneno"
+    },
+    {
+      "key": "Victim's home",
+      "value": "Casa da vítima"
+    },
+    {
+      "key": "Closed bar",
+      "value": "Bar fechado"
+    },
+    {
+      "key": "WHAT WAS THE WEAPON?",
+      "value": "QUAL FOI A ARMA?"
+    },
+    {
+      "key": "WHERE DID THE ATTACK HAPPEN?",
+      "value": "ONDE O ATAQUE ACONTECEU?"
+    },
+    {
+      "key": "WHAT CAUSED THE DEATH?",
+      "value": "O QUE CAUSOU A MORTE?"
+    },
+    {
+      "key": "WHERE WAS THE VICTIM POISONED?",
+      "value": "ONDE A VÍTIMA FOI ENVENENADA?"
+    },
+    {
+      "key": "WHICH WEAPON?",
+      "value": "QUAL ARMA?"
+    },
+    {
+      "key": "WHERE?",
+      "value": "ONDE?"
+    },
+    {
+      "key": "Talk to people",
+      "value": "Conversar com pessoas"
+    },
+    {
+      "key": "People to interview:",
+      "value": "Pessoas para interrogar:"
+    },
+    {
+      "key": "Compare their accounts with the evidence.",
+      "value": "Compare os relatos com as evidências."
+    },
+    {
+      "key": "NEW EVIDENCE",
+      "value": "NOVA EVIDÊNCIA"
+    },
+    {
+      "key": "Added to the case file.",
+      "value": "Adicionada ao arquivo do caso."
+    },
+    {
+      "key": "INVESTIGATION OVER",
+      "value": "INVESTIGAÇÃO ENCERRADA"
+    },
+    {
+      "key": "INCORRECT ACCUSATION",
+      "value": "ACUSAÇÃO INCORRETA"
+    },
+    {
+      "key": "All three attempts have been used. You can try the case again.",
+      "value": "As três tentativas foram usadas. Você pode tentar o caso novamente."
+    },
+    {
+      "key": "Review the evidence and testimony.",
+      "value": "Revise as evidências e os depoimentos."
+    },
+    {
+      "key": "CAMPAIGN COMPLETE!",
+      "value": "CAMPANHA CONCLUÍDA!"
+    },
+    {
+      "key": "CASE SOLVED!",
+      "value": "CASO RESOLVIDO!"
+    },
+    {
+      "key": "Congratulations, detective! All three cases are solved.",
+      "value": "Parabéns, detetive! Os três casos foram resolvidos."
+    },
+    {
+      "key": "Excellent work, detective!",
+      "value": "Excelente trabalho, detetive!"
+    },
+    {
+      "key": "Start or continue an investigation.",
+      "value": "Comece ou continue uma investigação."
+    },
+    {
+      "key": "Case closed • defeat",
+      "value": "Caso encerrado • derrota"
+    },
+    {
+      "key": "Select an investigation file.",
+      "value": "Selecione um arquivo de investigação."
+    },
+    {
+      "key": "NEW GAME • CHOOSE A SLOT",
+      "value": "NOVO JOGO • ESCOLHA UM ARQUIVO"
+    },
+    {
+      "key": "CONTINUE • CHOOSE A SLOT",
+      "value": "CONTINUAR • ESCOLHA UM ARQUIVO"
     }
   ]
 }

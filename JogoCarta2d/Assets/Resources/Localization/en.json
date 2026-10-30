@@ -199,6 +199,174 @@
     {
       "key": "Office",
       "value": "Office"
+    },
+    {
+      "key": "Fullscreen: on",
+      "value": "Fullscreen: on"
+    },
+    {
+      "key": "Fullscreen: off",
+      "value": "Fullscreen: off"
+    },
+    {
+      "key": "The Last Witness",
+      "value": "The Last Witness"
+    },
+    {
+      "key": "Blind Spot",
+      "value": "Blind Spot"
+    },
+    {
+      "key": "The Last Break",
+      "value": "The Last Break"
+    },
+    {
+      "key": "Bar",
+      "value": "Bar"
+    },
+    {
+      "key": "Security guard",
+      "value": "Security guard"
+    },
+    {
+      "key": "Caretaker",
+      "value": "Caretaker"
+    },
+    {
+      "key": "Baker",
+      "value": "Baker"
+    },
+    {
+      "key": "Nurse • witness",
+      "value": "Nurse • witness"
+    },
+    {
+      "key": "Man behind the counter",
+      "value": "Man behind the counter"
+    },
+    {
+      "key": "Bar employee",
+      "value": "Bar employee"
+    },
+    {
+      "key": "Unknown customer",
+      "value": "Unknown customer"
+    },
+    {
+      "key": "Pistol",
+      "value": "Pistol"
+    },
+    {
+      "key": "Knife",
+      "value": "Knife"
+    },
+    {
+      "key": "Poison",
+      "value": "Poison"
+    },
+    {
+      "key": "Victim's home",
+      "value": "Victim's home"
+    },
+    {
+      "key": "Closed bar",
+      "value": "Closed bar"
+    },
+    {
+      "key": "WHAT WAS THE WEAPON?",
+      "value": "WHAT WAS THE WEAPON?"
+    },
+    {
+      "key": "WHERE DID THE ATTACK HAPPEN?",
+      "value": "WHERE DID THE ATTACK HAPPEN?"
+    },
+    {
+      "key": "WHAT CAUSED THE DEATH?",
+      "value": "WHAT CAUSED THE DEATH?"
+    },
+    {
+      "key": "WHERE WAS THE VICTIM POISONED?",
+      "value": "WHERE WAS THE VICTIM POISONED?"
+    },
+    {
+      "key": "WHICH WEAPON?",
+      "value": "WHICH WEAPON?"
+    },
+    {
+      "key": "WHERE?",
+      "value": "WHERE?"
+    },
+    {
+      "key": "Talk to people",
+      "value": "Talk to people"
+    },
+    {
+      "key": "People to interview:",
+      "value": "People to interview:"
+    },
+    {
+      "key": "Compare their accounts with the evidence.",
+      "value": "Compare their accounts with the evidence."
+    },
+    {
+      "key": "NEW EVIDENCE",
+      "value": "NEW EVIDENCE"
+    },
+    {
+      "key": "Added to the case file.",
+      "value": "Added to the case file."
+    },
+    {
+      "key": "INVESTIGATION OVER",
+      "value": "INVESTIGATION OVER"
+    },
+    {
+      "key": "INCORRECT ACCUSATION",
+      "value": "INCORRECT ACCUSATION"
+    },
+    {
+      "key": "All three attempts have been used. You can try the case again.",
+      "value": "All three attempts have been used. You can try the case again."
+    },
+    {
+      "key": "Review the evidence and testimony.",
+      "value": "Review the evidence and testimony."
+    },
+    {
+      "key": "CAMPAIGN COMPLETE!",
+      "value": "CAMPAIGN COMPLETE!"
+    },
+    {
+      "key": "CASE SOLVED!",
+      "value": "CASE SOLVED!"
+    },
+    {
+      "key": "Congratulations, detective! All three cases are solved.",
+      "value": "Congratulations, detective! All three cases are solved."
+    },
+    {
+      "key": "Excellent work, detective!",
+      "value": "Excellent work, detective!"
+    },
+    {
+      "key": "Start or continue an investigation.",
+      "value": "Start or continue an investigation."
+    },
+    {
+      "key": "Case closed • defeat",
+      "value": "Case closed • defeat"
+    },
+    {
+      "key": "Select an investigation file.",
+      "value": "Select an investigation file."
+    },
+    {
+      "key": "NEW GAME • CHOOSE A SLOT",
+      "value": "NEW GAME • CHOOSE A SLOT"
+    },
+    {
+      "key": "CONTINUE • CHOOSE A SLOT",
+      "value": "CONTINUE • CHOOSE A SLOT"
     }
   ]
 }
