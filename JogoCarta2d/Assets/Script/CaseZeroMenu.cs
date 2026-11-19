@@ -15,6 +15,26 @@ public sealed class CaseZeroMenu : MonoBehaviour
     [Header("Easy Transitions • abertura da investigação")]
     [SerializeField] GameObject transitionTemplate;
     [SerializeField] EasyTransition.TransitionSettings sceneTransition;
+    [Header("Fundo animado • vídeo em loop com trovão no relâmpago")]
+    [SerializeField] UnityEngine.Video.VideoClip menuVideo;
+    [SerializeField] AudioClip menuThunder;
+
+#if UNITY_EDITOR
+    // Fills the two fields with Assets/Sprites/menu.mp4 and the thunder in Assets/songs the
+    // first time the menu is inspected or played in the editor; save the scene to keep them
+    // for builds. Either field can be changed by hand at any time.
+    void OnValidate()
+    {
+        if (menuVideo == null)
+            menuVideo = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Video.VideoClip>("Assets/Sprites/menu.mp4");
+        if (menuThunder == null)
+            foreach (var guid in UnityEditor.AssetDatabase.FindAssets("Thunder t:AudioClip", new[] { "Assets/songs" }))
+            {
+                menuThunder = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(UnityEditor.AssetDatabase.GUIDToAssetPath(guid));
+                if (menuThunder != null) break;
+            }
+    }
+#endif
     int selectedSlot = 1;
     bool newGame, loading;
     Sequence entrance;
@@ -24,6 +44,13 @@ public sealed class CaseZeroMenu : MonoBehaviour
     {
         // Hide before the first rendered frame; Start prepares the individual controls.
         if (canvasGroup != null) canvasGroup.alpha = 0;
+        // Pure black behind the menu (the camera's own colour showed through while fading in).
+        foreach (var menuCamera in Camera.allCameras)
+        {
+            if (menuCamera.gameObject.scene != gameObject.scene) continue;
+            menuCamera.clearFlags = CameraClearFlags.SolidColor;
+            menuCamera.backgroundColor = Color.black;
+        }
     }
 
     void PlayEntrance()
@@ -59,6 +86,8 @@ public sealed class CaseZeroMenu : MonoBehaviour
 
     void Start()
     {
+        // Looping menu.mp4 behind everything, with thunder synced to its lightning flash.
+        CaseZeroMenuBackdrop.Install(canvasGroup != null ? canvasGroup.transform : transform, menuVideo, menuThunder);
         ResetPanels();
         EnsureButtonMotion();
         Refresh();

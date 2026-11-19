@@ -238,6 +238,22 @@ namespace Pixit.TMProVisualFX
             Play();
         }
 
+        /// <summary>Headline preset: letters pop in one by one and then hold still.</summary>
+        public void PlayHeadline(float revealSpeed = 22f)
+        {
+            CacheTextComponent();
+            colorMode = ColorMode.Original;
+            motionMode = MotionMode.None;
+            motionAmount = 0f;
+            typeAnimationMode = TypeAnimationMode.PopIn;
+            typeCharactersPerSecond = Mathf.Max(1f, revealSpeed);
+            typeFadeDuration = 0.1f;
+            effectRangeMode = EffectRangeMode.AllText;
+            effectRanges.Clear();
+            useUnscaledTime = true;
+            Play();
+        }
+
         /// <summary>Clean character reveal for spoken dialogue that should not sound like radio static.</summary>
         public void PlaySoftDialogue(float revealSpeed = 54f)
         {

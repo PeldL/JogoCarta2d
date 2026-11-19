@@ -17,6 +17,7 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
     static CaseZeroSceneLoading active;
     string loadingText;
     bool waiting;
+    int shownDots;
     float progressTarget;
 
     void Update()
@@ -24,14 +25,22 @@ public sealed class CaseZeroSceneLoading : MonoBehaviour
         if (progress != null)
             progress.rectTransform.anchorMax = new Vector2(progress.fillAmount, 1);
         if (!waiting) return;
-        label.text = loadingText + new string('.', 1 + (int)(Time.unscaledTime * 2) % 3);
+        // Rebuild the label only when the dot count changes (avoids a string per frame).
+        int dots = 1 + (int)(Time.unscaledTime * 2) % 3;
+        if (dots != shownDots) { shownDots = dots; label.text = loadingText + new string('.', dots); }
         label.alpha = 0.82f + Mathf.Sin(Time.unscaledTime * 3f) * 0.18f;
         progress.fillAmount = Mathf.MoveTowards(progress.fillAmount, progressTarget, Time.unscaledDeltaTime * 1.4f);
     }
 
+    // The Easy Transitions asset chosen in the menu is reused for the way back to the menu.
+    static GameObject lastTemplate;
+    static TransitionSettings lastSettings;
+
     public static void Load(string scene, GameObject template, TransitionSettings settings, TMP_FontAsset font)
     {
         if (active != null || !Application.CanStreamedLevelBeLoaded(scene)) return;
+        if (template != null && settings != null) { lastTemplate = template; lastSettings = settings; }
+        else { template = lastTemplate; settings = lastSettings; }
         CaseZeroSoundFeedback.Current?.PlayTransition();
         var root = new GameObject("Caso Zero • Carregamento", typeof(RectTransform), typeof(Canvas),
             typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(CanvasGroup), typeof(CaseZeroSceneLoading));

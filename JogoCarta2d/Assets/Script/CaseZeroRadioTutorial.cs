@@ -142,9 +142,12 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     {
         var portrait = Graphic("Retrato • " + name, view.body.transform.parent, Color.white);
         var rect = portrait.rectTransform;
-        rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1);
-        rect.anchoredPosition = new Vector2(x, -260);
+        rect.anchorMin = rect.anchorMax = new Vector2(0, 1);
+        // Centre pivot (same on-screen placement as a top-left pivot at x, -260)
+        // so the speaker highlight scales and tilts in place.
+        rect.pivot = new Vector2(0.5f, 0.5f);
         rect.sizeDelta = new Vector2(300, 300);
+        rect.anchoredPosition = new Vector2(x + 150, -260 - 150);
         portrait.sprite = sprite;
         portrait.preserveAspect = true;
         portrait.raycastTarget = false;
@@ -243,9 +246,29 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         if (dialogueFx == null) dialogueFx = view.body.gameObject.AddComponent<CaseZeroDialogueFX>();
         dialogueFx.Reveal();
         bool detectiveSpeaking = lines[dialogue].StartsWith("DETECTIVE\n", System.StringComparison.Ordinal);
-        detectivePortrait.color = detectiveSpeaking ? Color.white : new Color(0.7f, 0.7f, 0.7f);
-        centralPortrait.color = detectiveSpeaking ? new Color(0.7f, 0.7f, 0.7f) : Color.white;
+        Spotlight(detectivePortrait, detectiveSpeaking);
+        Spotlight(centralPortrait, !detectiveSpeaking);
         textFade = DOTween.To(() => view.body.alpha, value => view.body.alpha = value, 1, 0.35f).SetUpdate(true);
     }
-    void OnDestroy() => textFade?.Kill();
+
+    static readonly Color Listening = new Color(0.62f, 0.62f, 0.62f);
+    // The speaker steps forward a little while the listener dims; never a hard cut.
+    void Spotlight(Image portrait, bool speaking)
+    {
+        if (portrait == null) return;
+        var target = portrait.transform;
+        target.DOKill();
+        portrait.DOKill();
+        portrait.DOColor(speaking ? Color.white : Listening, 0.25f).SetEase(Ease.OutSine).SetUpdate(true);
+        target.DOScale(speaking ? 1.04f : 0.97f, 0.3f).SetEase(Ease.OutBack, 1.2f).SetUpdate(true);
+        if (speaking)
+            target.DOPunchRotation(new Vector3(0, 0, 1.2f), 0.35f, 5, 0.5f).SetUpdate(true);
+    }
+
+    void OnDestroy()
+    {
+        textFade?.Kill();
+        if (detectivePortrait != null) { detectivePortrait.DOKill(); detectivePortrait.transform.DOKill(); }
+        if (centralPortrait != null) { centralPortrait.DOKill(); centralPortrait.transform.DOKill(); }
+    }
 }

@@ -41,7 +41,7 @@ MonoBehaviour:
   - name: Bar
     sprite: {fileID: 0}
   - name: Delegacia
-    sprite: {fileID: 0}
+    sprite: {fileID: 4193776825752866227, guid: 762d46e0185881643bd4afb7a4198c9a, type: 3}
   - name: "Laborat\xF3rio de per\xEDcia"
     sprite: {fileID: 0}
   - name: Padaria

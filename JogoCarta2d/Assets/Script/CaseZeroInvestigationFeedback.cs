@@ -112,6 +112,20 @@ public sealed class CaseZeroInvestigationFeedback : MonoBehaviour
         accent.color = failed ? new Color(0.75f, 0.14f, 0.14f) : new Color(0.86f, 0.29f, 0.12f);
         PlayNotice(failed ? 4.5f : 3.5f, false);
         if (errorSource != null) { errorSource.Stop(); errorSource.Play(); }
+        // The "conclude" button shakes "no" (Juice UI shake), on top of the screen shake.
+        if (view != null && view.concludeButton != null)
+        {
+            var shakeNo = view.concludeButton.GetComponent<SpankyBoy.JuiceUI.Free.Animate_Shake_Free>();
+            if (shakeNo == null)
+            {
+                shakeNo = view.concludeButton.gameObject.AddComponent<SpankyBoy.JuiceUI.Free.Animate_Shake_Free>();
+                shakeNo.shakeType = SpankyBoy.JuiceUI.Free.Animate_Shake_Free.ShakeType.Horizontal;
+                shakeNo.strength = 14f;
+                shakeNo.duration = 0.45f;
+                shakeNo.vibrato = 14;
+            }
+            shakeNo.Animate();
+        }
         ShakeScreen();
     }
 

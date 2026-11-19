@@ -10,6 +10,8 @@ public sealed class CaseZeroCursor : MonoBehaviour
 {
     CaseZeroArtLibrary art;
     readonly List<RaycastResult> hits = new List<RaycastResult>();
+    PointerEventData pointer;
+    EventSystem pointerOwner;
     Texture2D previous;
     Vector2 previousHotspot;
     bool applied;
@@ -26,10 +28,22 @@ public sealed class CaseZeroCursor : MonoBehaviour
     void Update()
     {
         if (art == null || !Application.isFocused) return;
+        // No cursor artwork assigned yet: keep the system cursor and skip the UI raycast.
+        if (art.cursorLupa == null && art.cursorInteracao == null && art.cursorEscrita == null)
+        {
+            if (applied) ResetCursor();
+            return;
+        }
         int mode = 0;
         if (EventSystem.current != null && Mouse.current != null)
         {
-            var pointer = new PointerEventData(EventSystem.current) { position = Mouse.current.position.ReadValue() };
+            // Reuse one pointer per EventSystem instead of allocating every frame.
+            if (pointer == null || pointerOwner != EventSystem.current)
+            {
+                pointerOwner = EventSystem.current;
+                pointer = new PointerEventData(pointerOwner);
+            }
+            pointer.position = Mouse.current.position.ReadValue();
             hits.Clear(); EventSystem.current.RaycastAll(pointer, hits);
             if (hits.Count > 0)
             {

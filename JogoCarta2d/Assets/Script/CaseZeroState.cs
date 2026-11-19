@@ -19,9 +19,10 @@ public sealed class CaseZeroState
     public bool solved;
     public bool failed;
     public int errors;
-    public int suspect;
-    public int weapon;
-    public int place;
+    // -1 = not chosen yet. A new case starts with nothing selected in Deduction.
+    public int suspect = -1;
+    public int weapon = -1;
+    public int place = -1;
     public string page = "Local";
     public bool documentOpen;
     public bool cameraMode;
@@ -56,6 +57,8 @@ public sealed class CaseZeroState
     }
 
     public bool Has(string id) => evidence.Contains(id);
+    /// <summary>The player has picked a culprit, a weapon and a location.</summary>
+    public bool HasTheory => suspect >= 0 && weapon >= 0 && place >= 0;
     public bool Finished => solved || failed;
     public int AttemptsRemaining => Math.Max(0, 3 - errors);
     public string Objective
@@ -141,7 +144,7 @@ public sealed class CaseZeroState
             && !float.IsNaN(elapsed) && !float.IsInfinity(elapsed) && elapsed >= 0 && errors >= 0
             && !float.IsNaN(callDelay) && !float.IsInfinity(callDelay) && callDelay >= -1
             && !float.IsNaN(idleTime) && !float.IsInfinity(idleTime) && idleTime >= 0
-            && suspect >= 0 && suspect < Definition.suspects.Length && weapon >= 0 && weapon < 3 && place >= 0 && place < 3
+            && suspect >= -1 && suspect < Definition.suspects.Length && weapon >= -1 && weapon < 3 && place >= -1 && place < 3
             && interviewSuspect >= 0 && interviewSuspect < Definition.interviewNames.Length
             && interviewedMask >= 0 && interviewedMask < (1 << Definition.interviewNames.Length)
             && analysisStage >= 0 && analysisStage <= Definition.analysisCount

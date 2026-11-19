@@ -34,7 +34,16 @@ public sealed class CaseZeroDialogueFX : MonoBehaviour
         if (visualFx == null) return;
         if (settle != null) StopCoroutine(settle);
         visualFx.PlaySoftDialogue(58f);
-        settle = StartCoroutine(Settle());
+        settle = StartCoroutine(Settle(58f));
+    }
+
+    /// <summary>Big headline (case solved / unsolved): letters pop in and then hold still.</summary>
+    public void RevealHeadline()
+    {
+        if (visualFx == null) return;
+        if (settle != null) StopCoroutine(settle);
+        visualFx.PlayHeadline(24f);
+        settle = StartCoroutine(Settle(24f));
     }
 
     public void RevealRadioTransmission()
@@ -49,15 +58,17 @@ public sealed class CaseZeroDialogueFX : MonoBehaviour
         if (visualFx == null) return;
         if (settle != null) StopCoroutine(settle);
         visualFx.PlayDialogueGlitch(amount, 4f, speed, glitchCharacterCount);
-        settle = holdUntilReplaced ? null : StartCoroutine(Settle());
+        settle = holdUntilReplaced ? null : StartCoroutine(Settle(speed));
     }
 
-    IEnumerator Settle()
+    // Wait exactly as long as the reveal speed that was actually used, so the
+    // glitch never lingers on fully revealed text (or cuts a fast reveal short).
+    IEnumerator Settle(float charactersPerSecond)
     {
         TMP_Text text = visualFx.Text;
         if (text != null) text.ForceMeshUpdate();
         int count = text != null ? text.textInfo.characterCount : 0;
-        yield return new WaitForSecondsRealtime(Mathf.Clamp(count / revealCharactersPerSecond + 0.18f, 0.25f, 8f));
+        yield return new WaitForSecondsRealtime(Mathf.Clamp(count / Mathf.Max(1f, charactersPerSecond) + 0.18f, 0.25f, 8f));
         visualFx.Stop();
         settle = null;
     }

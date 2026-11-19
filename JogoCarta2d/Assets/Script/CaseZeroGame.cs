@@ -214,12 +214,14 @@ public sealed class CaseZeroGame : MonoBehaviour
         view.ShowPortraits(data, state.interviewSuspect);
         for (int i = 0; i < view.suspectLabels.Length; i++)
         {
+            if (view.suspectLabels[i] == null) continue;
             bool exists = i < data.suspects.Length;
-            view.suspectLabels[i].transform.parent.gameObject.SetActive(exists);
+            var row = view.suspectLabels[i].transform.parent;
+            if (row != null) row.gameObject.SetActive(exists);
             if (exists) view.suspectLabels[i].text = data.suspects[i];
         }
-        for (int i = 0; i < view.objectLabels.Length; i++) view.objectLabels[i].text = data.objects[i];
-        for (int i = 0; i < view.placeLabels.Length; i++) view.placeLabels[i].text = data.places[i];
+        FillLabels(view.objectLabels, data.objects);
+        FillLabels(view.placeLabels, data.places);
         if (view.objectQuestion != null) view.objectQuestion.text = data.objectQuestion;
         if (view.placeQuestion != null) view.placeQuestion.text = data.placeQuestion;
         if (view.worldInterviewLabel != null) view.worldInterviewLabel.text = state.CaseIndex == 0 ? "Man behind the counter" : "Talk to people";
@@ -233,6 +235,13 @@ public sealed class CaseZeroGame : MonoBehaviour
             view.interviewSuspectButtons[i].gameObject.SetActive(exists);
             if (exists) view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = data.interviewNames[i];
         }
+    }
+
+    static void FillLabels(TMPro.TMP_Text[] labels, string[] values)
+    {
+        if (labels == null) return;
+        for (int i = 0; i < labels.Length; i++)
+            if (labels[i] != null) labels[i].text = values != null && i < values.Length ? values[i] : "";
     }
 
     public void InterviewSuspect(int index)
@@ -374,7 +383,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             if (Keyboard.current.tabKey.wasPressedThisFrame) ToggleDocument();
             else if (Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                if (view.documentRoot.activeSelf) CloseDocument();
+                if (view.IsDocumentOpen) CloseDocument();
                 else OpenPage("Opções");
             }
         }
@@ -392,7 +401,7 @@ public sealed class CaseZeroGame : MonoBehaviour
                 state.callPending = true;
                 phone.QueueCall(forensicCall);
                 Say("Dispatch is calling. Open the phone to answer.");
-                if (view.documentRoot.activeSelf && state.page == "Ligações") RefreshPhone();
+                if (view.IsDocumentOpen && state.page == "Ligações") RefreshPhone();
                 Save(false);
             }
         }
@@ -418,7 +427,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     public void ToggleDocument()
     {
         if (state == null) return;
-        if (view.documentRoot.activeSelf) CloseDocument();
+        if (view.IsDocumentOpen) CloseDocument();
         else OpenPage(view.separatePanels ? "Evidências" : NormalizePage(state.page));
     }
 
@@ -566,6 +575,7 @@ public sealed class CaseZeroGame : MonoBehaviour
                 if (view.nextCaseLabel != null) view.nextCaseLabel.text = state.CaseIndex < 2 ? "Go to Case " + (state.CaseIndex + 2) : "View campaign results";
                 if (view.resultSolution != null) view.resultSolution.SetActive(state.solved);
                 view.documentTitle.text = state.failed ? "CASE UNSOLVED" : "CASE SOLVED";
+                view.AnimateResult(state.solved);
                 view.resultStats.text = state.failed
                     ? $"All three accusations were incorrect.\nThe investigation is over.\n{TimeText(state.elapsed)} • {state.errors} mistakes\nYou can restart this case or return to the menu."
                     : $"{state.Rating}\n{state.Score} points  •  {TimeText(state.elapsed)}  •  {state.errors} mistake(s)";
@@ -626,6 +636,7 @@ public sealed class CaseZeroGame : MonoBehaviour
     {
         if (state.Has(id)) return;
         state.evidence.Add(id);
+        view.PulseMarker(System.Array.IndexOf(CurrentCase.EvidenceAt(state.location, state.analysisStage), id));
         view.NotifyEvidence(catalog[id].evidenceName);
         CaseZeroSoundFeedback.Current?.PlayEvidence();
         evidenceManager.CollectEvidence(catalog[id]);
@@ -648,9 +659,7 @@ public sealed class CaseZeroGame : MonoBehaviour
 
     void RefreshBoard()
     {
-        var collected = new List<string>();
-        foreach (var id in CurrentCase.evidenceKeys) if (state.Has(id)) collected.Add(id);
-        if (state.Has("depoimento")) collected.Add("depoimento");
+        var collected = CollectedEvidenceKeys();
         int pageCount = Mathf.Max(1, Mathf.CeilToInt(collected.Count / (float)EvidenceCardsPerPage));
         evidencePage = Mathf.Clamp(evidencePage, 0, pageCount - 1);
         int start = evidencePage * EvidenceCardsPerPage;
@@ -673,6 +682,11 @@ public sealed class CaseZeroGame : MonoBehaviour
             selectedIndex = start;
             selectedEvidence = collected[selectedIndex];
         }
+        ShowEvidenceDetails(pageCount);
+    }
+
+    void ShowEvidenceDetails(int pageCount)
+    {
         var data = catalog[selectedEvidence];
         view.evidenceName.text = data.evidenceName;
         view.evidenceDescription.text = data.description;
@@ -695,16 +709,15 @@ public sealed class CaseZeroGame : MonoBehaviour
         var collected = CollectedEvidenceKeys();
         int index = evidencePage * EvidenceCardsPerPage + slot;
         if (index < 0 || index >= collected.Count) return;
+        if (selectedEvidence == collected[index]) return;
         selectedEvidence = collected[index];
-        var data = catalog[selectedEvidence];
-        view.evidenceName.text = data.evidenceName;
-        view.evidenceDescription.text = data.description;
-        view.evidenceType.text = $"EVIDENCE • CASE {state.CaseIndex + 1:00}";
+        ShowEvidenceDetails(Mathf.Max(1, Mathf.CeilToInt(collected.Count / (float)EvidenceCardsPerPage)));
+        view.AnimateEvidenceDetails();
     }
 
     void BrowseEvidenceWithMouseWheel()
     {
-        if (state == null || !view.documentRoot.activeSelf || state.page != "Evidências" || Mouse.current == null) return;
+        if (state == null || !view.IsDocumentOpen || state.page != "Evidências" || Mouse.current == null) return;
         float wheel = Mouse.current.scroll.ReadValue().y;
         if (Mathf.Abs(wheel) < 0.01f || view.evidenceCards.Length == 0) return;
         var listRect = view.evidenceCards[0].transform.parent as RectTransform;
@@ -715,8 +728,11 @@ public sealed class CaseZeroGame : MonoBehaviour
         int pageCount = Mathf.Max(1, Mathf.CeilToInt(collected.Count / (float)EvidenceCardsPerPage));
         if (pageCount <= 1) return;
         int direction = wheel < 0 ? 1 : -1;
-        evidencePage = Mathf.Clamp(evidencePage + direction, 0, pageCount - 1);
+        int next = Mathf.Clamp(evidencePage + direction, 0, pageCount - 1);
+        if (next == evidencePage) return; // Already at the first/last page: no click, no redraw.
+        evidencePage = next;
         RefreshBoard();
+        view.AnimateEvidenceDetails();
         CaseZeroSoundFeedback.Current?.PlayClick();
     }
 
@@ -774,6 +790,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             view.interviewChoiceLabels[i].text = available ? choice.choiceText : state.CaseIndex == 0 ? "Challenge • find evidence that contradicts the account" : "Compare • investigate records and contradictions";
             view.interviewChoices[i].interactable = available;
         }
+        view.AnimateInterviewChoices();
     }
 
     public void SelectInterviewChoice(int index)
@@ -900,16 +917,17 @@ public sealed class CaseZeroGame : MonoBehaviour
         return state.Has("c3_padaria_retalho") && state.Has("c3_police_tox") && state.Has("c3_police_uniforme");
     }
     public void SelectSuspect(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.suspects.Length) return; state.suspect = index; RefreshDeduction(); }
-    public void SelectWeapon(int index) { if (state == null || index < 0 || index > 2) return; state.weapon = index; RefreshDeduction(); }
-    public void SelectPlace(int index) { if (state == null || index < 0 || index > 2) return; state.place = index; RefreshDeduction(); }
+    public void SelectWeapon(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.objects.Length) return; state.weapon = index; RefreshDeduction(); }
+    public void SelectPlace(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.places.Length) return; state.place = index; RefreshDeduction(); }
 
     void RefreshDeduction()
     {
         view.ShowSelection(view.suspectChecks, state.suspect);
         view.ShowSelection(view.weaponChecks, state.weapon);
         view.ShowSelection(view.placeChecks, state.place);
-        view.concludeButton.interactable = state.CanConclude && !state.Finished;
+        view.concludeButton.interactable = state.CanConclude && state.HasTheory && !state.Finished;
         view.deductionHint.text = state.Finished ? "This case is already closed. View the result or restart through Settings."
+            : state.CanConclude && !state.HasTheory ? "Choose the culprit, the weapon, and the location before confirming."
             : state.CanConclude ? $"Review your theory before confirming. {state.AttemptsRemaining} accusation attempt(s) remaining."
             : state.HasSceneEvidence && state.Has("depoimento") && state.AllInterviewed && !state.callRead ? "The forensic report is missing: submit the material by phone, answer, and record the response."
             : state.CaseIndex == 0 ? "Investigate the scene, compare statements, and consult forensics." : "Examine the records, interview those involved, and challenge contradictions.";
@@ -917,7 +935,7 @@ public sealed class CaseZeroGame : MonoBehaviour
 
     public void ConcludeCase()
     {
-        if (state == null || paused || state.Finished || !state.CanConclude || confirming) return;
+        if (state == null || paused || state.Finished || !state.CanConclude || !state.HasTheory || confirming) return;
         ShowSlotConfirmation(false);
         accusationConfirmation = true;
         view.documentTitle.text = "CONFIRM ACCUSATION";
@@ -1023,7 +1041,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             restoring = false;
             saveTimer = 0;
             selectedEvidence = null;
-            view.incomingCallPulse.enabled = false;
+            if (view.incomingCallPulse != null) view.incomingCallPulse.enabled = false;
             view.Feedback?.ResetFeedback();
             view.progress.text = "NO ACTIVE INVESTIGATION";
             view.phoneNotification.text = "Start or load an investigation.";
@@ -1085,6 +1103,6 @@ public sealed class CaseZeroGame : MonoBehaviour
         Say("Dispatch: " + message);
         Save(false);
     }
-    void Say(string message) { if (view != null) view.status.text = message; }
+    void Say(string message) { if (view != null) view.SetStatus(message); }
     static string TimeText(float time) => $"{(int)time / 60:00}:{(int)time % 60:00}";
 }
