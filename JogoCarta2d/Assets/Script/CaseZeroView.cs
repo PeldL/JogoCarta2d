@@ -11,17 +11,17 @@ public sealed class CaseZeroView : MonoBehaviour
     {
         switch (key)
         {
-            case "Evidências": return "Evidence";
-            case "Interrogatório": return "Interviews";
-            case "Dedução": return "Deduction";
-            case "Opções": return "Settings";
-            case "Suspeitos": return "Suspects";
-            case "Introdução": return "Introduction";
-            case "Confirmar reinício": return "Confirm restart";
-            case "Resultado": return "Results";
-            case "Mapa": return "Map";
-            case "Ligações": case "Telefone": return "Phone";
-            case "Local": return "Crime scene";
+            case CaseZeroPages.Evidence: return "Evidence";
+            case CaseZeroPages.Interviews: return "Interviews";
+            case CaseZeroPages.Deduction: return "Deduction";
+            case CaseZeroPages.Options: return "Settings";
+            case CaseZeroPages.Suspects: return "Suspects";
+            case CaseZeroPages.Introduction: return "Introduction";
+            case CaseZeroPages.Confirmation: return "Confirm restart";
+            case CaseZeroPages.Result: return "Results";
+            case CaseZeroPages.Map: return "Map";
+            case CaseZeroPages.Phone: case CaseZeroPages.LegacyPhone: return "Phone";
+            case CaseZeroPages.LegacyScene: return "Crime scene";
             case "Apartamento": return "Apartment 302";
             case "Escritorio": return "Office";
             case "Delegacia": return "Police station";
@@ -126,9 +126,7 @@ public sealed class CaseZeroView : MonoBehaviour
         if (firstCaseVictim != null)
         {
             // Reuse the existing portrait slot for each campaign victim.
-            string victimArt = data.id == "ultima-testemunha" ? "Vítima 1 - Mulher no bar"
-                : data.id == "apartamento-302" ? "Vítima 2"
-                : data.id == "arquivo-vertice" ? "Vítima 3" : null;
+            string victimArt = data.victimArt;
             Sprite victimSprite = string.IsNullOrEmpty(victimArt) ? null : artLibrary.Find(victimArt);
             var victimImage = firstCaseVictim.GetComponent<Image>();
             if (victimImage != null && victimSprite != null)
@@ -140,8 +138,7 @@ public sealed class CaseZeroView : MonoBehaviour
             if (victimCaption != null)
             {
                 int caseNumber = Mathf.Max(0, System.Array.IndexOf(CaseZeroCases.All, data) + 1);
-                string label = data.id == "ultima-testemunha" ? "Woman from the bar"
-                    : data.id == "apartamento-302" ? "Forensics lab assistant" : "Bakery regular";
+                string label = data.victimLabel ?? "";
                 victimCaption.text = victimSprite != null ? $"VICTIM • CASE {caseNumber:00}\n{label}" : string.Empty;
             }
         }
@@ -286,7 +283,7 @@ public sealed class CaseZeroView : MonoBehaviour
 
     public void SetLocation(string location)
     {
-        atMap = location == "Mapa";
+        atMap = location == CaseZeroPages.Map;
         if (mapRoot != null) mapRoot.SetActive(!mapInDocument && atMap);
         bool isInvestigationLocation = Array.IndexOf(availableLocations, location) >= 0;
         foreach (var control in barControls)
@@ -363,7 +360,7 @@ public sealed class CaseZeroView : MonoBehaviour
         if (objective != null) objective.gameObject.SetActive(false);
         if (caseBriefing != null) caseBriefing.gameObject.SetActive(false);
         if (worldControls != null) worldControls.interactable = false;
-        if (mapControls != null) mapControls.interactable = mapInDocument && name == "Mapa" && canNavigate;
+        if (mapControls != null) mapControls.interactable = mapInDocument && name == CaseZeroPages.Map && canNavigate;
         if (launchButtons != null)
             foreach (var button in launchButtons)
             {
@@ -372,23 +369,23 @@ public sealed class CaseZeroView : MonoBehaviour
             }
         if (separatePanels)
         {
-            bool modal = name == "Introdução" || name == "Confirmar reinício" || name == "Resultado";
-            investigationRoot.SetActive(!modal && (mapInDocument || name != "Mapa") && name != "Ligações");
-            if (!backgroundMap || mapInDocument) mapRoot.SetActive(name == "Mapa");
-            phoneRoot.SetActive(name == "Ligações");
+            bool modal = name == CaseZeroPages.Introduction || name == CaseZeroPages.Confirmation || name == CaseZeroPages.Result;
+            investigationRoot.SetActive(!modal && (mapInDocument || name != CaseZeroPages.Map) && name != CaseZeroPages.Phone);
+            if (!backgroundMap || mapInDocument) mapRoot.SetActive(name == CaseZeroPages.Map);
+            phoneRoot.SetActive(name == CaseZeroPages.Phone);
             modalRoot.SetActive(modal);
         }
         foreach (var page in pages)
         {
             bool selected = page.name == name;
-            if (page.panel != null && !(backgroundMap && !mapInDocument && page.name == "Mapa")) {
+            if (page.panel != null && !(backgroundMap && !mapInDocument && page.name == CaseZeroPages.Map)) {
                 bool wasActive = page.panel.activeInHierarchy;
                 page.panel.SetActive(selected);
                 if (selected && changedPage)
                 {
                     var motion = page.panel.GetComponent<CaseZeroPanelMotion>();
                     if (motion == null) motion = page.panel.AddComponent<CaseZeroPanelMotion>();
-                    if (page.name == "Mapa") motion.UseMapReveal();
+                    if (page.name == CaseZeroPages.Map) motion.UseMapReveal();
                     else if (motion != null && wasActive) motion.Play();
                 }
             }
@@ -556,11 +553,11 @@ public sealed class CaseZeroView : MonoBehaviour
             .SetEase(Ease.OutSine).SetUpdate(true);
     }
     // Inspector previews only activate existing objects; no generation or deletion.
-    [ContextMenu("Pré-visualizar/Mapa")] void PreviewMap() => ShowPage("Mapa", true);
-    [ContextMenu("Pré-visualizar/Evidências")] void PreviewEvidence() => ShowPage("Evidências", true);
-    [ContextMenu("Pré-visualizar/Interrogatório")] void PreviewInterview() => ShowPage("Interrogatório", true);
-    [ContextMenu("Pré-visualizar/Ligações")] void PreviewPhone() => ShowPage("Ligações", true);
-    [ContextMenu("Pré-visualizar/Dedução")] void PreviewDeduction() => ShowPage("Dedução", true);
-    [ContextMenu("Pré-visualizar/Opções")] void PreviewOptions() => ShowPage("Opções", true);
+    [ContextMenu("Pré-visualizar/Mapa")] void PreviewMap() => ShowPage(CaseZeroPages.Map, true);
+    [ContextMenu("Pré-visualizar/Evidências")] void PreviewEvidence() => ShowPage(CaseZeroPages.Evidence, true);
+    [ContextMenu("Pré-visualizar/Interrogatório")] void PreviewInterview() => ShowPage(CaseZeroPages.Interviews, true);
+    [ContextMenu("Pré-visualizar/Ligações")] void PreviewPhone() => ShowPage(CaseZeroPages.Phone, true);
+    [ContextMenu("Pré-visualizar/Dedução")] void PreviewDeduction() => ShowPage(CaseZeroPages.Deduction, true);
+    [ContextMenu("Pré-visualizar/Opções")] void PreviewOptions() => ShowPage(CaseZeroPages.Options, true);
     [ContextMenu("Pré-visualizar/Fechar documento")] void PreviewClose() => CloseDocument();
 }

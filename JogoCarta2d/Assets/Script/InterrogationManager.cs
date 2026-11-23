@@ -58,11 +58,16 @@ public class InterrogationManager : MonoBehaviour
         OnInterrogationEnded?.Invoke();
     }
 
+    /// <summary>Set by CaseZeroGame so question requirements read the saved investigation
+    /// (CaseZeroState) instead of a second copy of the collected evidence.</summary>
+    public System.Func<string, bool> HasEvidence;
+
     public bool IsChoiceAvailable(InterrogationChoice choice)
     {
         if (choice == null) return false;
         if (choice.requiredEvidence == null || string.IsNullOrEmpty(choice.requiredEvidence.id))
             return true;
+        if (HasEvidence != null) return HasEvidence(choice.requiredEvidence.id);
 
         return EvidenceManager.Instance != null &&
                EvidenceManager.Instance.HasEvidence(choice.requiredEvidence.id);

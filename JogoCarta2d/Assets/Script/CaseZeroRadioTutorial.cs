@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-// Radio conversations for each case. Tuning and gameplay instructions belong only to the first case.
+// Radio conversation before each case. Only the tutorial case asks the player to tune the radio.
 public sealed class CaseZeroRadioTutorial : MonoBehaviour
 {
     CaseZeroPresentation view;
@@ -17,31 +17,9 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     Tween textFade;
     float nextTuningSound;
     Image detectivePortrait, centralPortrait;
+    // The conversation comes from the case data (CaseZeroCase.radioLines).
     string[] lines;
-    int caseIndex;
-    // Short on purpose: the in-game hints explain each screen when the player first opens it.
-    static readonly string[] TutorialLines = {
-        "DISPATCH\nDetective, do you copy? A woman was shot dead in a bar. We need you at the scene.",
-        "DETECTIVE\nOn my way. Where do I start?",
-        "DISPATCH\nExamine the marked objects and send anything useful to forensics through your phone. Then challenge any account the evidence contradicts. Tab opens your case file."
-    };
-    static string[] BriefingLines(int index)
-    {
-        if (index == 1)
-            return new[] {
-                "DISPATCH\nDetective, a body was found in a street dumpster at dawn. It's an assistant from the forensics laboratory.",
-                "DETECTIVE\nCause of death?",
-                "DISPATCH\nThe laboratory's own medical examiner already signed the autopsy: overdose. The family swears the victim never used drugs.",
-                "DETECTIVE\nThen I want a second opinion. I'll start at the dumpster and then check the laboratory.",
-                "DISPATCH\nSend anything suspicious to an independent lab through your phone. The results will be waiting at the police station."
-            };
-        return new[] {
-            "DISPATCH\nDetective, a customer collapsed and died at the bakery during breakfast. The officer on the scene says it was a heart attack.",
-            "DETECTIVE\nBut you're calling me anyway.",
-            "DISPATCH\nA nurse who tried to help says the symptoms looked like poisoning. The victim's car is still in the parking lot behind the bakery.",
-            "DETECTIVE\nUnderstood. I'll start at the bakery. Keep that cup away from everyone."
-        };
-    }
+    CaseZeroCase data;
 
     float Target;
     readonly Image[] signalBars = new Image[7];
@@ -50,9 +28,11 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     {
         view = presentation;
         game = investigation;
-        caseIndex = game.CampaignState.CaseIndex;
+        data = game.CampaignState.Definition;
         Target = Random.Range(920, 1061) / 10f;
-        lines = caseIndex == 0 ? TutorialLines : BriefingLines(caseIndex);
+        lines = data.radioLines != null && data.radioLines.Length > 0
+            ? data.radioLines
+            : new[] { "DISPATCH\nDetective, we have a new case. " + data.introduction };
         ShowSkipButton();
         view.title.text = "AT HOME • A CALL ON THE RADIO";
         view.stepLabel.text = "FIRST SHIFT";
@@ -68,7 +48,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         detectivePortrait = Portrait("Detective", 140, art != null ? art.radioDetetive : null);
         centralPortrait = Portrait("Dispatch", 1480, art != null ? art.radioCentral : null);
         // Dialogue size, padding and artwork are authored in ApresentacaoCaso.unity.
-        if (caseIndex > 0)
+        if (!data.tutorial)
         {
             // A familiar frequency reconnects immediately; no repeated tuning or tutorial.
             dialogue = 0;
@@ -260,8 +240,8 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         textFade?.Kill();
         view.body.alpha = 0;
         view.title.text = "DISPATCH ↔ DETECTIVE";
-        view.stepLabel.text = caseIndex == 0 ? "RADIO • CONNECTION ESTABLISHED"
-            : $"CASE {caseIndex + 1} • {game.CampaignState.Definition.title.ToUpperInvariant()}";
+        view.stepLabel.text = data.tutorial ? "RADIO • CONNECTION ESTABLISHED"
+            : $"CASE {game.CampaignState.CaseIndex + 1} • {data.title.ToUpperInvariant()}";
         view.primaryLabel.text = dialogue == lines.Length - 1
             ? "Go to " + CaseZeroView.DisplayName(game.CampaignState.Definition.location)
             : "Continue conversation";

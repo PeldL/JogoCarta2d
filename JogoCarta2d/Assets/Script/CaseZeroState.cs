@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 // Plain data: the investigation can be saved independently of scene objects.
+// Every rule here reads the case's data, so all cases follow the same flow.
 [Serializable]
 public sealed class CaseZeroState
 {
@@ -23,10 +24,10 @@ public sealed class CaseZeroState
     public int suspect = -1;
     public int weapon = -1;
     public int place = -1;
-    public string page = "Local";
+    public string page = CaseZeroPages.LegacyScene;
     public bool documentOpen;
     public bool cameraMode;
-    public string location = "Mapa";
+    public string location = CaseZeroPages.Map;
     public string interviewNode = "start";
     public int interviewSuspect;
     public int interviewedMask;
@@ -51,7 +52,7 @@ public sealed class CaseZeroState
     List<CaseZeroResult> PreviousResults() => (results ?? new List<CaseZeroResult>()).FindAll(r => r != null && r.caseId != caseId);
     public CaseZeroState NextCase()
     {
-        if (!solved || CaseIndex < 0 || CaseIndex >= 2) return null;
+        if (!solved || CaseIndex < 0 || CaseIndex >= CaseZeroCases.All.Length - 1) return null;
         var next = CaseZeroCases.All[CaseIndex + 1];
         RecordResult();
         return new CaseZeroState { caseId = next.id, location = next.location, completedCases = CaseIndex + 1, results = new List<CaseZeroResult>(results) };
@@ -62,46 +63,29 @@ public sealed class CaseZeroState
     public bool HasTheory => suspect >= 0 && weapon >= 0 && place >= 0;
     public bool Finished => solved || failed;
     public int AttemptsRemaining => Math.Max(0, 3 - errors);
+
     public string Objective
     {
         get
         {
             if (solved) return "Case solved. View your evaluation.";
             if (failed) return "Investigation over. Try again from the results screen.";
-            if (CaseIndex > 0)
-            {
-                if (callPending && !callRead) return "Answer the call from forensics on your phone.";
-                if (CanRequestAnalysis && callDelay < 0) return "Submit the requested material through your phone. Results will be available at the police station.";
-                string task = NextInvestigationTask();
-                if (callDelay >= 0) return "Forensics is analyzing the material. Meanwhile: " + task;
-                return task;
-            }
             if (callPending && !callRead) return "Answer the call from forensics on your phone.";
-            if (!Has("registro") || !Has("pistola") || !Has("capsula"))
-                return location == "Bar" ? "Examine the objects in the bar and collect evidence." : "Travel to the bar using the map and examine the objects.";
-            // Ballistics first: the report is what breaks the man's story.
-            if (!callRead)
+            if (CanRequestAnalysis && callDelay < 0)
             {
-                if (callDelay < 0) return "Send the pistol and the cartridge case to forensics through your phone.";
-                return Has("sangue")
-                    ? "Forensics is comparing the pistol and the cartridge case. Meanwhile, question the man behind the counter."
-                    : "Forensics is comparing the pistol and the cartridge case. Meanwhile, examine the traces at the scene.";
+                var material = new List<string>(Definition.analysisPrerequisites[analysisStage]);
+                material.Remove("depoimento");
+                string where = Definition.ReportsLocation;
+                return (material.Count > 0 ? $"Send {Names(material)} to forensics through your phone." : "Request the next forensic analysis through your phone.")
+                    + (where != null ? $" Results will be ready at the {CaseZeroView.DisplayName(where)}." : "");
             }
-            if (!Has("sangue")) return "Examine the traces at the scene.";
-            if (!Has("depoimento")) return "In Interviews, challenge the man behind the counter with the records and the ballistic report.";
-            return "Open Deduction. Weigh every option against the evidence before you accuse.";
+            string task = NextInvestigationTask();
+            return callDelay >= 0 ? "Forensics is analyzing the material. Meanwhile: " + task : task;
         }
     }
-    public bool HasSceneEvidence
-    {
-        get
-        {
-            if (CaseIndex == 0) return Has("pistola") && Has("capsula") && Has("registro") && Has("sangue");
-            foreach (var key in Definition.evidenceKeys) if (!Has(key)) return false;
-            return true;
-        }
-    }
-    public bool HasAllCaseEvidence => HasSceneEvidence;
+
+    // Kept for the editor campaign checks; the required clues are the case's key evidence.
+    public bool HasSceneEvidence => HasKeyEvidence;
     bool Unlocked(string key) => analysisStage >= Definition.UnlockStage(key);
     public bool HasKeyEvidence => MissingKeys(Definition.keyEvidence, false).Count == 0;
     public bool CanConfront => MissingKeys(Definition.confrontRequirements, false).Count == 0
@@ -140,16 +124,13 @@ public sealed class CaseZeroState
         return string.Join(", ", pending);
     }
 
-    /// <summary>The next step that actually moves a later case forward, naming what is missing and where.</summary>
+    /// <summary>The next step that actually moves the case forward, naming what is missing and where.</summary>
     string NextInvestigationTask()
     {
         var data = Definition;
         var reports = new List<string>();
-        for (int i = 0; i < data.evidenceKeys.Length; i++)
-        {
-            string key = data.evidenceKeys[i];
+        foreach (var key in data.evidenceKeys)
             if (!Has(key) && data.UnlockStage(key) > 0 && Unlocked(key)) reports.Add(key);
-        }
         if (reports.Count > 0) return $"New forensic results are ready. Collect them at the {Places(reports)}.";
 
         if (analysisStage < data.analysisCount && analysisStage < data.analysisPrerequisites.Length)
@@ -171,7 +152,7 @@ public sealed class CaseZeroState
 
         var remaining = MissingKeys(data.keyEvidence, true);
         if (remaining.Count > 0) return $"Examine {Names(remaining)} at the {Places(remaining)}.";
-        if (CanConclude) return "Open Deduction and confirm the combination supported by the evidence.";
+        if (CanConclude) return "Open Deduction. Weigh every option against the evidence before you accuse.";
         if (!AllInterviewed) return "Interview " + PendingInterviews() + " and compare their accounts with the evidence.";
         return "Review the evidence and compare it with each account. Forensics will need more material to continue.";
     }
@@ -189,25 +170,21 @@ public sealed class CaseZeroState
         else if (!callRead || analysisStage < Definition.analysisCount) missing.Add("Request and record the forensic report by phone");
         return missing;
     }
+
     public bool CanRequestAnalysis
     {
         get
         {
-            if (CaseIndex == 0) return Has("pistola") && Has("capsula");
-            if (analysisStage < 0 || analysisStage >= Definition.analysisPrerequisites.Length) return false;
-            foreach (var key in Definition.analysisPrerequisites[analysisStage])
+            var prerequisites = Definition.analysisPrerequisites;
+            if (prerequisites == null || analysisStage < 0 || analysisStage >= Math.Min(Definition.analysisCount, prerequisites.Length)) return false;
+            foreach (var key in prerequisites[analysisStage])
                 if (!Has(key)) return false;
             return true;
         }
     }
-    public bool CanConclude
-    {
-        get
-        {
-            // Only the key clues are required; optional clues and witnesses add context.
-            return Has("depoimento") && callRead && HasKeyEvidence && analysisStage >= Definition.analysisCount;
-        }
-    }
+
+    // Only the key clues are required; optional clues and witnesses add context.
+    public bool CanConclude => Has("depoimento") && callRead && HasKeyEvidence && analysisStage >= Definition.analysisCount;
 
     public bool Accuse()
     {
@@ -229,29 +206,38 @@ public sealed class CaseZeroState
         results.Add(new CaseZeroResult { caseId = caseId, score = Score, elapsed = elapsed, errors = errors, evidenceCount = evidence.Count });
     }
 
-    /// <summary>Clamps interview data from saves made before a case's cast changed,
-    /// so an older save is restarted by the game instead of being rejected.</summary>
+    /// <summary>Brings a save made by an older version in line with the current case data,
+    /// so it is loaded (or restarted by the game) instead of being rejected.</summary>
     public void Repair()
     {
         if (CaseIndex < 0) return;
-        int people = Definition.interviewNames.Length;
+        var data = Definition;
+        int people = data.interviewNames.Length;
         if (interviewSuspect < 0 || interviewSuspect >= people) { interviewSuspect = 0; interviewNode = "start"; }
         interviewedMask &= (1 << people) - 1;
-        if (suspect >= Definition.suspects.Length) suspect = -1;
+        if (suspect >= data.suspects.Length) suspect = -1;
+        if (weapon >= data.objects.Length) weapon = -1;
+        if (place >= data.places.Length) place = -1;
+        // The first case used to record its report without advancing the analysis stage.
+        if (callRead && !callPending && callDelay < 0 && analysisStage <= pendingAnalysisStage && analysisStage < data.analysisCount)
+            analysisStage = Math.Min(data.analysisCount, pendingAnalysisStage + 1);
     }
 
     public bool IsValid()
     {
-        return version == 1 && CaseIndex >= 0 && evidence != null && photographs != null && questions != null
+        if (version != 1 || CaseIndex < 0) return false;
+        var data = Definition;
+        return evidence != null && photographs != null && questions != null
             && !float.IsNaN(elapsed) && !float.IsInfinity(elapsed) && elapsed >= 0 && errors >= 0
             && !float.IsNaN(callDelay) && !float.IsInfinity(callDelay) && callDelay >= -1
             && !float.IsNaN(idleTime) && !float.IsInfinity(idleTime) && idleTime >= 0
-            && suspect >= -1 && suspect < Definition.suspects.Length && weapon >= -1 && weapon < 3 && place >= -1 && place < 3
-            && interviewSuspect >= 0 && interviewSuspect < Definition.interviewNames.Length
-            && interviewedMask >= 0 && interviewedMask < (1 << Definition.interviewNames.Length)
-            && analysisStage >= 0 && analysisStage <= Definition.analysisCount
-            && pendingAnalysisStage >= 0 && pendingAnalysisStage < Math.Max(1, Definition.analysisCount)
-            && completedCases >= 0 && completedCases <= 3;
+            && suspect >= -1 && suspect < data.suspects.Length
+            && weapon >= -1 && weapon < data.objects.Length && place >= -1 && place < data.places.Length
+            && interviewSuspect >= 0 && interviewSuspect < data.interviewNames.Length
+            && interviewedMask >= 0 && interviewedMask < (1 << data.interviewNames.Length)
+            && analysisStage >= 0 && analysisStage <= data.analysisCount
+            && pendingAnalysisStage >= 0 && pendingAnalysisStage < Math.Max(1, data.analysisCount)
+            && completedCases >= 0 && completedCases <= CaseZeroCases.All.Length;
     }
 }
 
