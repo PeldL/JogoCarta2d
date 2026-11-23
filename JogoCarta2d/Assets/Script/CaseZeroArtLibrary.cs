@@ -12,6 +12,10 @@ public sealed class CaseZeroArtLibrary : ScriptableObject
     }
     public Entry[] personagens;
     public Entry[] cenarios;
+    [Header("Pistas • desenhos mostrados na ficha da evidência (CaseZeroCase.evidenceArt)")]
+    public Entry[] pistas;
+    [Tooltip("Moldura da foto da pista na ficha da evidência.")]
+    public Sprite molduraPolaroid;
     [Serializable]
     public class Portrait
     {
@@ -40,7 +44,7 @@ public sealed class CaseZeroArtLibrary : ScriptableObject
 
     public Sprite Find(string key)
     {
-        foreach (var entries in new[] { personagens, cenarios })
+        foreach (var entries in new[] { personagens, cenarios, pistas })
             if (entries != null)
                 foreach (var entry in entries)
                     if (entry != null && entry.name == key) return entry.sprite;

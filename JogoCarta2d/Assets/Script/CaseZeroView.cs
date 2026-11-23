@@ -77,6 +77,66 @@ public sealed class CaseZeroView : MonoBehaviour
     public TMP_Text evidenceName;
     public TMP_Text evidenceDescription;
     public TMP_Text evidenceType;
+    [Tooltip("Opcional: foto da pista montada na cena. Vazio = uma polaroid é criada no canto de Detalhes_Evidencia ao jogar.")]
+    public Image evidencePhoto;
+    [Tooltip("Opcional: o objeto que mostra/esconde a foto (por exemplo a moldura). Vazio = o próprio evidencePhoto.")]
+    public RectTransform evidencePhotoFrame;
+    const float PhotoColumn = 190;
+    bool photoCreatedAtRuntime;
+    float descriptionWidth = -1;
+
+    /// <summary>Shows the clue's drawing (art library name) in a polaroid on the evidence
+    /// card, or hides it when the clue has no drawing.</summary>
+    public void ShowEvidencePicture(string artName)
+    {
+        if (evidenceDetails == null) return;
+        Sprite picture = artLibrary != null && !string.IsNullOrEmpty(artName) ? artLibrary.Find(artName) : null;
+        if (picture != null) EnsureEvidencePhoto();
+        bool show = picture != null && evidencePhoto != null;
+        if (evidencePhotoFrame != null) evidencePhotoFrame.gameObject.SetActive(show);
+        if (show) { evidencePhoto.sprite = picture; evidencePhoto.preserveAspect = true; }
+        // The built-in polaroid sits beside the description, so narrow the text while it shows.
+        if (photoCreatedAtRuntime && evidenceDescription != null)
+        {
+            var rect = evidenceDescription.rectTransform;
+            if (descriptionWidth < 0) descriptionWidth = rect.rect.width;
+            float left = rect.anchoredPosition.x - rect.pivot.x * rect.rect.width;
+            float width = show ? descriptionWidth - PhotoColumn : descriptionWidth;
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            rect.anchoredPosition = new Vector2(left + rect.pivot.x * width, rect.anchoredPosition.y);
+        }
+    }
+
+    void EnsureEvidencePhoto()
+    {
+        if (evidencePhoto != null)
+        {
+            if (evidencePhotoFrame == null) evidencePhotoFrame = evidencePhoto.rectTransform;
+            return;
+        }
+        // Polaroid frame pinned to the top-right corner of the evidence card.
+        var frameObject = new GameObject("Foto_Pista", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        evidencePhotoFrame = frameObject.GetComponent<RectTransform>();
+        evidencePhotoFrame.SetParent(evidenceDetails.transform, false);
+        evidencePhotoFrame.anchorMin = evidencePhotoFrame.anchorMax = evidencePhotoFrame.pivot = new Vector2(1, 1);
+        evidencePhotoFrame.anchoredPosition = new Vector2(-4, -150);
+        evidencePhotoFrame.sizeDelta = new Vector2(175, 242);
+        evidencePhotoFrame.localRotation = Quaternion.Euler(0, 0, 3);
+        var frame = frameObject.GetComponent<Image>();
+        frame.sprite = artLibrary != null ? artLibrary.molduraPolaroid : null;
+        frame.preserveAspect = false;
+        frame.raycastTarget = false;
+        // The drawing sits in the white window of the polaroid.
+        var photoObject = new GameObject("Foto", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        var photoRect = photoObject.GetComponent<RectTransform>();
+        photoRect.SetParent(evidencePhotoFrame, false);
+        photoRect.anchorMin = new Vector2(0.10f, 0.30f);
+        photoRect.anchorMax = new Vector2(0.86f, 0.90f);
+        photoRect.offsetMin = photoRect.offsetMax = Vector2.zero;
+        evidencePhoto = photoObject.GetComponent<Image>();
+        evidencePhoto.raycastTarget = false;
+        photoCreatedAtRuntime = true;
+    }
 
     [Header("Interrogatório")]
     public TMP_Text interviewMessage;

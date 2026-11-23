@@ -21,6 +21,8 @@ public sealed class CaseZeroCase
     public string id, title, location, introduction, ending;
     public string[] locations, evidenceKeys, evidenceNames, evidenceDescriptions, evidenceLocations;
     public int[] evidenceUnlockStages;
+    // Optional drawing for each clue: a name in the art library's "pistas" list (null = none).
+    public string[] evidenceArt;
     public string testimonyEvidenceName, testimonyEvidenceDescription;
     public string[] suspects, objects, places;
     public int culprit, weaponSolution, placeSolution, analysisCount;
@@ -67,6 +69,12 @@ public sealed class CaseZeroCase
     {
         int index = EvidenceIndex(key);
         return index >= 0 ? evidenceNames[index] : key == "depoimento" ? testimonyEvidenceName : key;
+    }
+
+    public string EvidenceArt(string key)
+    {
+        int index = EvidenceIndex(key);
+        return index >= 0 && evidenceArt != null && index < evidenceArt.Length ? evidenceArt[index] : null;
     }
 
     public int UnlockStage(string key)
@@ -131,6 +139,7 @@ public static class CaseZeroCases
             },
             evidenceLocations = new[] { "Bar", "Bar", "Bar", "Bar" },
             evidenceUnlockStages = new[] { 0, 0, 0, 0 },
+            evidenceArt = new[] { "Agenda", "Pistola", "Cápsula", null },
             testimonyEvidenceName = "Challenged testimony",
             testimonyEvidenceDescription = "Confronted with the employee records and the ballistic report, the man admits he does not work at the bar and came in to empty the till. He says the woman walked in and he panicked, but refuses to say more.",
             suspects = new[] { "Man behind the counter", "Bar employee", "Unidentified customer" },
@@ -179,13 +188,13 @@ public static class CaseZeroCases
                 "c2_police_autopsia", "c2_police_rascunho", "c2_police_digitais", "c2_police_transferencia"
             },
             evidenceNames = new[] {
-                "Body in the dumpster", "Laboratory access badge", "Thin wheel tracks",
+                "Body in the dumpster", "Victim's key ring", "Thin wheel tracks",
                 "Syringe in the sharps bin", "Controlled drug log", "Camera control panel", "Body trolley",
                 "Second autopsy", "Victim's draft complaint", "Fingerprints on the syringe", "Bank transfer"
             },
             evidenceDescriptions = new[] {
                 "The victim lies in a street dumpster, still wearing a lab coat. No blood, no wounds, no sign of a struggle. The wallet and phone were not taken. This was no robbery.",
-                "The victim's access badge, clipped to the coat. It was last used to enter the forensics laboratory at 22:40, the night before the body was found.",
+                "The victim's key ring, still in the coat pocket, with the laboratory's access tag. The tag was last used to enter the forensics laboratory at 22:40, the night before the body was found.",
                 "Two thin, parallel wheel tracks run from the curb to the dumpster, where a white van was parked around midnight. Something heavy was rolled here.",
                 "A recently used syringe in the laboratory's sharps bin, its label torn off. A drop of clear liquid remains inside. It can be sent to an independent lab.",
                 "Two vials of a powerful sedative are missing from the controlled stock. The weekly check was signed as complete by the medical examiner the morning after the death.",
@@ -202,6 +211,7 @@ public static class CaseZeroCases
                 "Delegacia", "Delegacia", "Delegacia", "Delegacia"
             },
             evidenceUnlockStages = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2 },
+            evidenceArt = new[] { null, "Chaveiro", null, null, null, null, null, null, null, null, null },
             testimonyEvidenceName = "Security guard's confession",
             testimonyEvidenceDescription = "Confronted with the camera log, the trolley and the second autopsy, the security guard admits the medical examiner paid him to switch off the cameras and open the back door, and that he helped wheel the body to the dumpster. He says the examiner gave the injection.",
             suspects = new[] { "Medical examiner", "Security guard", "Street caretaker", "Examiner and guard together" },
@@ -294,6 +304,7 @@ public static class CaseZeroCases
                 "Delegacia", "Delegacia", "Delegacia", "Delegacia"
             },
             evidenceUnlockStages = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2 },
+            evidenceArt = new[] { null, null, null, null, null, "Agenda", null, null, null, null, null },
             testimonyEvidenceName = "Officer's admission",
             testimonyEvidenceDescription = "Confronted with the footage, the evidence-room log and his fingerprints on the sachet, the officer admits the victim had been blackmailing him for a year over the hit-and-run, and that he \"just wanted it to stop\".",
             suspects = new[] { "Police officer", "Baker", "Barista" },

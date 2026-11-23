@@ -167,6 +167,7 @@ public sealed partial class CaseZeroGame
         var data = catalog[selectedEvidence];
         view.evidenceName.text = data.evidenceName;
         view.evidenceDescription.text = data.description;
+        view.ShowEvidencePicture(CurrentCase.EvidenceArt(selectedEvidence));
         view.evidenceType.text = pageCount > 1
             ? $"EVIDENCE • CASE {state.CaseIndex + 1:00} • SCROLL THE LIST TO BROWSE"
             : $"EVIDENCE • CASE {state.CaseIndex + 1:00}";

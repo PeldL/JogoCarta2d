@@ -39,9 +39,9 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: c8766ca73a143e24e91e247383b67240, type: 3}
   cenarios:
   - name: Bar
-    sprite: {fileID: 0}
+    sprite: {fileID: -4025600669967548159, guid: a16ee34ea134fa8439cf165c606ea3b9, type: 3}
   - name: Delegacia
-    sprite: {fileID: 4193776825752866227, guid: 762d46e0185881643bd4afb7a4198c9a, type: 3}
+    sprite: {fileID: 4193776825752866227, guid: 63a7a4cc7d94a2943be756b897ea0ea6, type: 3}
   - name: "Laborat\xF3rio de per\xEDcia"
     sprite: {fileID: 0}
   - name: Padaria
@@ -56,6 +56,20 @@ MonoBehaviour:
     sprite: {fileID: 0}
   - name: Apartamento
     sprite: {fileID: 7552383343446757701, guid: 1c75ce84bdf88f64ca624303cb0ec7f3, type: 3}
+  - name: Bar - normal
+    sprite: {fileID: -6900928676536231200, guid: 5286bd97d13a17d4fbb468612e195c7d, type: 3}
+  - name: Delegacia - sala
+    sprite: {fileID: 4193776825752866227, guid: 762d46e0185881643bd4afb7a4198c9a, type: 3}
+  pistas:
+  - name: Agenda
+    sprite: {fileID: 3508105288163361634, guid: 8ded27f1c15b9f940bd8f4ff756e09dd, type: 3}
+  - name: Pistola
+    sprite: {fileID: -5544336463580313496, guid: e294612749c125e4f8a5841cf60958ba, type: 3}
+  - name: "C\xE1psula"
+    sprite: {fileID: 8092430098967794038, guid: e45c2be30dde1814c9742f9061c476bf, type: 3}
+  - name: Chaveiro
+    sprite: {fileID: 4617620551454551896, guid: 1a75ef191f79d6143b24004c7aa6cfa9, type: 3}
+  molduraPolaroid: {fileID: 49104727208924248, guid: c1e6bddde48006144a4ebf4bafd417f6, type: 3}
   retratos:
   - name: "Homem do balc\xE3o"
     caseId: ultima-testemunha
