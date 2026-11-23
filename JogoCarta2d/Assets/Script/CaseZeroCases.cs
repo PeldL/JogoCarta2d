@@ -12,6 +12,22 @@ public sealed class CaseZeroCase
     public string[] interviewNames, statements, explanations;
     public string[][] analysisPrerequisites;
     public string[] analysisMessages;
+    // Clues needed to challenge the culprit's account in Interviews.
+    public string[] confrontRequirements;
+    // Clues needed before Deduction opens; other clues are optional context.
+    public string[] keyEvidence;
+
+    public string EvidenceName(string key)
+    {
+        int index = EvidenceIndex(key);
+        return index >= 0 ? evidenceNames[index] : key == "depoimento" ? testimonyEvidenceName : key;
+    }
+
+    public int UnlockStage(string key)
+    {
+        int index = EvidenceIndex(key);
+        return index >= 0 && evidenceUnlockStages != null && index < evidenceUnlockStages.Length ? evidenceUnlockStages[index] : 0;
+    }
 
     public int EvidenceIndex(string key)
     {
@@ -59,6 +75,8 @@ public static class CaseZeroCases
             interviewNames = new[] { "Man behind the counter" },
             statements = new[] { "I was behind the counter when that woman came in. I have nothing else to say." },
             explanations = new[] { "All right. I was not an employee. I was robbing the bar. She came in, saw my face... I shot her because I was afraid she would report me." },
+            confrontRequirements = new[] { "pistola", "registro" },
+            keyEvidence = new[] { "registro", "pistola", "capsula", "sangue" },
             ending = "The man behind the counter was a robber. He killed the woman with the pistol in the bar to stop her from reporting him."
         },
         new CaseZeroCase {
@@ -119,6 +137,8 @@ public static class CaseZeroCases
                 "The blood beneath the bar bench matches the victim, confirming the attack happened there, not in the apartment. The button matches the security uniform, and the camera terminal records a manual shutdown under the guard's account. The medical examiner's report and uniform comparison are ready at the police station.",
                 "The search of the security locker found a knife. The lab identified the victim's blood on its blade. The seized knife and final report are ready at the police station."
             },
+            confrontRequirements = new[] { "c2_bar_botao", "c2_bar_terminal", "c2_police_uniforme" },
+            keyEvidence = new[] { "c2_bar_sangue", "c2_bar_botao", "c2_bar_terminal", "c2_police_laudo", "c2_police_uniforme", "c2_police_faca" },
             ending = "The cameras went blind, but the traces remained. The button and uniform placed the security guard in the closed bar, while the terminal exposed the manual shutdown. The knife linked him to the 28 wounds. The body had been moved to the apartment to mislead the investigation."
         },
         new CaseZeroCase {
@@ -179,6 +199,8 @@ public static class CaseZeroCases
                 "Toxicology found a poisonous substance in the victim's cup. The coffee-pot sample is clean. The toxicology report and the victim's personnel records are ready at the police station.",
                 "The yellow seam and tear on the caretaker's uniform match the fabric caught in the cup cabinet. The comparison report is ready at the police station."
             },
+            confrontRequirements = new[] { "c3_padaria_retalho", "c3_police_tox", "c3_police_uniforme" },
+            keyEvidence = new[] { "c3_padaria_xicara", "c3_padaria_camera", "c3_padaria_retalho", "c3_police_tox", "c3_police_uniforme", "c3_police_carta" },
             ending = "The coffee pot was clean, but the victim's cup was poisoned. The recovered footage fixed the collapse at the bakery, and the fabric match placed the caretaker in the cup cabinet he denied entering. The dismissal letter revealed the motive. The body was later moved to the closed bar."
         }
     };

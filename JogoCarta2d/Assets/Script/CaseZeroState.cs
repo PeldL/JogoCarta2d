@@ -46,7 +46,8 @@ public sealed class CaseZeroState
             return (interviewedMask & required) == required;
         }
     }
-    public CaseZeroState RestartCase() => new CaseZeroState { caseId = caseId, location = Definition.location, completedCases = completedCases, results = PreviousResults() };
+    // A retry keeps the briefing and tutorial already seen, so the radio does not replay.
+    public CaseZeroState RestartCase() => new CaseZeroState { caseId = caseId, location = Definition.location, completedCases = completedCases, results = PreviousResults(), introductionSeen = introductionSeen, tutorialHints = tutorialHints };
     List<CaseZeroResult> PreviousResults() => (results ?? new List<CaseZeroResult>()).FindAll(r => r != null && r.caseId != caseId);
     public CaseZeroState NextCase()
     {
@@ -69,14 +70,11 @@ public sealed class CaseZeroState
             if (failed) return "Investigation over. Try again from the results screen.";
             if (CaseIndex > 0)
             {
-                if (callPending && !callRead) return "Answer the call from dispatch on your phone.";
-                if (callDelay >= 0) return "Forensics is analyzing the requested material. Keep investigating while you wait.";
-                if (CanRequestAnalysis) return "Submit the requested material through your phone. Results will be available at the police station.";
-                if (!AllInterviewed) return "Interview the suspects and witness. New questions may appear when you find supporting evidence.";
-                if (!Has("depoimento")) return "Compare the statements with the collected clues and challenge the contradiction.";
-                if (analysisStage < Definition.analysisCount || !callRead) return "Continue the forensic requests and collect their results at the police station.";
-                if (!HasAllCaseEvidence) return "Examine the available objects at each case location and review the case file.";
-                return "Open Deduction and confirm the combination supported by the evidence.";
+                if (callPending && !callRead) return "Answer the call from forensics on your phone.";
+                if (CanRequestAnalysis && callDelay < 0) return "Submit the requested material through your phone. Results will be available at the police station.";
+                string task = NextInvestigationTask();
+                if (callDelay >= 0) return "Forensics is analyzing the material. Meanwhile: " + task;
+                return task;
             }
             if (callPending && !callRead) return "Answer the call from forensics on your phone.";
             if (!Has("registro") || !Has("pistola") || !Has("capsula"))
@@ -97,6 +95,92 @@ public sealed class CaseZeroState
         }
     }
     public bool HasAllCaseEvidence => HasSceneEvidence;
+    bool Unlocked(string key) => analysisStage >= Definition.UnlockStage(key);
+    public bool HasKeyEvidence => MissingKeys(Definition.keyEvidence, false).Count == 0;
+    public bool CanConfront => MissingKeys(Definition.confrontRequirements, false).Count == 0;
+
+    /// <summary>Clues from the list not yet recorded; optionally only those already examinable.</summary>
+    public List<string> MissingKeys(string[] keys, bool unlockedOnly)
+    {
+        var missing = new List<string>();
+        if (keys == null) return missing;
+        foreach (var key in keys)
+            if (!Has(key) && (!unlockedOnly || Unlocked(key))) missing.Add(key);
+        return missing;
+    }
+
+    string Names(List<string> keys) => string.Join(", ", keys.ConvertAll(Definition.EvidenceName));
+
+    string Places(List<string> keys)
+    {
+        var places = new List<string>();
+        foreach (var key in keys)
+        {
+            int index = Definition.EvidenceIndex(key);
+            if (index < 0) continue;
+            string place = CaseZeroView.DisplayName(Definition.evidenceLocations[index]);
+            if (!places.Contains(place)) places.Add(place);
+        }
+        return string.Join(" and ", places);
+    }
+
+    string PendingInterviews()
+    {
+        var pending = new List<string>();
+        for (int i = 0; i < Definition.interviewNames.Length; i++)
+            if ((interviewedMask & (1 << i)) == 0) pending.Add(Definition.interviewNames[i]);
+        return string.Join(", ", pending);
+    }
+
+    /// <summary>The next step that actually moves a later case forward, naming what is missing and where.</summary>
+    string NextInvestigationTask()
+    {
+        var data = Definition;
+        var reports = new List<string>();
+        for (int i = 0; i < data.evidenceKeys.Length; i++)
+        {
+            string key = data.evidenceKeys[i];
+            if (!Has(key) && data.UnlockStage(key) > 0 && Unlocked(key)) reports.Add(key);
+        }
+        if (reports.Count > 0) return $"New forensic results are ready. Collect them at the {Places(reports)}.";
+
+        if (analysisStage < data.analysisCount && analysisStage < data.analysisPrerequisites.Length)
+        {
+            var material = MissingKeys(data.analysisPrerequisites[analysisStage], true);
+            material.Remove("depoimento");
+            if (material.Count > 0) return $"Forensics needs more material. Examine {Names(material)} at the {Places(material)}.";
+        }
+
+        if (!Has("depoimento"))
+        {
+            var support = MissingKeys(data.confrontRequirements, true);
+            if (support.Count > 0) return $"Find evidence to challenge the statements. Examine {Names(support)} at the {Places(support)}.";
+            if (CanConfront)
+                return AllInterviewed
+                    ? "You have enough evidence. In Interviews, challenge the account that the evidence contradicts."
+                    : "Interview " + PendingInterviews() + " and look for the account the evidence contradicts.";
+        }
+
+        var remaining = MissingKeys(data.keyEvidence, true);
+        if (remaining.Count > 0) return $"Examine {Names(remaining)} at the {Places(remaining)}.";
+        if (CanConclude) return "Open Deduction and confirm the combination supported by the evidence.";
+        if (!AllInterviewed) return "Interview " + PendingInterviews() + " and compare their accounts with the evidence.";
+        return "Review the evidence and compare it with each account. Forensics will need more material to continue.";
+    }
+
+    /// <summary>What still blocks Deduction, one item per line, without revealing locked clues.</summary>
+    public List<string> MissingForConclusion()
+    {
+        var missing = new List<string>();
+        var available = MissingKeys(Definition.keyEvidence, true);
+        if (available.Count > 0) missing.Add("Evidence: " + Names(available) + " (" + Places(available) + ")");
+        int locked = MissingKeys(Definition.keyEvidence, false).Count - available.Count;
+        if (locked > 0) missing.Add($"Forensic results not yet available: {locked}");
+        if (!Has("depoimento")) missing.Add("Challenge the account that the evidence contradicts");
+        if (callPending && !callRead) missing.Add("Answer the forensics call");
+        else if (!callRead || analysisStage < Definition.analysisCount) missing.Add("Request and record the forensic report by phone");
+        return missing;
+    }
     public bool CanRequestAnalysis
     {
         get
@@ -112,9 +196,8 @@ public sealed class CaseZeroState
     {
         get
         {
-            if (!Has("depoimento") || !AllInterviewed || !callRead) return false;
-            if (CaseIndex == 0) return HasSceneEvidence;
-            return HasAllCaseEvidence && analysisStage >= Definition.analysisCount;
+            // Only the key clues are required; optional clues and witnesses add context.
+            return Has("depoimento") && callRead && HasKeyEvidence && analysisStage >= Definition.analysisCount;
         }
     }
 

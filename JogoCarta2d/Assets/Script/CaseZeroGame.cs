@@ -400,7 +400,7 @@ public sealed class CaseZeroGame : MonoBehaviour
                 state.callDelay = -1;
                 state.callPending = true;
                 phone.QueueCall(forensicCall);
-                Say("Dispatch is calling. Open the phone to answer.");
+                Say("Forensics is calling. Open the phone to answer.");
                 if (view.IsDocumentOpen && state.page == "Ligações") RefreshPhone();
                 Save(false);
             }
@@ -786,11 +786,32 @@ public sealed class CaseZeroGame : MonoBehaviour
             view.interviewChoices[i].gameObject.SetActive(exists);
             if (!exists) continue;
             var choice = node.choices[i];
-            bool available = interrogation.IsChoiceAvailable(choice) && (choice.nextNodeId != "confronto" || CanConfront());
-            view.interviewChoiceLabels[i].text = available ? choice.choiceText : state.CaseIndex == 0 ? "Challenge • find evidence that contradicts the account" : "Compare • investigate records and contradictions";
+            bool available = interrogation.IsChoiceAvailable(choice) && (choice.nextNodeId != "confronto" || state.CanConfront);
+            view.interviewChoiceLabels[i].text = available ? choice.choiceText : LockedChoiceText(choice);
             view.interviewChoices[i].interactable = available;
         }
         view.AnimateInterviewChoices();
+    }
+
+    // Names the clue that unlocks a question; clues still behind forensics stay unnamed.
+    string LockedChoiceText(InterrogationChoice choice)
+    {
+        var needed = new List<string>();
+        if (choice.requiredEvidence != null && !string.IsNullOrEmpty(choice.requiredEvidence.id) && !state.Has(choice.requiredEvidence.id))
+            needed.Add(choice.requiredEvidence.id);
+        if (choice.nextNodeId == "confronto")
+            foreach (var key in state.MissingKeys(CurrentCase.confrontRequirements, false))
+                if (!needed.Contains(key)) needed.Add(key);
+        var named = new List<string>();
+        bool forensic = false;
+        foreach (var key in needed)
+        {
+            if (state.analysisStage >= CurrentCase.UnlockStage(key)) named.Add(CurrentCase.EvidenceName(key));
+            else forensic = true;
+        }
+        if (forensic) named.Add("a forensic result");
+        string prefix = choice.nextNodeId == "confronto" ? "Challenge" : "Question";
+        return named.Count == 0 ? prefix + " • locked" : $"{prefix} • requires: {string.Join(", ", named)}";
     }
 
     public void SelectInterviewChoice(int index)
@@ -799,7 +820,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         var choices = interrogation.CurrentNode.choices;
         if (index < 0 || index >= choices.Count) return;
         var choice = choices[index];
-        if (!interrogation.IsChoiceAvailable(choice) || (choice.nextNodeId == "confronto" && !CanConfront())) return;
+        if (!interrogation.IsChoiceAvailable(choice) || (choice.nextNodeId == "confronto" && !state.CanConfront)) return;
         state.idleTime = 0;
         if (!state.questions.Contains(choice.choiceText)) state.questions.Add(choice.choiceText);
         if (choice.nextNodeId == "confronto" && (state.CaseIndex == 0 || state.interviewSuspect == CurrentCase.culprit)) Collect("depoimento");
@@ -909,13 +930,6 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state.page == "Ligações") RefreshPhone();
     }
 
-    bool CanConfront()
-    {
-        if (state.CaseIndex == 0) return state.Has("pistola") && state.Has("registro");
-        if (state.CaseIndex == 1)
-            return state.Has("c2_bar_botao") && state.Has("c2_bar_terminal") && state.Has("c2_police_uniforme");
-        return state.Has("c3_padaria_retalho") && state.Has("c3_police_tox") && state.Has("c3_police_uniforme");
-    }
     public void SelectSuspect(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.suspects.Length) return; state.suspect = index; RefreshDeduction(); }
     public void SelectWeapon(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.objects.Length) return; state.weapon = index; RefreshDeduction(); }
     public void SelectPlace(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.places.Length) return; state.place = index; RefreshDeduction(); }
@@ -929,8 +943,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         view.deductionHint.text = state.Finished ? "This case is already closed. View the result or restart through Settings."
             : state.CanConclude && !state.HasTheory ? "Choose the culprit, the weapon, and the location before confirming."
             : state.CanConclude ? $"Review your theory before confirming. {state.AttemptsRemaining} accusation attempt(s) remaining."
-            : state.HasSceneEvidence && state.Has("depoimento") && state.AllInterviewed && !state.callRead ? "The forensic report is missing: submit the material by phone, answer, and record the response."
-            : state.CaseIndex == 0 ? "Investigate the scene, compare statements, and consult forensics." : "Examine the records, interview those involved, and challenge contradictions.";
+            : "Still missing before an accusation:\n• " + string.Join("\n• ", state.MissingForConclusion());
     }
 
     public void ConcludeCase()
