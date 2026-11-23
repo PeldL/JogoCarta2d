@@ -141,7 +141,7 @@ public sealed class CaseZeroView : MonoBehaviour
             {
                 int caseNumber = Mathf.Max(0, System.Array.IndexOf(CaseZeroCases.All, data) + 1);
                 string label = data.id == "ultima-testemunha" ? "Woman from the bar"
-                    : data.id == "apartamento-302" ? "Victim 2" : "Victim 3";
+                    : data.id == "apartamento-302" ? "Forensics lab assistant" : "Bakery regular";
                 victimCaption.text = victimSprite != null ? $"VICTIM • CASE {caseNumber:00}\n{label}" : string.Empty;
             }
         }
@@ -153,7 +153,7 @@ public sealed class CaseZeroView : MonoBehaviour
         for (int i = 0; i < deductionPortraits.Length; i++)
             if (deductionPortraits[i] != null)
             {
-                deductionPortraits[i].sprite = artLibrary.FindPortrait(data.id, i);
+                deductionPortraits[i].sprite = artLibrary.FindPortrait(data.id, data.SuspectAtSlot(i));
                 deductionPortraits[i].preserveAspect = true;
                 // Without artwork, hide the image instead of drawing a white box.
                 deductionPortraits[i].enabled = deductionPortraits[i].sprite != null;

@@ -85,17 +85,17 @@ public sealed class CaseZeroGame : MonoBehaviour
         forensicCall = ScriptableObject.CreateInstance<PhoneCallAsset>();
         forensicCall.callerName = "Forensics laboratory";
         forensicCall.nodes = new List<PhoneDialogueNode> {
-            new PhoneDialogueNode { nodeId = "start", message = "The ballistic comparison is a match: the cartridge case recovered in the bar was fired by the pistol found under the counter. Compare this finding with the employee records and the testimony.", choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Record report and end call" } } }
+            new PhoneDialogueNode { nodeId = "start", message = "The ballistic comparison is a match: the cartridge case recovered behind the counter was fired by the pistol hidden under it. Use this report and the employee records to challenge the man behind the counter.", choices = new List<PhoneDialogueChoice> { new PhoneDialogueChoice { choiceText = "Record report and end call" } } }
         };
         if (state != null && state.CaseIndex > 0) { CreateLaterCase(); return; }
         suspectAsset = ScriptableObject.CreateInstance<SuspectAsset>();
         suspectAsset.suspectName = "Man behind the counter";
         suspectAsset.nodes = new List<InterrogationNode> {
-            Node("start", "I was behind the counter when that woman came in. I have nothing else to say.",
-                Choice("What were you doing at the bar?", "trabalho"), Choice("Did you know the victim?", "vitima"), Choice("Challenge with the schedule and weapon", "confronto", catalog["registro"])),
+            Node("start", data.statements[0],
+                Choice("What were you doing at the bar?", "trabalho"), Choice("Did you know the victim?", "vitima"), Choice("Challenge with the records and the ballistic report", "confronto", catalog["registro"])),
             Node("trabalho", "I... was helping with the service. I do not remember who called me.", Choice("Back to questions", "start")),
             Node("vitima", "I had never seen her before. She came in and ordered a drink. It all happened so fast.", Choice("Back to questions", "start")),
-            Node("confronto", "All right. I was not an employee. I was robbing the bar. She came in, saw my face... I shot her because I was afraid she would report me.", Choice("End interview", ""))
+            Node("confronto", data.explanations[0], Choice("End interview", ""))
         };
     }
 
@@ -120,87 +120,80 @@ public sealed class CaseZeroGame : MonoBehaviour
         suspectAsset = caseSuspects[state.interviewSuspect];
     }
 
+    // Each opening node has at most three choices (the scene has three buttons).
     List<InterrogationNode> BuildInterviewNodes(int index, CaseZeroCase data)
     {
         var nodes = new List<InterrogationNode>();
+        var back = Choice("Back to questions", "start");
         if (data.id == "apartamento-302")
         {
-            if (index == 0)
+            if (index == 0) // Medical examiner
             {
                 nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask about the camera outage", "camera", catalog["c2_bar_terminal"]),
-                    Choice("Ask about the button", "button", catalog["c2_bar_botao"]),
-                    Choice("Challenge the timeline", "confronto")));
-                nodes.Add(Node("camera", "You said the cameras failed, but the terminal records a manual shutdown under your account. Why?", Choice("Back to questions", "start")));
-                nodes.Add(Node("button", "That is a company uniform button. I do not know how it ended up at the bar.", Choice("Back to questions", "start")));
+                    Choice("Ask about the missing sedative", "stock", catalog["c2_lab_estoque"]),
+                    Choice("Ask about the draft complaint", "complaint", catalog["c2_police_rascunho"]),
+                    Choice("End conversation", "")));
+                nodes.Add(Node("stock", "Stock goes missing all the time in a busy laboratory. I sign the weekly check; I can't watch every shelf myself.", back));
+                nodes.Add(Node("complaint", "The assistant was confused, seeing conspiracies everywhere. Nobody would have believed a word of it. If you have more questions, talk to my lawyer.", back));
+            }
+            else if (index == 1) // Security guard: the challenge produces the testimony
+            {
+                nodes.Add(Node("start", data.statements[index],
+                    Choice("Ask about the camera shutdown", "camera", catalog["c2_lab_camera"]),
+                    Choice("Ask about the body trolley", "trolley", catalog["c2_lab_maca"]),
+                    Choice("Confront him with the evidence", "confronto")));
+                nodes.Add(Node("camera", "Crashed, switched off, whatever the log says. I'm a guard, not a technician. Anyone could have used my account.", back));
+                nodes.Add(Node("trolley", "Nobody moves a body at night without the examiner's orders. Ask him, not me.", back));
                 nodes.Add(Node("confronto", data.explanations[index], Choice("End interview", "")));
             }
-            else if (index == 1)
+            else // Street caretaker
             {
                 nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask about the spare key", "key", catalog["c2_apt_chaveiro"]),
-                    Choice("Ask about the appointment at the bar", "appointment", catalog["c2_apt_agenda"]),
+                    Choice("Ask about the wheel tracks", "tracks", catalog["c2_rua_marcas"]),
+                    Choice("Ask what they saw that night", "van"),
                     Choice("End conversation", "")));
-                nodes.Add(Node("key", "I used the key for an earlier repair. I must have dropped the key ring then. It does not mean I entered the apartment that night.", Choice("Back to questions", "start")));
-                nodes.Add(Node("appointment", "I knew the bar was closed, but I did not meet the victim there. Check the evidence from the bar before deciding who had access.", Choice("Back to questions", "start")));
-            }
-            else if (index == 2)
-            {
-                nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask about the closed bar", "bar", catalog["c2_bar_sangue"]),
-                    Choice("Ask about the security company", "security", catalog["c2_bar_botao"]),
-                    Choice("End conversation", "")));
-                nodes.Add(Node("bar", "The bar has been closed since the first case. I did not see who went inside that night.", Choice("Back to questions", "start")));
-                nodes.Add(Node("security", "The button belongs to the security company. The guard wore that uniform, but the forensic comparison will tell us more.", Choice("Back to questions", "start")));
-            }
-            else
-            {
-                nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask what happened in the corridor", "corridor", catalog["c2_apt_tapete"]),
-                    Choice("Ask when the body was found", "discovery", catalog["c2_apt_agenda"]),
-                    Choice("End conversation", "")));
-                nodes.Add(Node("corridor", "I noticed movement after the victim had already been found. I could not identify the person, but the body was inside the apartment when help arrived.", Choice("Back to questions", "start")));
-                nodes.Add(Node("discovery", "The apartment door was intact. I cannot say whether the victim was attacked there or brought there afterward.", Choice("Back to questions", "start")));
+                nodes.Add(Node("tracks", "Those thin tracks weren't there yesterday. Something heavy was rolled from the curb to the bin.", back));
+                nodes.Add(Node("van", "A white van, the kind they use to move bodies. It stopped by the bins around midnight and left with its lights off.", back));
             }
         }
         else
         {
-            if (index == 0)
+            if (index == 0) // Police officer: the challenge produces the testimony
             {
                 nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask about the fabric in the kitchen", "fabric", catalog["c3_padaria_retalho"]),
-                    Choice("Ask about the dismissal", "motive", catalog["c3_police_carta"]),
-                    Choice("Challenge the denial", "confronto")));
-                nodes.Add(Node("fabric", "That could have come from an old work jacket. I said I never entered the kitchen that morning.", Choice("Back to questions", "start")));
-                nodes.Add(Node("motive", "The victim blamed me for an accident that was not my fault. I was angry, but that does not prove I poisoned anyone.", Choice("Back to questions", "start")));
+                    Choice("Ask about the footage", "footage", catalog["c3_padaria_camera"]),
+                    Choice("Ask about the evidence-room log", "log", catalog["c3_police_livro"]),
+                    Choice("Confront him with the evidence", "confronto")));
+                nodes.Add(Node("footage", "I leaned over to help with the tray. I was nowhere near that cup.", back));
+                nodes.Add(Node("log", "I signed that bottle out to send it for destruction. The paperwork must have gone astray.", back));
                 nodes.Add(Node("confronto", data.explanations[index], Choice("End interview", "")));
             }
-            else if (index == 1)
+            else if (index == 1) // Baker
             {
                 nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask about the victim's cup", "cup", catalog["c3_padaria_xicara"]),
-                    Choice("Ask about the collapse", "footage", catalog["c3_padaria_camera"]),
+                    Choice("Ask about the sugar sachet", "sachet", catalog["c3_padaria_sache"]),
+                    Choice("Ask who sat near the victim", "table"),
                     Choice("End conversation", "")));
-                nodes.Add(Node("cup", "The victim always used that cup. I prepared the coffee, but I drank from the same pot and was fine.", Choice("Back to questions", "start")));
-                nodes.Add(Node("footage", "The recording shows the victim drinking and collapsing. It does not show who handled the cup before that.", Choice("Back to questions", "start")));
+                nodes.Add(Node("sachet", "That isn't ours. We only have sugar bowls. And the victim never took sugar anyway.", back));
+                nodes.Add(Node("table", "Only the officer. He comes in every morning and always sits at the table next to the victim's.", back));
             }
-            else if (index == 2)
+            else if (index == 2) // Barista
             {
                 nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask about the victim's routine", "routine", catalog["c3_bar_recibo"]),
-                    Choice("Ask what the recording shows", "collapse", catalog["c3_padaria_camera"]),
+                    Choice("Ask about the victim", "victim"),
+                    Choice("Ask about the parking lot", "parking", catalog["c3_est_caderno"]),
                     Choice("End conversation", "")));
-                nodes.Add(Node("routine", "The victim visited the bakery before opening and always used the same cup. I saw them alive there that morning.", Choice("Back to questions", "start")));
-                nodes.Add(Node("collapse", "They drank coffee, became ill, and collapsed. I tried to help, but I cannot identify who touched the cup.", Choice("Back to questions", "start")));
+                nodes.Add(Node("victim", "The victim always seemed nervous around the officer, but kept sitting at the next table. Strange, right?", back));
+                nodes.Add(Node("parking", "The victim parked behind the bakery every day and stayed a while in the car, writing in a little notebook.", back));
             }
-            else
+            else // Nurse
             {
                 nodes.Add(Node("start", data.statements[index],
-                    Choice("Ask about moving the body", "body", catalog["c3_bar_manutencao"]),
-                    Choice("Ask about the toxicology report", "report", catalog["c3_police_tox"]),
+                    Choice("Ask about the symptoms", "symptoms"),
+                    Choice("Ask about the officer", "officer", catalog["c3_padaria_camera"]),
                     Choice("End conversation", "")));
-                nodes.Add(Node("body", "The bar was locked when we arrived. The maintenance log shows who had access, but access alone does not prove who killed the victim.", Choice("Back to questions", "start")));
-                nodes.Add(Node("report", "The victim's cup was poisoned, while the coffee pot was clean. We still need to identify who used the victim's routine against them.", Choice("Back to questions", "start")));
+                nodes.Add(Node("symptoms", "Those signs look like pesticide poisoning. I told the officer, but he said to leave it to the professionals.", back));
+                nodes.Add(Node("officer", "He picked up the broken cup himself and wanted to throw it away. I asked him to leave it where it was.", back));
             }
         }
         return nodes;
@@ -218,7 +211,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             bool exists = i < data.suspects.Length;
             var row = view.suspectLabels[i].transform.parent;
             if (row != null) row.gameObject.SetActive(exists);
-            if (exists) view.suspectLabels[i].text = data.suspects[i];
+            if (exists) view.suspectLabels[i].text = data.suspects[data.SuspectAtSlot(i)];
         }
         FillLabels(view.objectLabels, data.objects);
         FillLabels(view.placeLabels, data.places);
@@ -249,6 +242,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state == null || state.Finished || confirming || travelling || index < 0 || index >= caseSuspects.Count) return;
         state.interviewSuspect = index;
         state.interviewNode = "start";
+        interviewResumed = false;
         interrogation.EndInterrogation();
         suspectAsset = caseSuspects[index];
         OpenPage("Interrogatório");
@@ -405,9 +399,10 @@ public sealed class CaseZeroGame : MonoBehaviour
                 Save(false);
             }
         }
-        if (!state.idleHintShown && state.idleTime >= inactivityHintDelay)
+        // Repeats after every stretch of inactivity, not only once per case.
+        if (state.idleTime >= inactivityHintDelay)
         {
-            state.idleHintShown = true;
+            state.idleTime = 0;
             Say("Dispatch: " + state.Objective);
         }
         if (saveTimer >= Mathf.Max(10, autosaveInterval)) Save(false);
@@ -564,7 +559,12 @@ public sealed class CaseZeroGame : MonoBehaviour
         {
             case "Evidências": RefreshBoard(); break;
             case "Interrogatório": ShowInterview(); break;
-            case "Ligações": RefreshPhone(); break;
+            case "Ligações":
+                RefreshPhone();
+                // Opening the phone while it rings answers the call: one click less.
+                if (!paused && state.callPending && !state.callRead && phone.CurrentCall == null && phone.HasPendingCall)
+                    phone.AnswerPendingCall();
+                break;
             case "Dedução": RefreshDeduction(); break;
             case "Opções": break;
             case "Saves": Save(false); RefreshSlots(); break;
@@ -585,7 +585,7 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (page == "Evidências") TutorialHint(4, "Read the recorded clues. Then interview the people involved and compare their accounts.");
         else if (page == "Interrogatório") TutorialHint(8, "Choose a question. Some questions become available only after you find supporting evidence.");
         else if (page == "Dedução") TutorialHint(16, "Choose the combination supported by the evidence. Confirming an incorrect accusation costs an attempt; canceling does not. You have three attempts.");
-        else if (page == "Ligações") TutorialHint(32, "Answer incoming calls and read the information from dispatch.");
+        else if (page == "Ligações") TutorialHint(32, "Send material to forensics here. When the phone rings, open it to answer, read the report, and end the call to record it.");
     }
 
     public void ToggleCamera()
@@ -772,11 +772,16 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state.page == "Interrogatório") RenderInterview(node);
     }
 
+    // After the first exchange, returning to the opening node gets a short prompt
+    // instead of the person repeating their whole opening statement.
+    bool interviewResumed;
+
     void RenderInterview(InterrogationNode node)
     {
         if (node == null) return;
         view.ShowPortraits(CurrentCase, state.interviewSuspect);
-        view.interviewMessage.text = view.interviewPortraitName != null ? node.message : suspectAsset.suspectName + "\n\n" + node.message;
+        string message = node.nodeId == "start" && interviewResumed ? "Anything else, detective?" : node.message;
+        view.interviewMessage.text = view.interviewPortraitName != null ? message : suspectAsset.suspectName + "\n\n" + message;
         var dialogueFx = view.interviewMessage.GetComponent<CaseZeroDialogueFX>();
         if (dialogueFx == null) dialogueFx = view.interviewMessage.gameObject.AddComponent<CaseZeroDialogueFX>();
         dialogueFx.RevealInterview();
@@ -810,6 +815,7 @@ public sealed class CaseZeroGame : MonoBehaviour
             else forensic = true;
         }
         if (forensic) named.Add("a forensic result");
+        if (choice.nextNodeId == "confronto" && CurrentCase.confrontNeedsReport && !state.callRead) named.Add("the forensic report");
         string prefix = choice.nextNodeId == "confronto" ? "Challenge" : "Question";
         return named.Count == 0 ? prefix + " • locked" : $"{prefix} • requires: {string.Join(", ", named)}";
     }
@@ -823,9 +829,22 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (!interrogation.IsChoiceAvailable(choice) || (choice.nextNodeId == "confronto" && !state.CanConfront)) return;
         state.idleTime = 0;
         if (!state.questions.Contains(choice.choiceText)) state.questions.Add(choice.choiceText);
-        if (choice.nextNodeId == "confronto" && (state.CaseIndex == 0 || state.interviewSuspect == CurrentCase.culprit)) Collect("depoimento");
+        if (choice.nextNodeId == "confronto" && (state.CaseIndex == 0 || state.interviewSuspect == CurrentCase.confrontInterview)) Collect("depoimento");
+        bool leavingChallenge = interrogation.CurrentNode.nodeId == "confronto";
+        interviewResumed = true;
         interrogation.SelectChoice(choice);
-        if (string.IsNullOrEmpty(choice.nextNodeId)) { state.interviewNode = "start"; CloseDocument(); }
+        if (string.IsNullOrEmpty(choice.nextNodeId))
+        {
+            // Ending a conversation keeps the file open: a fresh statement goes to Evidence,
+            // otherwise the player stays in Interviews to pick someone else.
+            state.interviewNode = "start";
+            if (leavingChallenge && state.Has("depoimento")) SelectEvidence("depoimento");
+            else
+            {
+                interrogation.StartInterrogation(suspectAsset);
+                if (state.CaseIndex > 0) Say("Ask something else or choose another person to talk to.");
+            }
+        }
         Save(false);
     }
 
@@ -904,7 +923,13 @@ public sealed class CaseZeroGame : MonoBehaviour
     }
 
     public void AnswerPhone() { if (state != null && !paused) phone.AnswerPendingCall(); }
-    public void EndPhone() { if (state != null && !paused && phone.CurrentCall != null && !view.phonePresentation.IsRevealing) phone.EndCall(); }
+    public void EndPhone()
+    {
+        if (state == null || paused || phone.CurrentCall == null) return;
+        // First click during the typing animation shows the whole report; the next one ends the call.
+        if (view.phonePresentation.IsRevealing) { view.phonePresentation.Complete(); return; }
+        phone.EndCall();
+    }
 
     void CallUpdated(PhoneCallAsset call, PhoneDialogueNode node)
     {
@@ -930,17 +955,18 @@ public sealed class CaseZeroGame : MonoBehaviour
         if (state.page == "Ligações") RefreshPhone();
     }
 
-    public void SelectSuspect(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.suspects.Length) return; state.suspect = index; RefreshDeduction(); }
+    // Scene buttons pass the on-screen slot; the state keeps the suspect index.
+    public void SelectSuspect(int slot) { if (state == null || state.Finished || confirming || slot < 0 || slot >= CurrentCase.suspects.Length) return; state.suspect = CurrentCase.SuspectAtSlot(slot); RefreshDeduction(); }
     public void SelectWeapon(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.objects.Length) return; state.weapon = index; RefreshDeduction(); }
     public void SelectPlace(int index) { if (state == null || state.Finished || confirming || index < 0 || index >= CurrentCase.places.Length) return; state.place = index; RefreshDeduction(); }
 
     void RefreshDeduction()
     {
-        view.ShowSelection(view.suspectChecks, state.suspect);
+        view.ShowSelection(view.suspectChecks, CurrentCase.SlotOfSuspect(state.suspect));
         view.ShowSelection(view.weaponChecks, state.weapon);
         view.ShowSelection(view.placeChecks, state.place);
         view.concludeButton.interactable = state.CanConclude && state.HasTheory && !state.Finished;
-        view.deductionHint.text = state.Finished ? "This case is already closed. View the result or restart through Settings."
+        view.deductionHint.text = state.Finished ? "This case is already closed. Use the results screen to restart it or continue."
             : state.CanConclude && !state.HasTheory ? "Choose the culprit, the weapon, and the location before confirming."
             : state.CanConclude ? $"Review your theory before confirming. {state.AttemptsRemaining} accusation attempt(s) remaining."
             : "Still missing before an accusation:\n• " + string.Join("\n• ", state.MissingForConclusion());

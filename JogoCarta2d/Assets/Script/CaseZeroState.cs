@@ -79,10 +79,17 @@ public sealed class CaseZeroState
             if (callPending && !callRead) return "Answer the call from forensics on your phone.";
             if (!Has("registro") || !Has("pistola") || !Has("capsula"))
                 return location == "Bar" ? "Examine the objects in the bar and collect evidence." : "Travel to the bar using the map and examine the objects.";
-            if (!Has("sangue")) return "Examine the traces at the scene and compare them with the statements.";
-            if (!Has("depoimento")) return "In Interviews, challenge the testimony with evidence.";
-            if (!callRead) return callDelay >= 0 ? "Forensics is analyzing the material. Review the evidence while awaiting the call." : "Submit material for analysis through your phone.";
-            return "Open Deduction and compare the culprit, weapon, and location.";
+            // Ballistics first: the report is what breaks the man's story.
+            if (!callRead)
+            {
+                if (callDelay < 0) return "Send the pistol and the cartridge case to forensics through your phone.";
+                return Has("sangue")
+                    ? "Forensics is comparing the pistol and the cartridge case. Meanwhile, question the man behind the counter."
+                    : "Forensics is comparing the pistol and the cartridge case. Meanwhile, examine the traces at the scene.";
+            }
+            if (!Has("sangue")) return "Examine the traces at the scene.";
+            if (!Has("depoimento")) return "In Interviews, challenge the man behind the counter with the records and the ballistic report.";
+            return "Open Deduction. Weigh every option against the evidence before you accuse.";
         }
     }
     public bool HasSceneEvidence
@@ -97,7 +104,8 @@ public sealed class CaseZeroState
     public bool HasAllCaseEvidence => HasSceneEvidence;
     bool Unlocked(string key) => analysisStage >= Definition.UnlockStage(key);
     public bool HasKeyEvidence => MissingKeys(Definition.keyEvidence, false).Count == 0;
-    public bool CanConfront => MissingKeys(Definition.confrontRequirements, false).Count == 0;
+    public bool CanConfront => MissingKeys(Definition.confrontRequirements, false).Count == 0
+        && (!Definition.confrontNeedsReport || callRead);
 
     /// <summary>Clues from the list not yet recorded; optionally only those already examinable.</summary>
     public List<string> MissingKeys(string[] keys, bool unlockedOnly)
@@ -219,6 +227,17 @@ public sealed class CaseZeroState
         if (results == null) results = new List<CaseZeroResult>();
         results.RemoveAll(r => r == null || r.caseId == caseId);
         results.Add(new CaseZeroResult { caseId = caseId, score = Score, elapsed = elapsed, errors = errors, evidenceCount = evidence.Count });
+    }
+
+    /// <summary>Clamps interview data from saves made before a case's cast changed,
+    /// so an older save is restarted by the game instead of being rejected.</summary>
+    public void Repair()
+    {
+        if (CaseIndex < 0) return;
+        int people = Definition.interviewNames.Length;
+        if (interviewSuspect < 0 || interviewSuspect >= people) { interviewSuspect = 0; interviewNode = "start"; }
+        interviewedMask &= (1 << people) - 1;
+        if (suspect >= Definition.suspects.Length) suspect = -1;
     }
 
     public bool IsValid()

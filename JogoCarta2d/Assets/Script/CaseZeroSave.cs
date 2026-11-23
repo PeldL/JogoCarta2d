@@ -102,6 +102,7 @@ public static class CaseZeroSave
             try
             {
                 var state = JsonUtility.FromJson<CaseZeroState>(File.ReadAllText(path));
+                state?.Repair();
                 if (state != null && state.IsValid())
                 {
                     error = path.EndsWith(".bak") ? "Save recovered from the backup." : null;

@@ -33,7 +33,8 @@ public sealed class CaseZeroPhonePresentation : MonoBehaviour
         pendingMessage = text;
         IsRevealing = true;
         message.text = "";
-        confirmButton.interactable = false;
+        // Stays clickable: CaseZeroGame.EndPhone uses the first click to finish the reveal.
+        confirmButton.interactable = true;
         typingIndicator.SetActive(true);
         for (int i = 0; i < dots.Length; i++)
         {
@@ -56,6 +57,9 @@ public sealed class CaseZeroPhonePresentation : MonoBehaviour
             .Append(DOTween.To(() => message.alpha, value => message.alpha = value, 1f, 0.28f).SetEase(Ease.OutSine))
             .OnComplete(() => { IsRevealing = false; confirmButton.interactable = true; });
     }
+
+    /// <summary>Skip the typing animation and show the message in full.</summary>
+    public void Complete() => ShowImmediate(pendingMessage ?? "");
 
     public void ShowImmediate(string text)
     {

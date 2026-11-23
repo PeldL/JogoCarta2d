@@ -1,6 +1,7 @@
 using TMPro;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 // Radio conversations for each case. Tuning and gameplay instructions belong only to the first case.
@@ -18,36 +19,27 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
     Image detectivePortrait, centralPortrait;
     string[] lines;
     int caseIndex;
+    // Short on purpose: the in-game hints explain each screen when the player first opens it.
     static readonly string[] TutorialLines = {
-        "DISPATCH\nDetective, do you copy? We have a report of a death at a bar. We need you at the scene.",
-        "DETECTIVE\nI hear you. This is my first shift using this system. How do I access the case material?",
-        "DISPATCH\nI am sending the shift briefing to your phone. Documents contains the incident report and instructions. Open the case file with Tab or the on-screen button; use the Map to choose a location.",
-        "DISPATCH\nExamine the marked objects at the scene. Every discovery is stored in Evidence. Read the records and listen to those involved in Interviews. Some questions only become available when you find evidence that supports them.",
-        "DETECTIVE\nAnd once I have collected the material?",
-        "DISPATCH\nOpen your phone and request examinations of the material you find. Sending something to forensics does not end the search for clues. Keep investigating while they work. When the call arrives, answer, read the findings, and record the report. If you get stuck, you can ask for guidance through your phone.",
-        "DISPATCH\nWith the evidence, testimony, and report recorded, use Deduction to present your conclusion. Check before confirming: an incorrect accusation costs one of your three attempts. Progress is saved automatically. Start by examining the scene."
+        "DISPATCH\nDetective, do you copy? A woman was shot dead in a bar. We need you at the scene.",
+        "DETECTIVE\nOn my way. Where do I start?",
+        "DISPATCH\nExamine the marked objects and send anything useful to forensics through your phone. Then challenge any account the evidence contradicts. Tab opens your case file."
     };
     static string[] BriefingLines(int index)
     {
-        var data = CaseZeroCases.All[index];
         if (index == 1)
             return new[] {
-                "DISPATCH\nDetective, we have a new call. A person was found dead in their apartment. The police officer is waiting at the scene.",
-                "DETECTIVE\nUnderstood. What do we know so far?",
-                "DISPATCH\n" + data.introduction,
-                "DETECTIVE\nI'll start with the scene and the people connected to it. How do I keep the evidence organized?",
-                "DISPATCH\nUse the map to move between locations. Examine each marked object, record it in Evidence, and compare what people say in Interviews. You can send useful material to forensics through your phone.",
-                "DISPATCH\nThe results will arrive as calls. Collect them at the police station, then use Deduction when the statements, physical evidence, and reports fit together. The map also lets you return to the apartment or visit the closed bar.",
-                "DETECTIVE\nCopy. I'll examine the apartment first and follow the evidence wherever it leads."
+                "DISPATCH\nDetective, a body was found in a street dumpster at dawn. It's an assistant from the forensics laboratory.",
+                "DETECTIVE\nCause of death?",
+                "DISPATCH\nThe laboratory's own medical examiner already signed the autopsy: overdose. The family swears the victim never used drugs.",
+                "DETECTIVE\nThen I want a second opinion. I'll start at the dumpster and then check the laboratory.",
+                "DISPATCH\nSend anything suspicious to an independent lab through your phone. The results will be waiting at the police station."
             };
         return new[] {
-            "DISPATCH\nDetective, we need you at the closed bar. A person was found dead there before opening. An officer and a medical examiner are assisting.",
-            "DETECTIVE\nDo we know what happened?",
-            "DISPATCH\n" + data.introduction,
-            "DETECTIVE\nI'll examine the scene and the people connected to it. What should I do if the cause is unclear?",
-            "DISPATCH\nRecord the objects you find and compare the accounts. Use your phone to request an examination when you have relevant material; the result will come by call and be collected at the police station.",
-            "DISPATCH\nThe map lets you move between the bar, the bakery, and the station. Keep the body's discovery location separate from the place indicated by the evidence.",
-            "DETECTIVE\nUnderstood. I'll start at the bar and follow the evidence."
+            "DISPATCH\nDetective, a customer collapsed and died at the bakery during breakfast. The officer on the scene says it was a heart attack.",
+            "DETECTIVE\nBut you're calling me anyway.",
+            "DISPATCH\nA nurse who tried to help says the symptoms looked like poisoning. The victim's car is still in the parking lot behind the bakery.",
+            "DETECTIVE\nUnderstood. I'll start at the bakery. Keep that cup away from everyone."
         };
     }
 
@@ -61,7 +53,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         caseIndex = game.CampaignState.CaseIndex;
         Target = Random.Range(920, 1061) / 10f;
         lines = caseIndex == 0 ? TutorialLines : BriefingLines(caseIndex);
-        view.back.gameObject.SetActive(false);
+        ShowSkipButton();
         view.title.text = "AT HOME • A CALL ON THE RADIO";
         view.stepLabel.text = "FIRST SHIFT";
         ConfigureSingleLine(view.title, 18f, view.title.fontSize);
@@ -123,6 +115,8 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         tuning.minValue = 88;
         tuning.maxValue = 108;
         tuning.value = 90;
+        // Arrow keys are read in Update for fine steps; the default jump is 2 MHz.
+        tuning.navigation = new Navigation { mode = Navigation.Mode.None };
         for (int i = 0; i < signalBars.Length; i++)
         {
             var bar = Graphic("Signal bar " + (i + 1), root, Color.black);
@@ -204,9 +198,43 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         frequency.text = $"{value:0.0} MHz • " + (distance <= 0.6f ? "CLEAR SIGNAL — hold here" : distance < 2.5f ? "Signal nearby" : "Weak signal");
     }
 
+    void ShowSkipButton()
+    {
+        if (view.back == null) return;
+        view.back.gameObject.SetActive(true);
+        view.back.interactable = true;
+        var label = view.back.GetComponentInChildren<TMP_Text>(true);
+        if (label != null) label.text = "Skip";
+    }
+
+    /// <summary>Back button during the radio: skip straight to the investigation.</summary>
+    public void Skip()
+    {
+        if (finished) return;
+        CaseZeroSoundFeedback.Current?.PlayClick();
+        Finish();
+    }
+
+    void Finish()
+    {
+        if (finished) return;
+        finished = true;
+        view.primary.interactable = false;
+        if (view.back != null) view.back.interactable = false;
+        game.FinishIntroduction();
+    }
+    bool finished;
+
     void Update()
     {
-        if (dialogue >= 0 || tuning == null) return;
+        if (dialogue >= 0 || tuning == null || finished) return;
+        var keyboard = Keyboard.current;
+        if (keyboard != null)
+        {
+            float direction = (keyboard.rightArrowKey.isPressed || keyboard.dKey.isPressed ? 1 : 0)
+                - (keyboard.leftArrowKey.isPressed || keyboard.aKey.isPressed ? 1 : 0);
+            if (direction != 0) tuning.value += direction * 3f * Time.unscaledDeltaTime;
+        }
         if (Mathf.Abs(tuning.value - Target) > 0.6f) { stableTime = 0; return; }
         stableTime += Time.unscaledDeltaTime;
         if (stableTime < 0.7f) return;
@@ -221,14 +249,10 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
 
     public void Advance()
     {
-        if (dialogue < 0) return;
+        if (dialogue < 0 || finished) return;
         CaseZeroSoundFeedback.Current?.PlayClick();
         if (++dialogue < lines.Length) ShowDialogue();
-        else
-        {
-            view.primary.interactable = false;
-            game.FinishIntroduction();
-        }
+        else Finish();
     }
 
     void ShowDialogue()

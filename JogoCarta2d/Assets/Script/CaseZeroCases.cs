@@ -8,6 +8,9 @@ public sealed class CaseZeroCase
     public string testimonyEvidenceName, testimonyEvidenceDescription;
     public string[] suspects, objects, places;
     public int culprit, weaponSolution, placeSolution, analysisCount;
+    // Interview whose challenge produces the testimony (may differ from the culprit
+    // when the deduction answer names more than one person).
+    public int confrontInterview;
     public string objectQuestion, placeQuestion;
     public string[] interviewNames, statements, explanations;
     public string[][] analysisPrerequisites;
@@ -16,6 +19,25 @@ public sealed class CaseZeroCase
     public string[] confrontRequirements;
     // Clues needed before Deduction opens; other clues are optional context.
     public string[] keyEvidence;
+    // The challenge also needs a recorded forensic report (first case: ballistics).
+    public bool confrontNeedsReport;
+    // Deduction shows suspects in this order (slot -> suspect index), so the
+    // culprit is not always the first option. Suspect indices stay tied to
+    // interviews and portraits.
+    public int[] suspectOrder;
+
+    public int SuspectAtSlot(int slot)
+    {
+        if (suspectOrder == null || suspectOrder.Length != suspects.Length) return slot;
+        return slot >= 0 && slot < suspectOrder.Length ? suspectOrder[slot] : -1;
+    }
+
+    public int SlotOfSuspect(int suspect)
+    {
+        if (suspect < 0) return -1;
+        if (suspectOrder == null || suspectOrder.Length != suspects.Length) return suspect;
+        return System.Array.IndexOf(suspectOrder, suspect);
+    }
 
     public string EvidenceName(string key)
     {
@@ -54,154 +76,166 @@ public static class CaseZeroCases
     public static readonly CaseZeroCase[] All = {
         new CaseZeroCase {
             id = "ultima-testemunha", title = "The Last Witness", location = "Bar",
-            locations = new[] { "Bar" }, culprit = 0, weaponSolution = 0, placeSolution = 0,
+            locations = new[] { "Bar" }, culprit = 0, weaponSolution = 1, placeSolution = 2,
+            suspectOrder = new[] { 1, 2, 0 },
             introduction = "A woman entered the bar and was shot dead. Gather evidence, question the man behind the counter, and establish the culprit, weapon, and crime scene.",
             evidenceKeys = new[] { "registro", "pistola", "capsula", "sangue" },
             evidenceNames = new[] { "Employee records", "Pistol under the counter", "Cartridge case on the floor", "Crime scene traces" },
             evidenceDescriptions = new[] {
-                "The schedule identifies the actual employee: he left before the crime. The man seen behind the counter does not work here.",
+                "The schedule lists one employee on shift, who clocked out twenty minutes before the shot. The man found behind the counter is not on any list. The storeroom door was left open.",
                 "A pistol was found hidden under the counter. Preserve it for ballistic comparison.",
-                "A cartridge case was found near the body in the bar service area. It indicates a shot was fired here.",
-                "Bloodstains by the counter. Their position is consistent with the account of the victim's arrival."
+                "A cartridge case was found in the service area behind the counter. Nearby, a customer's receipt was paid minutes before the shot; that customer has not been identified.",
+                "Bloodstains in the service area behind the counter. A broken bottle and a kitchen knife lie nearby, but neither has any blood on it."
             },
             evidenceLocations = new[] { "Bar", "Bar", "Bar", "Bar" },
             evidenceUnlockStages = new[] { 0, 0, 0, 0 },
             testimonyEvidenceName = "Challenged testimony",
-            testimonyEvidenceDescription = "Confronted with the schedule and the pistol, the man admits he was robbing the bar. The victim entered during the robbery.",
-            suspects = new[] { "Man behind the counter", "Bar employee", "Unknown customer" },
-            objects = new[] { "Pistol", "Knife", "Poison" },
-            places = new[] { "Bar", "Street", "Victim's home" },
+            testimonyEvidenceDescription = "Confronted with the employee records and the ballistic report, the man admits he does not work at the bar and came in to empty the till. He says the woman walked in and he panicked, but refuses to say more.",
+            suspects = new[] { "Man behind the counter", "Bar employee", "Unidentified customer" },
+            objects = new[] { "Kitchen knife", "Pistol", "Broken bottle" },
+            places = new[] { "Storeroom", "Street outside", "Behind the counter" },
             objectQuestion = "WHICH WEAPON?", placeQuestion = "WHERE?",
             interviewNames = new[] { "Man behind the counter" },
             statements = new[] { "I was behind the counter when that woman came in. I have nothing else to say." },
-            explanations = new[] { "All right. I was not an employee. I was robbing the bar. She came in, saw my face... I shot her because I was afraid she would report me." },
+            explanations = new[] { "...Fine. I don't work here. I came in through the storeroom to empty the till. Then she walked in and saw me. I panicked. That's all I'm saying." },
             confrontRequirements = new[] { "pistola", "registro" },
+            confrontNeedsReport = true,
             keyEvidence = new[] { "registro", "pistola", "capsula", "sangue" },
             ending = "The man behind the counter was a robber. He killed the woman with the pistol in the bar to stop her from reporting him."
         },
+        // Case 2: the medical examiner, helped by the security guard, kills a lab assistant
+        // who was about to expose his falsified autopsies. Injection in the laboratory;
+        // the body is dumped in a street bin and the examiner signs it off as an overdose.
         new CaseZeroCase {
-            id = "apartamento-302", title = "Blind Spot", location = "Apartamento",
-            locations = new[] { "Apartamento", "Bar", "Delegacia" },
-            culprit = 0, weaponSolution = 0, placeSolution = 0, analysisCount = 2,
-            introduction = "A person was found dead in their apartment. There are no signs of forced entry, and the building cameras were offline for part of the night. The body may not have been found where the murder happened.",
+            id = "apartamento-302", title = "The Second Opinion", location = "Rua",
+            locations = new[] { "Rua", "Laboratorio", "Delegacia" },
+            culprit = 3, confrontInterview = 1, weaponSolution = 1, placeSolution = 2, analysisCount = 2,
+            suspectOrder = new[] { 2, 3, 0, 1 },
+            introduction = "A lab assistant from the forensics laboratory was found dead inside a street dumpster at dawn. The official autopsy, signed by the laboratory's own medical examiner, says overdose. The family insists the victim never used drugs.",
             evidenceKeys = new[] {
-                "c2_apt_tapete", "c2_apt_agenda", "c2_apt_chaveiro",
-                "c2_bar_sangue", "c2_bar_botao", "c2_bar_terminal",
-                "c2_police_laudo", "c2_police_uniforme", "c2_police_faca"
+                "c2_rua_lixeira", "c2_rua_cracha", "c2_rua_marcas",
+                "c2_lab_seringa", "c2_lab_estoque", "c2_lab_camera", "c2_lab_maca",
+                "c2_police_autopsia", "c2_police_rascunho", "c2_police_digitais", "c2_police_transferencia"
             },
             evidenceNames = new[] {
-                "Rug beneath the body", "Victim's appointment book", "Caretaker's key ring",
-                "Blood beneath the bench", "Security uniform button", "Camera terminal",
-                "Medical examiner's report", "Seized uniform", "Knife from the security locker"
+                "Body in the dumpster", "Laboratory access badge", "Thin wheel tracks",
+                "Syringe in the sharps bin", "Controlled drug log", "Camera control panel", "Body trolley",
+                "Second autopsy", "Victim's draft complaint", "Fingerprints on the syringe", "Bank transfer"
             },
             evidenceDescriptions = new[] {
-                "There is surprisingly little blood beneath the body despite the severity of the wounds. The scene may have been moved after the attack.",
-                "The victim noted a meeting at the closed bar after closing time. The appointment connects the victim to a second scene.",
-                "A caretaker's key ring was left behind during an earlier repair. It explains access to the apartment, but does not place its owner there that night.",
-                "Blood beneath a bench matches the victim. The pattern is consistent with a violent attack in the closed bar.",
-                "A dark button bears the logo of the security company. It was found beside the bloodstain and may have come off during a struggle.",
-                "The terminal records a manual camera shutdown under the security guard's account, contradicting the claim that the system simply failed.",
-                "The medical examiner confirms 28 stab wounds and finds signs that the body was moved after death. The estimated time matches the camera outage.",
-                "One button is missing from the security guard's uniform. Its design and remaining threads match the button from the bar.",
-                "A knife recovered from the security guard's locker carries the victim's blood on its blade."
+                "The victim lies in a street dumpster, still wearing a lab coat. No blood, no wounds, no sign of a struggle. The wallet and phone were not taken. This was no robbery.",
+                "The victim's access badge, clipped to the coat. It was last used to enter the forensics laboratory at 22:40, the night before the body was found.",
+                "Two thin, parallel wheel tracks run from the curb to the dumpster, where a white van was parked around midnight. Something heavy was rolled here.",
+                "A recently used syringe in the laboratory's sharps bin, its label torn off. A drop of clear liquid remains inside. It can be sent to an independent lab.",
+                "Two vials of a powerful sedative are missing from the controlled stock. The weekly check was signed as complete by the medical examiner the morning after the death.",
+                "The laboratory cameras were switched off manually at 22:30 and back on at 01:10, using the security guard's account.",
+                "The body trolley from the autopsy room has thin wheels caked in street mud, although it should never leave the building. Its tread matches the tracks by the dumpster.",
+                "An independent examiner found a fresh injection mark on the back of the victim's neck and a lethal dose of the sedative missing from the laboratory. No sign of drug use: the official overdose report is false.",
+                "Recovered from the victim's phone: an unsent complaint to the police, describing autopsy reports the medical examiner falsified for money. The victim planned to send it the next morning.",
+                "Fingerprints on the syringe plunger belong to the medical examiner. The liquid inside is the same sedative found in the victim's body.",
+                "Bank records show a cash transfer from the medical examiner to the security guard the morning after the murder."
             },
             evidenceLocations = new[] {
-                "Apartamento", "Apartamento", "Apartamento", "Bar", "Bar", "Bar",
-                "Delegacia", "Delegacia", "Delegacia"
+                "Rua", "Rua", "Rua",
+                "Laboratorio", "Laboratorio", "Laboratorio", "Laboratorio",
+                "Delegacia", "Delegacia", "Delegacia", "Delegacia"
             },
-            evidenceUnlockStages = new[] { 0, 0, 0, 0, 0, 0, 1, 1, 2 },
-            testimonyEvidenceName = "Security guard's revised statement",
-            testimonyEvidenceDescription = "Confronted with the uniform button, the camera log, and the matching uniform, the security guard changes his story: he went to the bar, but claims the victim was alive when he left.",
-            suspects = new[] { "Security guard", "Caretaker", "Baker" },
-            objects = new[] { "Knife", "Pistol", "Poison" },
-            places = new[] { "Closed bar", "Apartment", "Street" },
-            objectQuestion = "WHAT WAS THE WEAPON?", placeQuestion = "WHERE DID THE ATTACK HAPPEN?",
-            interviewNames = new[] { "Security guard", "Caretaker", "Baker", "Nurse • witness" },
+            evidenceUnlockStages = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2 },
+            testimonyEvidenceName = "Security guard's confession",
+            testimonyEvidenceDescription = "Confronted with the camera log, the trolley and the second autopsy, the security guard admits the medical examiner paid him to switch off the cameras and open the back door, and that he helped wheel the body to the dumpster. He says the examiner gave the injection.",
+            suspects = new[] { "Medical examiner", "Security guard", "Street caretaker", "Examiner and guard together" },
+            objects = new[] { "Drug overdose", "Lethal injection", "Suffocation" },
+            places = new[] { "Street dumpster", "Police station", "Forensics laboratory" },
+            objectQuestion = "HOW WAS THE VICTIM KILLED?", placeQuestion = "WHERE DID THE MURDER HAPPEN?",
+            interviewNames = new[] { "Medical examiner", "Security guard", "Caretaker • found the body" },
             statements = new[] {
-                "The cameras had a problem. I stayed in the surveillance room all night.",
-                "I went in earlier to make a repair. I have a spare key, but I did not enter that night.",
-                "I had no reason to visit the apartment or the closed bar. I have nothing to do with the camera system.",
-                "I live in the building. I noticed movement in the corridor after the victim was found, but I could not identify who was there."
+                "My report is clear: an overdose. The assistant had problems, everyone at the laboratory knew it. I don't see what there is to investigate.",
+                "I was on duty all night. The cameras crashed around half past ten. That old system does it all the time.",
+                "I found the body when I came to empty the bins at six. I called the police straight away."
             },
             explanations = new[] {
-                "All right. I went to the bar, but the victim was alive when I left.",
-                "The key ring was left during the earlier repair. I did not kill the victim or move the body.",
-                "I did not go to the closed bar that night. The evidence from the scene and the security room should be checked against the guard's account.",
-                "I saw someone moving through the corridor, but I could not identify them. I can confirm the body was in the apartment when it was discovered."
+                "",
+                "...Okay. The examiner paid me to switch off the cameras and open the back door. When I came back, the assistant was on the trolley, in a bag. He told me to help him get it to the van. I swear I never touched that needle.",
+                ""
             },
             analysisPrerequisites = new[] {
-                new[] { "c2_bar_sangue", "c2_bar_botao", "c2_bar_terminal" },
-                new[] { "c2_bar_botao", "c2_bar_terminal", "depoimento" }
+                new[] { "c2_rua_lixeira", "c2_lab_seringa" },
+                new[] { "c2_lab_estoque", "depoimento" }
             },
             analysisMessages = new[] {
-                "The blood beneath the bar bench matches the victim, confirming the attack happened there, not in the apartment. The button matches the security uniform, and the camera terminal records a manual shutdown under the guard's account. The medical examiner's report and uniform comparison are ready at the police station.",
-                "The search of the security locker found a knife. The lab identified the victim's blood on its blade. The seized knife and final report are ready at the police station."
+                "The independent autopsy is done: a fresh injection mark on the neck and a lethal dose of the laboratory's sedative. There is no sign of drug use; the official overdose report is false. We also unlocked the victim's phone. The second autopsy and the victim's draft complaint are ready at the police station.",
+                "The fingerprints on the syringe belong to the medical examiner, and the liquid matches the sedative in the body. The guard's bank records show a payment from the examiner the morning after. Both reports are ready at the police station."
             },
-            confrontRequirements = new[] { "c2_bar_botao", "c2_bar_terminal", "c2_police_uniforme" },
-            keyEvidence = new[] { "c2_bar_sangue", "c2_bar_botao", "c2_bar_terminal", "c2_police_laudo", "c2_police_uniforme", "c2_police_faca" },
-            ending = "The cameras went blind, but the traces remained. The button and uniform placed the security guard in the closed bar, while the terminal exposed the manual shutdown. The knife linked him to the 28 wounds. The body had been moved to the apartment to mislead the investigation."
+            confrontRequirements = new[] { "c2_lab_camera", "c2_lab_maca", "c2_police_autopsia" },
+            keyEvidence = new[] { "c2_rua_lixeira", "c2_lab_seringa", "c2_lab_estoque", "c2_lab_camera", "c2_lab_maca", "c2_police_autopsia", "c2_police_digitais", "c2_police_transferencia" },
+            ending = "The medical examiner had been falsifying autopsies for money, and the lab assistant found out and was about to report it. He kept the assistant late at the laboratory while the security guard, paid to help, switched off the cameras and opened the back door. The examiner killed the assistant with a lethal injection from the laboratory's own stock. Together they wheeled the body out on the autopsy trolley and dumped it in a street bin, and the examiner signed an autopsy calling it an overdose. The second autopsy, the fingerprints and the payment exposed them both."
         },
+        // Case 3: a regular customer is poisoned at the bakery by the police officer
+        // they had been blackmailing over a hit-and-run. The officer then takes charge
+        // of the scene and calls it a heart attack.
         new CaseZeroCase {
-            id = "arquivo-vertice", title = "The Last Break", location = "Bar",
-            locations = new[] { "Bar", "Padaria", "Delegacia" },
-            culprit = 0, weaponSolution = 0, placeSolution = 0, analysisCount = 2,
-            introduction = "A person was found dead in the closed bar. A receipt and coffee-stained fabric suggest the body may have been brought from somewhere else. The cause of death is not yet known.",
+            id = "arquivo-vertice", title = "The Last Coffee", location = "Padaria",
+            locations = new[] { "Padaria", "Estacionamento", "Delegacia" },
+            culprit = 0, confrontInterview = 0, weaponSolution = 2, placeSolution = 0, analysisCount = 2,
+            suspectOrder = new[] { 1, 0, 2 },
+            introduction = "A regular customer collapsed and died at the bakery during breakfast. The first officer on the scene called it a heart attack, but a nurse who tried to help says the symptoms were wrong. The victim's car is still in the parking lot behind the bakery.",
             evidenceKeys = new[] {
-                "c3_bar_recibo", "c3_bar_pano", "c3_bar_manutencao",
-                "c3_padaria_xicara", "c3_padaria_camera", "c3_padaria_retalho",
-                "c3_police_tox", "c3_police_uniforme", "c3_police_carta"
+                "c3_padaria_xicara", "c3_padaria_camera", "c3_padaria_sache", "c3_padaria_comanda",
+                "c3_est_envelope", "c3_est_caderno", "c3_est_jornal",
+                "c3_police_tox", "c3_police_livro", "c3_police_digitais", "c3_police_viatura"
             },
             evidenceNames = new[] {
-                "Receipt in the victim's pocket", "Cloth caught on the victim", "Bar maintenance log",
-                "Cup behind the bakery counter", "Recovered bakery footage", "Fabric snagged in the cup cabinet",
-                "Toxicology report", "Caretaker's uniform", "Dismissal letter"
+                "Victim's coffee cup", "Bakery security footage", "Torn sugar sachet", "Order slip",
+                "Envelope in the victim's car", "Payment notebook", "Newspaper clipping",
+                "Toxicology report", "Evidence-room log", "Fingerprints on the sachet", "Patrol car repair record"
             },
             evidenceDescriptions = new[] {
-                "The receipt records a delivery received at the bakery that morning. It points to the victim's last known appointment.",
-                "The cloth bears the bakery's name and coffee stains. It links the victim's clothing to a different location.",
-                "The maintenance log shows that the caretaker had a key to the closed bar that day, providing a way to move the body.",
-                "The victim's cup contains leftover coffee. It was found behind the counter beside a spill and can be submitted for toxicology.",
-                "Recovered footage shows the victim drinking coffee and collapsing behind the counter. The image does not show who handled the cup.",
-                "A piece of gray fabric with yellow stitching is caught on the cup-cabinet hinge. It can be compared with the caretaker's uniform.",
-                "Toxicology identifies poison in the victim's cup. The sample from the coffee pot is clean, showing that only one drink was contaminated.",
-                "The tear and yellow seam in the caretaker's uniform match the fabric caught in the cup cabinet.",
-                "The victim blamed the caretaker for a workplace accident. On the back is a handwritten note: 'You knew it wasn't my fault.'"
+                "The victim's cup, broken by the window table, with a little coffee left in the largest piece. It can be sent for toxicology.",
+                "While the baker turns to the oven, the officer at the next table leans over the victim's cup for a few seconds. Moments later the victim drinks and collapses.",
+                "A paper sugar sachet torn open under the window table, with a fine grey powder inside. The bakery does not use paper sachets, only sugar bowls.",
+                "The victim's usual order, paid every morning at the same time: black coffee, no sugar.",
+                "Photos of a patrol car with a dented front bumper, dated the night of last year's hit-and-run in this parking lot. On the back: \"He pays, or this goes to the papers.\"",
+                "A notebook listing monthly cash payments over the last year. Every entry is marked with the same patrol car number.",
+                "An article on last year's hit-and-run in the bakery parking lot: a cyclist was badly injured and the driver was never found.",
+                "The coffee contained a lethal dose of an organophosphate pesticide. This was poisoning, not a heart attack.",
+                "Two days before the death, the officer signed a bottle of seized pesticide out of the evidence room \"for destruction\". It was never destroyed and never returned.",
+                "The officer's fingerprints are on the torn sachet, and the powder inside is the same pesticide found in the coffee.",
+                "The officer's patrol car had its front bumper replaced, paid in cash, the day after last year's hit-and-run."
             },
             evidenceLocations = new[] {
-                "Bar", "Bar", "Bar", "Padaria", "Padaria", "Padaria",
-                "Delegacia", "Delegacia", "Delegacia"
+                "Padaria", "Padaria", "Padaria", "Padaria",
+                "Estacionamento", "Estacionamento", "Estacionamento",
+                "Delegacia", "Delegacia", "Delegacia", "Delegacia"
             },
-            evidenceUnlockStages = new[] { 0, 0, 0, 0, 0, 0, 1, 2, 1 },
-            testimonyEvidenceName = "Caretaker's changed statement",
-            testimonyEvidenceDescription = "Confronted with the fabric match, the caretaker admits entering the bakery's kitchen despite denying it. The admission and the victim-only poison result must be considered with the motive in the letter.",
-            suspects = new[] { "Caretaker", "Baker" },
-            objects = new[] { "Poison", "Knife", "Pistol" },
-            places = new[] { "Bakery", "Closed bar", "Apartment" },
-            objectQuestion = "WHAT CAUSED THE DEATH?", placeQuestion = "WHERE WAS THE VICTIM POISONED?",
-            interviewNames = new[] { "Caretaker", "Baker", "Nurse • witness", "Police officer" },
+            evidenceUnlockStages = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2 },
+            testimonyEvidenceName = "Officer's admission",
+            testimonyEvidenceDescription = "Confronted with the footage, the evidence-room log and his fingerprints on the sachet, the officer admits the victim had been blackmailing him for a year over the hit-and-run, and that he \"just wanted it to stop\".",
+            suspects = new[] { "Police officer", "Baker", "Barista" },
+            objects = new[] { "Heart attack", "Allergic reaction", "Pesticide poisoning" },
+            places = new[] { "Bakery", "Parking lot", "Police station" },
+            objectQuestion = "WHAT KILLED THE VICTIM?", placeQuestion = "WHERE WAS THE VICTIM POISONED?",
+            interviewNames = new[] { "Police officer • first on the scene", "Baker", "Barista", "Nurse • witness" },
             statements = new[] {
-                "I only came back to collect my belongings. I never entered the kitchen.",
-                "I prepared the coffee as usual and drank from the same pot. I had argued with the victim about delayed wages, but I did not touch their cup.",
-                "I saw the victim at the bakery that morning. They drank coffee and became ill shortly afterward. I tried to help.",
-                "The body was found in the closed bar. We will collect the items you identify and compare them with the witness accounts."
+                "I was having my usual coffee when the victim collapsed. I called it in and secured the scene myself. Looked like a heart attack to me.",
+                "I've served the victim the same black coffee every morning for years. I turned to the oven for a minute, and when I looked back they were on the floor.",
+                "I was making orders in the back. I came out when I heard the cup break.",
+                "I was in line and tried to help. Tiny pupils, sweating, struggling to breathe... that was no heart attack."
             },
             explanations = new[] {
-                "I... did enter the bakery kitchen, just for a moment. I only wanted to retrieve something. I did not poison the coffee.",
-                "The victim always used that cup. Anyone who worked there knew where it was kept, but I did not poison it.",
-                "I saw the victim take a few sips and collapse. I cannot say who prepared or handled that cup.",
-                "The evidence shows where the victim collapsed and how the body was moved. The lab reports and witness accounts should be compared before making an accusation."
+                "...A year. A year of paying for one mistake on a rainy night. An envelope every month, and every month they wanted more. I just wanted it to stop. I'm done talking.",
+                "", "", ""
             },
             analysisPrerequisites = new[] {
                 new[] { "c3_padaria_xicara" },
-                new[] { "c3_padaria_retalho" }
+                new[] { "c3_padaria_sache" }
             },
             analysisMessages = new[] {
-                "Toxicology found a poisonous substance in the victim's cup. The coffee-pot sample is clean. The toxicology report and the victim's personnel records are ready at the police station.",
-                "The yellow seam and tear on the caretaker's uniform match the fabric caught in the cup cabinet. The comparison report is ready at the police station."
+                "Toxicology found a lethal dose of an organophosphate pesticide in the victim's coffee. This was poisoning, not a heart attack. The toxicology report and the evidence-room log for seized pesticides are ready at the police station.",
+                "The powder in the sugar sachet is the same pesticide, and the only fingerprints on the paper belong to the officer who secured the scene. The fingerprint report and the officer's patrol car records are ready at the police station."
             },
-            confrontRequirements = new[] { "c3_padaria_retalho", "c3_police_tox", "c3_police_uniforme" },
-            keyEvidence = new[] { "c3_padaria_xicara", "c3_padaria_camera", "c3_padaria_retalho", "c3_police_tox", "c3_police_uniforme", "c3_police_carta" },
-            ending = "The coffee pot was clean, but the victim's cup was poisoned. The recovered footage fixed the collapse at the bakery, and the fabric match placed the caretaker in the cup cabinet he denied entering. The dismissal letter revealed the motive. The body was later moved to the closed bar."
+            confrontRequirements = new[] { "c3_padaria_camera", "c3_police_livro", "c3_police_digitais" },
+            keyEvidence = new[] { "c3_padaria_xicara", "c3_padaria_camera", "c3_padaria_sache", "c3_est_envelope", "c3_police_tox", "c3_police_livro", "c3_police_digitais" },
+            ending = "The victim had discovered that the officer caused last year's hit-and-run and had been blackmailing him ever since. The officer signed a seized pesticide out of the evidence room, tipped it from a sugar sachet into the victim's coffee at the bakery while the baker's back was turned, then took charge of the scene and called it a heart attack. The footage, the evidence-room log and his fingerprints on the sachet proved otherwise."
         }
     };
 

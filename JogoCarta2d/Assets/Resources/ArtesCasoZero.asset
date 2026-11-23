@@ -72,46 +72,46 @@ MonoBehaviour:
     suspectIndex: 2
     artName: 
     sprite: {fileID: 0}
-  - name: "Seguran\xE7a das c\xE2meras"
+  - name: Legista
     caseId: apartamento-302
     suspectIndex: 0
+    artName: Legista
+    sprite: {fileID: 21300000, guid: 5245eff8a0984674cb91ce8cb8f5c959, type: 3}
+  - name: Seguranca das cameras
+    caseId: apartamento-302
+    suspectIndex: 1
     artName: "Seguran\xE7a das c\xE2meras"
     sprite: {fileID: 21300000, guid: d0b59135122360b4d937ffc9518da516, type: 3}
-  - name: Zelador
-    caseId: apartamento-302
-    suspectIndex: 1
-    artName: Zelador
-    sprite: {fileID: -8136669070187365587, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
-  - name: Padeiro
+  - name: Zelador da rua
     caseId: apartamento-302
     suspectIndex: 2
-    artName: Padeiro
-    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
-  - name: "Enfermeiro \u2022 testemunha"
+    artName: Zelador
+    sprite: {fileID: -8136669070187365587, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
+  - name: Legista e seguranca juntos
     caseId: apartamento-302
     suspectIndex: 3
-    artName: Enfermeiro
-    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
-  - name: Zelador
-    caseId: arquivo-vertice
-    suspectIndex: 0
-    artName: Zelador
-    sprite: {fileID: -8136669070187365587, guid: a52f3f0128b378d4cabcf654e3453300, type: 3}
-  - name: Padeiro
-    caseId: arquivo-vertice
-    suspectIndex: 1
-    artName: Padeiro
-    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
-  - name: "Enfermeiro \u2022 testemunha"
-    caseId: arquivo-vertice
-    suspectIndex: 2
-    artName: Enfermeiro
-    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
+    artName: 
+    sprite: {fileID: 0}
   - name: Policial
     caseId: arquivo-vertice
-    suspectIndex: 3
+    suspectIndex: 0
     artName: Policial
     sprite: {fileID: 21300000, guid: 39be66199a1ab3d4bb6d8b9ee3bc3952, type: 3}
+  - name: Padeiro
+    caseId: arquivo-vertice
+    suspectIndex: 1
+    artName: Padeiro
+    sprite: {fileID: 21300000, guid: dc034177278756b4187e06d94e5502c7, type: 3}
+  - name: Barista
+    caseId: arquivo-vertice
+    suspectIndex: 2
+    artName: Barista
+    sprite: {fileID: 21300000, guid: b58dc27a9a38d3048ac9270494793680, type: 3}
+  - name: Enfermeiro testemunha
+    caseId: arquivo-vertice
+    suspectIndex: 3
+    artName: Enfermeiro
+    sprite: {fileID: 21300000, guid: d5c30d9576208904e894b0878aa55c63, type: 3}
   cursorLupa: {fileID: 0}
   cursorInteracao: {fileID: 0}
   cursorEscrita: {fileID: 0}

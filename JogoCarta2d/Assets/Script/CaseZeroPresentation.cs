@@ -206,7 +206,7 @@ public sealed class CaseZeroPresentation : MonoBehaviour
     public void Back()
     {
         if (game == null) return;
-        if (radio != null) return;
+        if (radio != null) { radio.Skip(); return; }
         if (finale) { game.ReturnToMenu(); return; }
         if (step > 0 && game.CampaignState.CaseIndex == 0) { step--; Refresh(); }
     }
