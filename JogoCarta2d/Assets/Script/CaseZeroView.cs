@@ -232,7 +232,8 @@ public sealed class CaseZeroView : MonoBehaviour
             var rect = interviewPortrait.rectTransform;
             if (!portraitRestCaptured) { portraitRest = rect.anchoredPosition; portraitRestCaptured = true; }
             var color = interviewPortrait.color; color.a = 0; interviewPortrait.color = color;
-            rect.anchoredPosition = portraitRest + Vector2.up * 10f;
+            rect.anchoredPosition = portraitRest + (nextPortraitOffset ?? Vector2.up * 10f);
+            nextPortraitOffset = null;
             portraitFade = DOTween.Sequence().SetUpdate(true)
                 .Append(interviewPortrait.DOFade(1, 0.28f).SetEase(Ease.OutSine))
                 .Join(rect.DOAnchorPos(portraitRest, 0.34f).SetEase(Ease.OutCubic));
@@ -240,6 +241,17 @@ public sealed class CaseZeroView : MonoBehaviour
     }
     Vector2 portraitRest;
     bool portraitRestCaptured;
+    Vector2? nextPortraitOffset;
+
+    /// <summary>The next portrait change slides in from this offset instead of the small lift.</summary>
+    public void SlideNextPortraitFrom(Vector2 offset) => nextPortraitOffset = offset;
+
+    /// <summary>The interview portrait was moved: settle any animation and take the new place as rest.</summary>
+    public void ForgetPortraitRest()
+    {
+        portraitFade?.Kill(true);
+        portraitRestCaptured = false;
+    }
     void OnDestroy()
     {
         portraitFade?.Kill();
@@ -367,6 +379,9 @@ public sealed class CaseZeroView : MonoBehaviour
         if (deductionPortraits.Length > 0 && deductionPortraits[0] != null)
             suspectCarousel = CaseZeroSuspectCarousel.Attach(deductionPortraits[0].transform.parent.parent as RectTransform,
                 suspectPreviousArrow, suspectNextArrow);
+        ReleaseInvisibleClickBlockers();
+        KeepTabsClickable();
+        HideScreenTexts();
         foreach (var page in pages)
         {
             if (page.tab == null) continue;
@@ -384,6 +399,46 @@ public sealed class CaseZeroView : MonoBehaviour
             motion.SetFolderTab(false);
         }
     }
+    // Invisible images (alpha ~0) that still receive clicks act like hidden walls: the suspect
+    // portrait area on the Deduction page was scaled up past the top of the page and swallowed
+    // clicks on the folder tabs. Only images that are not buttons themselves are released.
+    void ReleaseInvisibleClickBlockers()
+    {
+        foreach (var page in pages)
+        {
+            if (page.panel == null) continue;
+            foreach (var graphic in page.panel.GetComponentsInChildren<Graphic>(true))
+            {
+                if (!graphic.raycastTarget || graphic.color.a > 0.05f) continue;
+                if (graphic.GetComponent<Selectable>() != null) continue;
+                graphic.raycastTarget = false;
+            }
+        }
+    }
+
+    // Folder tabs share their parent with the pages, so page content can end up over them. Each tab
+    // gets its own sorting above the book: a click on a tab always reaches the tab.
+    // The scene stays clean: no case title, objective line or status/dispatch messages on screen.
+    // The texts are still updated by the game, so they can be shown again by enabling them.
+    void HideScreenTexts()
+    {
+        foreach (var label in new[] { progress, objective, status })
+            if (label != null) label.gameObject.SetActive(false);
+    }
+
+    void KeepTabsClickable()
+    {
+        foreach (var page in pages)
+        {
+            if (page.tab == null || page.tab.GetComponent<Canvas>() != null) continue;
+            var parentCanvas = page.tab.transform.parent != null ? page.tab.transform.parent.GetComponentInParent<Canvas>() : null;
+            var canvas = page.tab.gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = (parentCanvas != null ? parentCanvas.sortingOrder : 0) + 1;
+            page.tab.gameObject.AddComponent<GraphicRaycaster>();
+        }
+    }
+
     string animatedPage;
     Tween closeMotion;
     CanvasGroup documentGroup;
@@ -481,7 +536,7 @@ public sealed class CaseZeroView : MonoBehaviour
                 });
         }
         else documentRoot.SetActive(false);
-        if (objective != null) objective.gameObject.SetActive(true);
+        // The objective line stays hidden (HideScreenTexts); the scene shows only the investigation.
         if (caseBriefing != null) caseBriefing.gameObject.SetActive(false);
         if (worldControls != null) worldControls.interactable = true;
         if (backgroundMap) mapRoot.SetActive(!mapInDocument && atMap);
@@ -549,6 +604,51 @@ public sealed class CaseZeroView : MonoBehaviour
             group.alpha = 0;
             choicesMotion.Insert(0.12f + order++ * 0.06f, group.DOFade(1, 0.22f).SetEase(Ease.OutSine));
         }
+    }
+
+    /// <summary>Shows the clue's drawing in place of its scene marker tag (the text tag is hidden),
+    /// or the plain tag when the clue has no drawing. The drawing is the object itself, without a
+    /// frame (the polaroid is only used on the Evidence card). Clicking it clicks the marker.</summary>
+    public void ShowMarkerArt(int index, string artName, bool recorded)
+    {
+        if (evidenceMarkers == null || index < 0 || index >= evidenceMarkers.Length || evidenceMarkers[index] == null) return;
+        var marker = evidenceMarkers[index].transform;
+        Sprite picture = artLibrary != null && !string.IsNullOrEmpty(artName) ? artLibrary.Find(artName) : null;
+        var existing = marker.Find("Desenho_Pista");
+        bool show = picture != null;
+        // The tag and its text only show for clues without a drawing.
+        var tag = marker.GetComponent<Image>();
+        if (tag != null) tag.enabled = !show;
+        if (evidenceMarkerLabels != null && index < evidenceMarkerLabels.Length && evidenceMarkerLabels[index] != null)
+            evidenceMarkerLabels[index].gameObject.SetActive(!show);
+        if (!show) { if (existing != null) existing.gameObject.SetActive(false); return; }
+        if (existing == null) existing = CreateMarkerArt(marker);
+        existing.gameObject.SetActive(true);
+        var drawing = existing.GetComponent<Image>();
+        drawing.sprite = picture;
+        // A recorded clue is slightly dimmed.
+        drawing.color = recorded ? new Color(0.65f, 0.62f, 0.6f) : Color.white;
+    }
+
+    Transform CreateMarkerArt(Transform marker)
+    {
+        // Just the drawing of the object, standing where the marker tag was. It can be moved or
+        // resized in play mode under the marker ("Desenho_Pista").
+        var drawingObject = new GameObject("Desenho_Pista", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        var rect = drawingObject.GetComponent<RectTransform>();
+        rect.SetParent(marker, false);
+        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0);
+        rect.pivot = new Vector2(0.5f, 0);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = new Vector2(190, 140);
+        rect.SetAsFirstSibling();
+        var drawing = drawingObject.GetComponent<Image>();
+        drawing.preserveAspect = true;
+        // A soft light edge keeps the dark ink readable against the dark scene.
+        var outline = drawingObject.AddComponent<Outline>();
+        outline.effectColor = new Color(1f, 0.92f, 0.85f, 0.35f);
+        outline.effectDistance = new Vector2(1.5f, -1.5f);
+        return rect;
     }
 
     Tween markerMotion;

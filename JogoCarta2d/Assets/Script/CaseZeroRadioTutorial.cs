@@ -33,7 +33,7 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         lines = data.radioLines != null && data.radioLines.Length > 0
             ? data.radioLines
             : new[] { "DISPATCH\nDetective, we have a new case. " + data.introduction };
-        ShowSkipButton();
+        HideSkipButton();
         view.title.text = "AT HOME • A CALL ON THE RADIO";
         view.stepLabel.text = "FIRST SHIFT";
         ConfigureSingleLine(view.title, 18f, view.title.fontSize);
@@ -178,13 +178,10 @@ public sealed class CaseZeroRadioTutorial : MonoBehaviour
         frequency.text = $"{value:0.0} MHz • " + (distance <= 0.6f ? "CLEAR SIGNAL — hold here" : distance < 2.5f ? "Signal nearby" : "Weak signal");
     }
 
-    void ShowSkipButton()
+    // The radio briefing has no Skip: the player tunes in and listens to dispatch.
+    void HideSkipButton()
     {
-        if (view.back == null) return;
-        view.back.gameObject.SetActive(true);
-        view.back.interactable = true;
-        var label = view.back.GetComponentInChildren<TMP_Text>(true);
-        if (label != null) label.text = "Skip";
+        if (view.back != null) view.back.gameObject.SetActive(false);
     }
 
     /// <summary>Back button during the radio: skip straight to the investigation.</summary>

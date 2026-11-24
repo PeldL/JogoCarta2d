@@ -33,6 +33,50 @@ public sealed class CaseZeroArtLibrary : ScriptableObject
     [Header("Rádio • retratos independentes dos suspeitos")]
     public Sprite radioDetetive, radioCentral;
 
+    [Serializable]
+    public class RorschachArt
+    {
+        public string name;
+        public string caseId;
+        public int suspectIndex;
+        [Tooltip("Quadros do NPC desenhando, tocados em loop durante o teste.")]
+        public Sprite[] quadrosDesenhando;
+        public float quadrosPorSegundo = 8;
+        [Tooltip("Desenho pronto mostrado no papel. Vazio = mancha de tinta gerada pelo jogo.")]
+        public Sprite desenho;
+    }
+    [Header("Sala de interrogatório • fundo e teste de Rorschach")]
+    [Tooltip("Vazio = usa o cenário \"Delegacia - sala\".")]
+    public Sprite salaInterrogatorio;
+    public RorschachArt[] rorschach;
+
+    [Serializable]
+    public class EvidenceModel
+    {
+        [Tooltip("Chave da pista, ex.: pistola, capsula, c2_lab_seringa.")]
+        public string evidenceKey;
+        public GameObject modelo;
+        public Vector3 rotacaoInicial;
+    }
+    [Header("Modelos 3D das pistas • vazio = modelo simples gerado pelo jogo")]
+    public EvidenceModel[] modelos3d;
+
+    public EvidenceModel FindModel(string evidenceKey)
+    {
+        if (modelos3d != null)
+            foreach (var entry in modelos3d)
+                if (entry != null && entry.modelo != null && entry.evidenceKey == evidenceKey) return entry;
+        return null;
+    }
+
+    public RorschachArt FindRorschach(string caseId, int suspectIndex)
+    {
+        if (rorschach != null)
+            foreach (var entry in rorschach)
+                if (entry != null && entry.caseId == caseId && entry.suspectIndex == suspectIndex) return entry;
+        return null;
+    }
+
     public Sprite FindPortrait(string caseId, int suspectIndex)
     {
         if (retratos != null)

@@ -44,6 +44,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Estacionamento.unity
     guid: c7bd63d5828247fa853bf4f741a67e9d
+  - enabled: 1
+    path: Assets/Scenes/SalaInterrogatorio.unity
+    guid: 687ba0acd5284a85bda680f9ae683745
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -49,6 +49,7 @@ public sealed partial class CaseZeroGame : MonoBehaviour
         interrogation.HasEvidence = id => state != null && state.Has(id);
         WireDynamicButtons();
         CreateContent();
+        BuildEvidenceViewer();
         phone.OnCallScreenUpdated += CallUpdated;
         phone.OnCallEnded += CallEnded;
         interrogation.OnInterrogationUpdated += InterviewUpdated;
@@ -118,7 +119,19 @@ public sealed partial class CaseZeroGame : MonoBehaviour
     void Update()
     {
         if (state == null || travelling || presenting) return;
-        if (Keyboard.current != null)
+        bool inRoom = roomBusy || RoomOpen;
+        if (EvidenceViewerOpen)
+        {
+            // The 3D view handles its own mouse input; Escape or Tab puts the object down.
+            if (Keyboard.current != null && (Keyboard.current.escapeKey.wasPressedThisFrame || Keyboard.current.tabKey.wasPressedThisFrame))
+                evidenceViewer.Hide();
+        }
+        else if (Keyboard.current != null && inRoom)
+        {
+            // Inside the interrogation room the case file stays closed; Escape leaves the room.
+            if (Keyboard.current.escapeKey.wasPressedThisFrame) LeaveInterrogationRoom();
+        }
+        else if (Keyboard.current != null)
         {
             if (Keyboard.current.tabKey.wasPressedThisFrame) ToggleDocument();
             else if (Keyboard.current.escapeKey.wasPressedThisFrame)
@@ -164,6 +177,7 @@ public sealed partial class CaseZeroGame : MonoBehaviour
             interrogation.HasEvidence = null;
         }
         DestroyCaseAssets();
+        DestroyEvidenceViewer();
     }
 
     /// <summary>Control hints shown once, only in the tutorial case.</summary>

@@ -74,7 +74,7 @@ public sealed partial class CaseZeroGame
         {
             case Pages.Evidence:
                 RefreshBoard();
-                TutorialHint(4, "Read the recorded clues. Then interview the people involved and compare their accounts.");
+                TutorialHint(4, "Read the recorded clues. Then, in Interviews, pick a person and take them to the interrogation room.");
                 break;
             case Pages.Interviews:
                 ShowInterview();

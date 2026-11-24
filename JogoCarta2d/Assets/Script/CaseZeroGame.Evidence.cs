@@ -87,6 +87,7 @@ public sealed partial class CaseZeroGame
             string id = keys[i];
             bool found = state.Has(id);
             view.evidenceMarkerLabels[i].text = catalog[id].evidenceName + (found ? " • recorded" : "");
+            view.ShowMarkerArt(i, CurrentCase.EvidenceArt(id), found);
             marker.interactable = !state.Finished || found;
         }
     }
@@ -105,7 +106,13 @@ public sealed partial class CaseZeroGame
         int clueIndex = CurrentCase.EvidenceIndex(id);
         if (clueIndex >= 0 && CurrentCase.evidenceLocations[clueIndex] != state.location) return;
         if (clueIndex >= 0 && state.analysisStage < CurrentCase.UnlockStage(id)) return;
-        if (state.Has(id)) { SelectEvidence(id); return; }
+        // Clicking an item already found in the scene examines it again in 3D.
+        if (state.Has(id))
+        {
+            if (CaseZeroEvidenceViewer.HasModel(id)) ShowEvidence3D(id);
+            else SelectEvidence(id);
+            return;
+        }
         if (state.Finished) return;
         Collect(id);
         RefreshWorld();
@@ -126,6 +133,7 @@ public sealed partial class CaseZeroGame
         Save(false);
         RefreshProgress();
         TutorialHint(2, "Clue recorded. Open the case file with Tab or the investigation button and check Evidence.");
+        if (!restoring && CaseZeroEvidenceViewer.HasModel(id)) StartCoroutine(ShowEvidence3DSoon(id));
     }
 
     public void SelectEvidence(string id)
@@ -168,6 +176,7 @@ public sealed partial class CaseZeroGame
         view.evidenceName.text = data.evidenceName;
         view.evidenceDescription.text = data.description;
         view.ShowEvidencePicture(CurrentCase.EvidenceArt(selectedEvidence));
+        Refresh3DButton();
         view.evidenceType.text = pageCount > 1
             ? $"EVIDENCE • CASE {state.CaseIndex + 1:00} • SCROLL THE LIST TO BROWSE"
             : $"EVIDENCE • CASE {state.CaseIndex + 1:00}";
@@ -194,7 +203,8 @@ public sealed partial class CaseZeroGame
 
     void BrowseEvidenceWithMouseWheel()
     {
-        if (state == null || !view.IsDocumentOpen || state.page != Pages.Evidence || Mouse.current == null) return;
+        // While the 3D viewer is open the wheel zooms the object instead.
+        if (state == null || EvidenceViewerOpen || !view.IsDocumentOpen || state.page != Pages.Evidence || Mouse.current == null) return;
         float wheel = Mouse.current.scroll.ReadValue().y;
         if (Mathf.Abs(wheel) < 0.01f || view.evidenceCards.Length == 0) return;
         var listRect = view.evidenceCards[0].transform.parent as RectTransform;

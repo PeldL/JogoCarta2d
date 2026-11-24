@@ -14,6 +14,8 @@ public sealed partial class CaseZeroGame
     // After the first exchange, returning to the opening node gets a short prompt
     // instead of the person repeating their whole opening statement.
     bool interviewResumed;
+    // The challenge produced the testimony: show it in Evidence when the player leaves the room.
+    bool showTestimonyOnExit;
 
     void CreateInterviews()
     {
@@ -52,66 +54,45 @@ public sealed partial class CaseZeroGame
     static InterrogationChoice Choice(string text, string next, EvidenceData required = null) => new InterrogationChoice { choiceText = text, nextNodeId = next, requiredEvidence = required };
     static InterrogationNode Node(string id, string message, params InterrogationChoice[] choices) => new InterrogationNode { nodeId = id, message = message, choices = new List<InterrogationChoice>(choices) };
 
+    /// <summary>Opens the Interviews page on this person (old scene bindings and the
+    /// person marker in the scene). Questioning starts from the page's Interview button.</summary>
     public void InterviewSuspect(int index)
     {
         if (state == null || state.Finished || confirming || travelling || index < 0 || index >= caseSuspects.Count) return;
         state.interviewSuspect = index;
         state.interviewNode = "start";
-        interviewResumed = false;
-        interrogation.EndInterrogation();
         suspectAsset = caseSuspects[index];
         OpenPage(Pages.Interviews);
         Save(false);
     }
 
+    // The Interviews page picks who goes to the interrogation room.
     void ShowInterview()
     {
-        state.interviewedMask |= 1 << state.interviewSuspect;
-        var names = CurrentCase.interviewNames;
-        for (int i = 0; i < view.interviewSuspectButtons.Length; i++)
-        {
-            view.interviewSuspectButtons[i].interactable = i != state.interviewSuspect;
-            if (names.Length > 1 && i < names.Length)
-                view.interviewSuspectButtons[i].GetComponentInChildren<TMPro.TMP_Text>(true).text = names[i] + ((state.interviewedMask & (1 << i)) != 0 ? " • interviewed" : "");
-        }
-        if (interrogation.CurrentSuspect != suspectAsset)
-        {
-            string nodeId = state.interviewNode;
-            interrogation.StartInterrogation(suspectAsset);
-            if (nodeId != "start" && suspectAsset.GetNode(nodeId) != null)
-                interrogation.SelectChoice(Choice("Resume", nodeId));
-        }
-        else RenderInterview(interrogation.CurrentNode);
+        var picker = CaseZeroInterviewPicker.Attach(view, StepInterviewee, () => OpenInterrogationRoom(state.interviewSuspect));
+        view.ShowPortraits(CurrentCase, state.interviewSuspect);
+        int person = state.interviewSuspect;
+        picker?.Refresh(CurrentCase.interviewNames.Length, (state.interviewedMask & (1 << person)) != 0, (state.rorschachMask & (1 << person)) != 0);
         Save(false);
+    }
+
+    void StepInterviewee(int direction)
+    {
+        if (state == null || caseSuspects.Count < 2) return;
+        int count = caseSuspects.Count;
+        state.interviewSuspect = ((state.interviewSuspect + direction) % count + count) % count;
+        suspectAsset = caseSuspects[state.interviewSuspect];
+        state.interviewNode = "start";
+        view.SlideNextPortraitFrom(new Vector2(90 * direction, 0));
+        CaseZeroSoundFeedback.Current?.PlayClick();
+        ShowInterview();
     }
 
     void InterviewUpdated(SuspectAsset suspect, InterrogationNode node)
     {
         if (state == null || suspect != suspectAsset || restoring) return;
         state.interviewNode = node.nodeId;
-        if (state.page == Pages.Interviews) RenderInterview(node);
-    }
-
-    void RenderInterview(InterrogationNode node)
-    {
-        if (node == null) return;
-        view.ShowPortraits(CurrentCase, state.interviewSuspect);
-        string message = node.nodeId == "start" && interviewResumed ? "Anything else, detective?" : node.message;
-        view.interviewMessage.text = view.interviewPortraitName != null ? message : suspectAsset.suspectName + "\n\n" + message;
-        var dialogueFx = view.interviewMessage.GetComponent<CaseZeroDialogueFX>();
-        if (dialogueFx == null) dialogueFx = view.interviewMessage.gameObject.AddComponent<CaseZeroDialogueFX>();
-        dialogueFx.RevealInterview();
-        for (int i = 0; i < view.interviewChoices.Length; i++)
-        {
-            bool exists = i < node.choices.Count;
-            view.interviewChoices[i].gameObject.SetActive(exists);
-            if (!exists) continue;
-            var choice = node.choices[i];
-            bool available = IsChoiceAvailable(choice);
-            view.interviewChoiceLabels[i].text = available ? choice.choiceText : LockedChoiceText(choice);
-            view.interviewChoices[i].interactable = available;
-        }
-        view.AnimateInterviewChoices();
+        if (RoomOpen) RenderRoomInterview(node);
     }
 
     bool IsChoiceAvailable(InterrogationChoice choice) =>
@@ -137,7 +118,8 @@ public sealed partial class CaseZeroGame
         if (forensic) named.Add("a forensic result");
         if (challenge && CurrentCase.confrontNeedsReport && !state.callRead) named.Add("the forensic report");
         string prefix = challenge ? "Challenge" : "Question";
-        return named.Count == 0 ? prefix + " • locked" : $"{prefix} • requires: {string.Join(", ", named)}";
+        // The required evidence is no longer spelled out: the player works out what unlocks it.
+        return prefix + " • locked";
     }
 
     public void SelectInterviewChoice(int index)
@@ -149,21 +131,19 @@ public sealed partial class CaseZeroGame
         if (!IsChoiceAvailable(choice)) return;
         state.idleTime = 0;
         if (!state.questions.Contains(choice.choiceText)) state.questions.Add(choice.choiceText);
-        if (choice.nextNodeId == ChallengeNode && state.interviewSuspect == CurrentCase.confrontInterview) Collect(Testimony);
-        bool leavingChallenge = interrogation.CurrentNode.nodeId == ChallengeNode;
+        if (choice.nextNodeId == ChallengeNode && state.interviewSuspect == CurrentCase.confrontInterview && !state.Has(Testimony))
+        {
+            Collect(Testimony);
+            showTestimonyOnExit = true;
+        }
         interviewResumed = true;
         interrogation.SelectChoice(choice);
         if (string.IsNullOrEmpty(choice.nextNodeId))
         {
-            // Ending a conversation keeps the file open: a fresh statement goes to Evidence,
-            // otherwise the player stays in Interviews to pick someone else.
+            // Ending a conversation returns to the room's menu (question, Rorschach test or leave).
             state.interviewNode = "start";
-            if (leavingChallenge && state.Has(Testimony)) SelectEvidence(Testimony);
-            else
-            {
-                interrogation.StartInterrogation(suspectAsset);
-                if (CurrentCase.interviewNames.Length > 1) Say("Ask something else or choose another person to talk to.");
-            }
+            interrogation.EndInterrogation();
+            if (RoomOpen) room.ShowMenu();
         }
         Save(false);
     }

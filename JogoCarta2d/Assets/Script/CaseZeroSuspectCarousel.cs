@@ -93,6 +93,7 @@ public sealed class CaseZeroSuspectCarousel : MonoBehaviour
             }
             rect.anchoredPosition = slot;
         }
+        LayOutLikeFirstOption();
 
         if (authoredPrevious != null && authoredNext != null)
         {
@@ -117,6 +118,78 @@ public sealed class CaseZeroSuspectCarousel : MonoBehaviour
         previous.onClick.AddListener(() => { Kick(previous, -1); Step(-1); ReleaseSelection(); });
         next.onClick.AddListener(() => { Kick(next, 1); Step(1); ReleaseSelection(); });
         if (isActiveAndEnabled) PlayArrowIntro();
+    }
+
+    // Every option shows its photo and the name written under it exactly like Opcao_0_0.
+    // The photo is enlarged to fill the tag above the name (it was drawn very small).
+    void LayOutLikeFirstOption()
+    {
+        var reference = rects[0];
+        var referencePhoto = Photo(reference);
+        var referenceName = Name(reference);
+        if (referencePhoto != null)
+        {
+            // Width of the tag minus margins; height down to just above the name.
+            float nameTop = referenceName != null ? -referenceName.rectTransform.anchoredPosition.y : reference.rect.height;
+            float height = Mathf.Max(60, nameTop - 8);
+            float width = Mathf.Min(reference.rect.width - 40, height * 1.6f);
+            referencePhoto.anchorMin = referencePhoto.anchorMax = new Vector2(0, 1);
+            referencePhoto.pivot = new Vector2(0.5f, 1);
+            referencePhoto.localScale = Vector3.one;
+            referencePhoto.sizeDelta = new Vector2(width, height);
+            referencePhoto.anchoredPosition = new Vector2(reference.rect.width * 0.5f, -4);
+            var image = referencePhoto.GetComponent<Image>();
+            if (image != null) image.preserveAspect = true;
+        }
+        for (int i = 1; i < rects.Length; i++)
+        {
+            if (rects[i] == null) continue;
+            Copy(referencePhoto, Photo(rects[i]));
+            var name = Name(rects[i]);
+            if (referenceName != null && name != null)
+            {
+                Copy(referenceName.rectTransform, name.rectTransform);
+                name.font = referenceName.font;
+                name.fontSharedMaterial = referenceName.fontSharedMaterial;
+                name.fontStyle = referenceName.fontStyle;
+                name.color = referenceName.color;
+                name.characterSpacing = referenceName.characterSpacing;
+                name.alignment = referenceName.alignment;
+                name.fontSize = referenceName.fontSize;
+                name.enableAutoSizing = referenceName.enableAutoSizing;
+                name.fontSizeMin = referenceName.fontSizeMin;
+                name.fontSizeMax = referenceName.fontSizeMax;
+                name.textWrappingMode = referenceName.textWrappingMode;
+            }
+            var photoImage = Photo(rects[i]) != null ? Photo(rects[i]).GetComponent<Image>() : null;
+            if (photoImage != null) photoImage.preserveAspect = true;
+        }
+    }
+
+    static RectTransform Photo(RectTransform option)
+    {
+        foreach (Transform child in option)
+            if (child.name.StartsWith("Retrato")) return child as RectTransform;
+        return null;
+    }
+
+    static TMP_Text Name(RectTransform option)
+    {
+        foreach (Transform child in option)
+            if (child.name.StartsWith("Texto") && child.TryGetComponent<TMP_Text>(out var text)) return text;
+        return null;
+    }
+
+    static void Copy(RectTransform from, RectTransform to)
+    {
+        if (from == null || to == null) return;
+        to.anchorMin = from.anchorMin;
+        to.anchorMax = from.anchorMax;
+        to.pivot = from.pivot;
+        to.sizeDelta = from.sizeDelta;
+        to.anchoredPosition = from.anchoredPosition;
+        to.localScale = from.localScale;
+        to.localRotation = from.localRotation;
     }
 
     // ---- Arrow animation -------------------------------------------------------

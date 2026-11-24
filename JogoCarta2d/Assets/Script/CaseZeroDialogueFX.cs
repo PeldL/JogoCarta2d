@@ -29,6 +29,12 @@ public sealed class CaseZeroDialogueFX : MonoBehaviour
         StartReveal(0, amount, speed);
     }
 
+    /// <summary>Reveals the text and keeps it trembling until another effect replaces it.</summary>
+    public void RevealAndKeepTrembling(float amount, float speed)
+    {
+        StartReveal(0, amount, speed, true);
+    }
+
     public void RevealInterview()
     {
         if (visualFx == null) return;

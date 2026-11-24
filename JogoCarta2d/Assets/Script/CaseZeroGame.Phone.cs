@@ -116,7 +116,7 @@ public sealed partial class CaseZeroGame
         if (!CanConsultPhone()) return;
         view.phoneState.text = "SHIFT DOCUMENTS";
         view.phonePresentation.ShowImmediate(CurrentCase.introduction
-            + "\n\nReference location: " + CaseZeroView.DisplayName(CurrentCase.location) + ".\n\nOpen the case file with Tab or the on-screen button. Map: visit locations. Evidence: read collected records. Interviews: listen and compare accounts. Deduction: present your conclusion after recording the report.");
+            + "\n\nReference location: " + CaseZeroView.DisplayName(CurrentCase.location) + ".\n\nOpen the case file with Tab or the on-screen button. Map: visit locations. Evidence: read collected records. Interviews: pick a person and question them in the interrogation room. Deduction: present your conclusion after recording the report.");
     }
 
     public void OpenAnalysisReport()

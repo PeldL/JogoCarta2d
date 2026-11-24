@@ -18,7 +18,12 @@ public sealed class CaseZeroPresentation : MonoBehaviour
     void OnEnable()
     {
 #if UNITY_EDITOR
-        if (!Application.isPlaying) EnsureRadioEditPreview();
+        // The radio preview belongs to the case briefing only, not to the campaign finale.
+        if (!Application.isPlaying)
+        {
+            if (finale) ClearRadioEditPreview();
+            else EnsureRadioEditPreview();
+        }
 #endif
     }
 
@@ -242,7 +247,8 @@ public sealed class CaseZeroPresentation : MonoBehaviour
     {
         var fx = body.GetComponent<CaseZeroDialogueFX>();
         if (fx == null) fx = body.gameObject.AddComponent<CaseZeroDialogueFX>();
-        fx.Reveal(0.55f, 56f);
+        // The finale summary keeps a light tremble for as long as it is on screen.
+        fx.RevealAndKeepTrembling(0.55f, 56f);
     }
 
     public static string Summary(CaseZeroState state)

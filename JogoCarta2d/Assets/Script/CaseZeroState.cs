@@ -31,6 +31,8 @@ public sealed class CaseZeroState
     public string interviewNode = "start";
     public int interviewSuspect;
     public int interviewedMask;
+    // Bit i set = interviewee i already took the Rorschach test in the interrogation room.
+    public int rorschachMask;
     public int analysisStage;
     public int pendingAnalysisStage;
     public int completedCases;
@@ -146,14 +148,14 @@ public sealed class CaseZeroState
             if (support.Count > 0) return $"Find evidence to challenge the statements. Examine {Names(support)} at the {Places(support)}.";
             if (CanConfront)
                 return AllInterviewed
-                    ? "You have enough evidence. In Interviews, challenge the account that the evidence contradicts."
-                    : "Interview " + PendingInterviews() + " and look for the account the evidence contradicts.";
+                    ? "You have enough evidence. Take the person whose account it contradicts to the interrogation room and challenge them."
+                    : "Question " + PendingInterviews() + " in the interrogation room and look for the account the evidence contradicts.";
         }
 
         var remaining = MissingKeys(data.keyEvidence, true);
         if (remaining.Count > 0) return $"Examine {Names(remaining)} at the {Places(remaining)}.";
         if (CanConclude) return "Open Deduction. Weigh every option against the evidence before you accuse.";
-        if (!AllInterviewed) return "Interview " + PendingInterviews() + " and compare their accounts with the evidence.";
+        if (!AllInterviewed) return "Question " + PendingInterviews() + " in the interrogation room and compare their accounts with the evidence.";
         return "Review the evidence and compare it with each account. Forensics will need more material to continue.";
     }
 

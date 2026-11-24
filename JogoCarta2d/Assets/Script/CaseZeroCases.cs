@@ -122,30 +122,31 @@ public static class CaseZeroCases
     static CaseZeroAsk EndInterview => Ask("End interview", "");
 
     public static readonly CaseZeroCase[] All = {
-        // Case 1 (tutorial): a robber shoots a woman who walks in on him at the bar.
+        // Case 1 (tutorial) • "Quick on the trigger": a woman walks into an empty bar and orders a
+        // drink from the man behind the counter, who shoots her. He was robbing the bar and she was
+        // the only witness. There is only one person there; the player works out what happened and why.
         new CaseZeroCase {
             id = "ultima-testemunha", title = "The Last Witness", location = "Bar", tutorial = true,
             locations = new[] { "Bar" }, culprit = 0, confrontInterview = 0, weaponSolution = 1, placeSolution = 2, analysisCount = 1,
-            suspectOrder = new[] { 1, 2, 0 },
             victimArt = "Vítima 1 - Mulher no bar", victimLabel = "Woman from the bar",
-            introduction = "A woman entered the bar and was shot dead. Gather evidence, question the man behind the counter, and establish the culprit, weapon, and crime scene.",
+            introduction = "A woman walked into an empty bar, ordered a drink from the man behind the counter, and was shot dead. He was the only other person there. Find out what really happened in that bar, and why she had to die.",
             evidenceKeys = new[] { "registro", "pistola", "capsula", "sangue" },
             evidenceNames = new[] { "Employee records", "Pistol under the counter", "Cartridge case on the floor", "Crime scene traces" },
             evidenceDescriptions = new[] {
                 "The schedule lists one employee on shift, who clocked out twenty minutes before the shot. The man found behind the counter is not on any list. The storeroom door was left open.",
                 "A pistol was found hidden under the counter. Preserve it for ballistic comparison.",
-                "A cartridge case was found in the service area behind the counter. Nearby, a customer's receipt was paid minutes before the shot; that customer has not been identified.",
-                "Bloodstains in the service area behind the counter. A broken bottle and a kitchen knife lie nearby, but neither has any blood on it."
+                "A cartridge case was found in the service area behind the counter, a few steps from the till.",
+                "The till drawer is open and empty, and the storeroom lock was forced. At the end of the counter, where the woman stood, her drink sits untouched next to the bloodstains."
             },
             evidenceLocations = new[] { "Bar", "Bar", "Bar", "Bar" },
             evidenceUnlockStages = new[] { 0, 0, 0, 0 },
             evidenceArt = new[] { "Agenda", "Pistola", "Cápsula", null },
             testimonyEvidenceName = "Challenged testimony",
-            testimonyEvidenceDescription = "Confronted with the employee records and the ballistic report, the man admits he does not work at the bar and came in to empty the till. He says the woman walked in and he panicked, but refuses to say more.",
-            suspects = new[] { "Man behind the counter", "Bar employee", "Unidentified customer" },
-            objects = new[] { "Kitchen knife", "Pistol", "Broken bottle" },
-            places = new[] { "Storeroom", "Street outside", "Behind the counter" },
-            objectQuestion = "WHICH WEAPON?", placeQuestion = "WHERE?",
+            testimonyEvidenceDescription = "Confronted with the employee records and the ballistic report, the man admits he does not work at the bar and came in through the storeroom to empty the till. He says the woman walked in, asked him for a drink and looked straight at him. He will not say why he fired.",
+            suspects = new[] { "Man behind the counter" },
+            objects = new[] { "Working the night shift", "Robbing the bar", "Waiting for the woman" },
+            places = new[] { "An old grudge against her", "A drunken argument", "She was the only witness" },
+            objectQuestion = "WHAT WAS HE DOING THERE?", placeQuestion = "WHY DID HE SHOOT HER?",
             interviewNames = new[] { "Man behind the counter" },
             interviews = new[] {
                 new[] {
@@ -154,8 +155,8 @@ public static class CaseZeroCases
                         Ask("Did you know the victim?", "vitima"),
                         Ask("Challenge with the records and the ballistic report", "confronto", "registro")),
                     Talk("trabalho", "I... was helping with the service. I do not remember who called me.", BackToQuestions),
-                    Talk("vitima", "I had never seen her before. She came in and ordered a drink. It all happened so fast.", BackToQuestions),
-                    Talk("confronto", "...Fine. I don't work here. I came in through the storeroom to empty the till. Then she walked in and saw me. I panicked. That's all I'm saying.", EndInterview)
+                    Talk("vitima", "I had never seen her before. She came in, sat at the end of the counter and asked for a drink. It all happened so fast.", BackToQuestions),
+                    Talk("confronto", "...Fine. I don't work here. I came in through the storeroom to empty the till. Then she walked in, asked me for a drink and looked right at my face. I panicked. That's all I'm saying.", EndInterview)
                 }
             },
             analysisPrerequisites = new[] { new[] { "pistola", "capsula" } },
@@ -166,11 +167,11 @@ public static class CaseZeroCases
             confrontNeedsReport = true,
             keyEvidence = new[] { "registro", "pistola", "capsula", "sangue" },
             radioLines = new[] {
-                "DISPATCH\nDetective, do you copy? A woman was shot dead in a bar. We need you at the scene.",
+                "DISPATCH\nDetective, do you copy? A woman was shot dead in a bar. The man behind the counter was the only one there.",
                 "DETECTIVE\nOn my way. Where do I start?",
-                "DISPATCH\nExamine the marked objects and send anything useful to forensics through your phone. Then challenge any account the evidence contradicts. Tab opens your case file."
+                "DISPATCH\nExamine the marked objects and send anything useful to forensics through your phone. Then take him to the interrogation room and challenge his story. Tab opens your case file."
             },
-            ending = "The man behind the counter was a robber. He killed the woman with the pistol in the bar to stop her from reporting him."
+            ending = "The man behind the counter was not a bartender: he had broken in through the storeroom to rob the till. When the woman walked into the empty bar and asked him for a drink, she saw his face. To keep from being handed to the police, he shot the only witness."
         },
         // Case 2: the medical examiner, helped by the security guard, kills a lab assistant
         // who was about to expose his falsified autopsies. Injection in the laboratory;

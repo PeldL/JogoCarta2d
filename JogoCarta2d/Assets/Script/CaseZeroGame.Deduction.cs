@@ -29,14 +29,16 @@ public sealed partial class CaseZeroGame
 
     void RefreshDeduction()
     {
+        // With a single person in the case there is nobody else to choose: the question is what happened.
+        if (CurrentCase.suspects.Length == 1 && state.suspect < 0 && !state.Finished) state.suspect = 0;
         view.ShowSelection(view.suspectChecks, CurrentCase.SlotOfSuspect(state.suspect));
         view.ShowSelection(view.weaponChecks, state.weapon);
         view.ShowSelection(view.placeChecks, state.place);
         view.concludeButton.interactable = state.CanConclude && state.HasTheory && !state.Finished;
         view.deductionHint.text = state.Finished ? "This case is already closed. Use the results screen to restart it or continue."
-            : state.CanConclude && !state.HasTheory ? "Choose the culprit, the weapon, and the location before confirming."
+            : state.CanConclude && !state.HasTheory ? "Answer every question before confirming."
             : state.CanConclude ? $"Review your theory before confirming. {state.AttemptsRemaining} accusation attempt(s) remaining."
-            : "Still missing before an accusation:\n• " + string.Join("\n• ", state.MissingForConclusion());
+            : ""; // No list of missing evidence: the player works out what is still needed.
     }
 
     public void ConcludeCase()
