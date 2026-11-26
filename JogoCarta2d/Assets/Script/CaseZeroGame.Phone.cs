@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Pages = CaseZeroPages;
 
@@ -144,13 +144,29 @@ public sealed partial class CaseZeroGame
         view.phonePresentation.PlayMessage(node.message);
     }
 
+    void FileForensicReports()
+    {
+        var names = new List<string>();
+        foreach (var key in CurrentCase.evidenceKeys)
+        {
+            int stage = CurrentCase.UnlockStage(key);
+            if (stage <= 0 || stage > state.analysisStage || state.evidence.Contains(key)) continue;
+            state.evidence.Add(key);
+            names.Add(catalog[key].evidenceName);
+        }
+        if (names.Count == 0) return;
+        view.NotifyEvidence(string.Join("\n", names));
+        CaseZeroSoundFeedback.Current?.PlayEvidence();
+    }
+
     void CallEnded()
     {
         if (state == null || restoring) return;
         state.callRead = true;
         state.callPending = false;
-        // Recording a report unlocks the next stage of clues (for example at the police station).
+        // Recording a report unlocks the next stage and files its documents straight into Evidence.
         state.analysisStage = Mathf.Max(state.analysisStage, state.pendingAnalysisStage + 1);
+        FileForensicReports();
         RefreshWorld();
         state.idleTime = 0;
         Save(false);

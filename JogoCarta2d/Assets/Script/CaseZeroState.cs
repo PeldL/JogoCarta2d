@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 // Plain data: the investigation can be saved independently of scene objects.
@@ -60,7 +60,8 @@ public sealed class CaseZeroState
         return new CaseZeroState { caseId = next.id, location = next.location, completedCases = CaseIndex + 1, results = new List<CaseZeroResult>(results) };
     }
 
-    public bool Has(string id) => evidence.Contains(id);
+    // Forensic reports go straight into the case file once their analysis is recorded.
+    public bool Has(string id) => evidence.Contains(id) || (CaseIndex >= 0 && Definition.UnlockStage(id) > 0 && Unlocked(id));
     /// <summary>The player has picked a culprit, a weapon and a location.</summary>
     public bool HasTheory => suspect >= 0 && weapon >= 0 && place >= 0;
     public bool Finished => solved || failed;
@@ -220,6 +221,8 @@ public sealed class CaseZeroState
         if (suspect >= data.suspects.Length) suspect = -1;
         if (weapon >= data.objects.Length) weapon = -1;
         if (place >= data.places.Length) place = -1;
+        // Saves made while standing in a location the case no longer has (the old police station).
+        if (Array.IndexOf(data.locations, location) < 0) location = data.location;
         // The first case used to record its report without advancing the analysis stage.
         if (callRead && !callPending && callDelay < 0 && analysisStage <= pendingAnalysisStage && analysisStage < data.analysisCount)
             analysisStage = Math.Min(data.analysisCount, pendingAnalysisStage + 1);

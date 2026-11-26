@@ -1,4 +1,4 @@
-// Rorschach test content. Each interviewee has a drawing with hidden details (found with the
+﻿// Rorschach test content. Each interviewee has a drawing with hidden details (found with the
 // magnifier) and answers to the three fixed questions. A psychopath's answers contradict the
 // drawing; once the player compares them, the room reveals the hint.
 public sealed class RorschachDetail
@@ -35,14 +35,14 @@ public static class CaseZeroRorschach
             case "ultima-testemunha:0": return new RorschachProfile {
                 psychopath = true, seed = 11,
                 details = new[] {
-                    D("An open cash drawer, empty", 0.36f, 0.58f, 2),
+                    D("A door forced open, the lock broken", 0.36f, 0.58f, 2),
                     D("A pair of wide eyes staring back", 0.62f, 0.7f, 1),
                     D("A figure lying at the end of a counter", 0.5f, 0.3f, 4) },
                 answers = new[] {
                     "A quiet bar at closing time. Glasses on a shelf. Nothing happening.",
                     "A bottle. I was pouring drinks, that's all.",
                     "Calm. Just another shift." },
-                hint = "HINT • He describes a quiet shift, but the drawing shows an empty cash drawer, a pair of eyes watching him and a body by the counter. Check the till, and where the woman was standing."
+                hint = "HINT • He describes a quiet shift, but the drawing shows a door forced open, a pair of eyes watching him and a body by the counter. Check the storeroom, and where the woman was standing."
             };
             // Case 2 • the medical examiner (killer), the security guard (paid accomplice), the caretaker (found the body).
             case "apartamento-302:0": return new RorschachProfile {

@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public sealed class CaseZeroEvidenceViewer : MonoBehaviour
 {
     static readonly Vector3 Stage = new Vector3(0, -5000, 0); // Far away from the 2D scene.
-    const float ModelSize = 2.2f;
+    const float ModelSize = 2.55f; // Diagonal: the model stays inside the frame at any angle.
     const float MinDistance = 3f, MaxDistance = 8.5f;
     const float RotateSpeed = 0.32f;  // Degrees per pixel of mouse movement.
     const float InertiaDamping = 5f;  // How fast the spin settles after letting go.
@@ -133,7 +133,7 @@ public sealed class CaseZeroEvidenceViewer : MonoBehaviour
         if (renderers.Length == 0) return;
         var bounds = renderers[0].bounds;
         foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
-        float largest = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+        float largest = bounds.size.magnitude;
         float scale = largest > 0.0001f ? ModelSize / largest : 1;
         target.localScale = Vector3.one * scale;
         target.position += (Stage - bounds.center) * scale;
@@ -220,8 +220,8 @@ public sealed class CaseZeroEvidenceViewer : MonoBehaviour
         var display = new GameObject("Pista 3D", typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage)).GetComponent<RawImage>();
         displayRect = display.rectTransform;
         displayRect.SetParent(root.transform, false);
-        displayRect.anchoredPosition = new Vector2(0, 70);
-        displayRect.sizeDelta = new Vector2(820, 820);
+        displayRect.anchoredPosition = new Vector2(0, 105); // Kept clear of the title below.
+        displayRect.sizeDelta = new Vector2(700, 700);
         display.texture = texture;
         display.raycastTarget = false;
 

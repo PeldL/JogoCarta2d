@@ -88,8 +88,35 @@ public sealed partial class CaseZeroGame
             bool found = state.Has(id);
             view.evidenceMarkerLabels[i].text = catalog[id].evidenceName + (found ? " • recorded" : "");
             view.ShowMarkerArt(i, CurrentCase.EvidenceArt(id), found);
+            PlaceMarker(marker.transform as RectTransform, i, id);
             marker.interactable = !state.Finished || found;
         }
+    }
+
+    // Each location scene may hold empty objects named "Pista_<evidence key>" that set where
+    // that clue sits in its drawing; without one the marker keeps its default spot.
+    readonly Dictionary<int, Vector2> markerHome = new Dictionary<int, Vector2>();
+
+    void PlaceMarker(RectTransform rect, int index, string id)
+    {
+        if (rect == null) return;
+        if (!markerHome.ContainsKey(index)) markerHome[index] = rect.anchoredPosition;
+        rect.anchoredPosition = markerHome[index];
+        var anchor = FindLocationAnchor("Pista_" + id);
+        if (anchor == null) return;
+        // Centre the marker on the point, whatever its pivot.
+        rect.position = anchor.position;
+        rect.anchoredPosition -= Vector2.Scale(new Vector2(0.5f, 0.5f) - rect.pivot, rect.rect.size);
+    }
+
+    Transform FindLocationAnchor(string name)
+    {
+        var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByName(state.location);
+        if (!scene.IsValid() || !scene.isLoaded) return null;
+        foreach (var root in scene.GetRootGameObjects())
+            foreach (var child in root.GetComponentsInChildren<Transform>(true))
+                if (child.name == name) return child;
+        return null;
     }
 
     public void ExamineMarker(int markerIndex)
